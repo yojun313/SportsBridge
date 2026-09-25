@@ -2,7 +2,7 @@
 {% block title %}내 동네 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
-  <div class="page-head"><div><h1>내 동네 운동 사정</h1><p class="sub">우리 시군구에 이용권으로 갈 수 있는 시설과 강좌가 얼마나 있는지 쉬운 말로 보여줍니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div class="page-head"><div><h1>지역별 운동 시설·강좌 <button class="help-button" type="button" data-help-title="지역 현황 안내" data-help="시군구를 선택하면 이용권 시설과 최근 강좌, 종목별·시간대별 운영 현황을 볼 수 있습니다. 표시된 이용 이력은 현재 모집 여부를 뜻하지 않습니다." aria-label="지역 현황 안내">?</button></h1><p class="sub">선택한 지역의 이용권 시설과 최근 강좌 현황을 확인할 수 있습니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
   <div id="ur-body"><div class="notice">시군구를 고르세요.</div></div>
 </div>
 {% endblock %}
@@ -23,7 +23,7 @@
           <div class="card stat"><div class="label">이용권으로 갈 수 있는 시설</div><div class="value">${fmtNum(r.activeFacilityCount)}<small>곳</small></div><div class="desc">최근 1년 강좌 운영 기준</div></div>
           <div class="card stat"><div class="label">열린 강좌</div><div class="value">${fmtNum(r.activeCourseCount)}<small>개</small></div><div class="desc">종목 ${fmtNum(r.sportCount)}가지</div></div>
           <div class="card stat"><div class="label">저녁 강좌</div><div class="value">${fmtPct(r.eveningShare)}</div><div class="desc">18시 이후 시작</div></div>
-          <div class="card stat"><div class="label">동네 목소리</div><div class="value">${fmtNum((sig.demand || {}).total || 0)}<small>건</small></div><div class="desc">수요 등록 · 가맹 요청 ${fmtNum(sig.voteTotal || 0)}건</div></div>
+          <div class="card stat"><div class="label">이용자 의견</div><div class="value">${fmtNum((sig.demand || {}).total || 0)}<small>건</small></div><div class="desc">희망 강좌 · 시설 이용 희망 ${fmtNum(sig.voteTotal || 0)}건</div></div>
         </div>
         <div class="grid-2 mb-16">
           <div class="card card-pad"><div class="card-head"><h3>어떤 종목이 있나</h3></div>${d.sportCounts.length ? bars(d.sportCounts.slice(0, 10)) : '<p class="muted">최근 강좌가 없습니다.</p>'}</div>

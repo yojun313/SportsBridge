@@ -1,18 +1,18 @@
 {% extends "base.html" %}
-{% block title %}동네 목소리 - {{ APP_NAME }}{% endblock %}
+{% block title %}희망 강좌·시설 수요 등록 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
-  <div class="page-head"><div><h1>동네 목소리</h1><p class="sub">"이런 강좌가 있었으면", "이 시설이 가맹되면 다닐게요"를 익명으로 남깁니다. 담당자의 공급 계획에 그대로 들어갑니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div class="page-head"><div><h1>희망 강좌·시설 수요 등록 <button class="help-button" type="button" data-help-title="수요 등록 안내" data-help="원하는 강좌의 종목과 시간대 또는 가맹을 희망하는 시설을 등록할 수 있습니다. 등록 내용은 익명으로 집계되어 담당자의 지역별 공급 검토에 참고됩니다." aria-label="수요 등록 안내">?</button></h1><p class="sub">원하는 강좌나 이용권 가맹을 희망하는 시설을 등록해 주세요. 의견은 익명으로 집계되어 지역별 공급 검토에 참고됩니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
   <div class="layout-side">
     <aside class="side">
       <form class="card card-pad" id="v-form">
-        <h3>이런 강좌가 있었으면</h3>
+        <h3>희망 강좌 등록</h3>
         <div class="field"><label for="v-sport">종목</label><select class="input" id="v-sport"></select></div>
         <div class="field"><label>요일</label><div class="dow-toggle-row" id="v-dows"></div></div>
         <div class="field"><label>시간대</label><div class="row"><input class="input" type="time" id="v-start" value="18:00" step="900" style="width:auto" /> ~ <input class="input" type="time" id="v-end" value="20:00" step="900" style="width:auto" /></div></div>
-        <div class="field"><label for="v-band">누가</label><select class="input" id="v-band"><option value="10">초등학생</option><option value="15">중·고등학생</option><option value="35">성인</option><option value="70">어르신</option></select></div>
+        <div class="field"><label for="v-band">대상 연령대 <button class="help-button" type="button" data-help="희망 강좌를 이용할 사람의 연령대를 선택해 주세요. 개인을 식별할 수 있는 정보는 입력하지 않습니다." aria-label="대상 연령대 안내">?</button></label><select class="input" id="v-band"><option value="10">초등학생</option><option value="15">중·고등학생</option><option value="35">성인</option><option value="70">어르신</option></select></div>
         <div class="field"><label for="v-type">이용권</label><select class="input" id="v-type"><option value="youth_voucher">유·청소년 이용권</option><option value="disability_voucher">장애인 이용권</option><option value="general">없음(일반)</option></select></div>
-        <button class="btn btn-primary btn-block" type="submit">익명으로 남기기</button>
+        <button class="btn btn-primary btn-block" type="submit">희망 강좌 등록</button>
         <p class="hint">이름·주소·정확한 나이는 저장하지 않습니다.</p>
       </form>
     </aside>
@@ -44,7 +44,7 @@
           <div class="card card-pad"><div class="card-head"><h3>원하는 시간대</h3></div>${slots.length ? `<div class="bar-list">${slots.map(([k, v]) => `<div class="bar-row"><span class="k">${esc(k)}</span><div class="bar"><span style="width:${(v / max * 100).toFixed(0)}%"></span></div><span class="v">${v}</span></div>`).join("")}</div>` : '<p class="muted">–</p>'}</div>
         </div>
         <div class="card card-pad"><div class="card-head"><h3>가맹되면 다니고 싶은 시설</h3><span class="faint">아직 가맹하지 않은 것으로 보이는 근처 체육시설</span></div>
-          <div class="table-wrap"><table class="table responsive"><thead><tr><th>시설</th><th>업종</th><th class="num">요청</th><th></th></tr></thead><tbody>${d.candidates.map((f) => `<tr><td class="name" data-label="시설"><b>${esc(f.name)}</b><span class="sub">${esc(f.address || "")}</span></td><td data-label="업종">${esc(f.category || "")}${f.safety ? " · 안전 " + esc(f.safety) : ""}</td><td class="num" data-label="요청"><span id="v-${esc(f.facilityId)}">${f.votes}</span></td><td><button class="btn btn-sm btn-outline" data-vote="${esc(f.facilityId)}">가맹되면 다닐게요</button></td></tr>`).join("") || '<tr><td colspan="4" class="empty-state">후보가 없습니다.</td></tr>'}</tbody></table></div></div>`;
+          <div class="table-wrap"><table class="table responsive"><thead><tr><th>시설</th><th>업종</th><th class="num">희망 등록 수</th><th></th></tr></thead><tbody>${d.candidates.map((f) => `<tr><td class="name" data-label="시설"><b>${esc(f.name)}</b><span class="sub">${esc(f.address || "")}</span></td><td data-label="업종">${esc(f.category || "")}${f.safety ? " · 안전 " + esc(f.safety) : ""}</td><td class="num" data-label="희망 등록 수"><span id="v-${esc(f.facilityId)}">${f.votes}</span></td><td><button class="btn btn-sm btn-outline" data-vote="${esc(f.facilityId)}">이용 희망 등록</button></td></tr>`).join("") || '<tr><td colspan="4" class="empty-state">후보가 없습니다.</td></tr>'}</tbody></table></div></div>`;
       body.querySelectorAll("[data-vote]").forEach((b) => b.addEventListener("click", async () => { b.disabled = true; try { const r = await api.post("/api/user/vote", { facilityId: b.dataset.vote, regionCode: code, sport: sel.value }); document.getElementById("v-" + b.dataset.vote).textContent = r.votes; b.textContent = "표시됨"; showSnackbar("담당자 유치 순서에 반영됩니다", "success"); } catch (e) { showSnackbar(e.message, "error"); b.disabled = false; } }));
     } catch (e) { body.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
   }

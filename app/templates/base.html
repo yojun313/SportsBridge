@@ -29,6 +29,9 @@
     {% block footer %}{% include "partials/footer.html" %}{% endblock %}
     {% include "partials/tabbar.html" %}
     <div id="snackbar-root" aria-live="polite"></div>
+    <div class="dialog-backdrop help-backdrop" id="help-dialog" role="dialog" aria-modal="true" aria-labelledby="help-title" hidden>
+      <div class="dialog help-dialog"><div class="dialog-header"><h2 id="help-title">기능 안내</h2><button class="btn-icon" type="button" data-dialog-close aria-label="안내 닫기">&times;</button></div><p id="help-body" class="help-body"></p></div>
+    </div>
     <script src="{{ asset('js/api.js') }}"></script>
     <script src="{{ asset('js/ui.js') }}"></script>
     <script src="{{ asset('js/viewport.js') }}"></script>

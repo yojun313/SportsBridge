@@ -7,7 +7,8 @@
   const TOOL_LABEL = { resolve_place: "지역·시설 해석", get_region_diagnosis: "시군구 진단", compare_regions: "지역 비교", list_supply_options: "공급 옵션 조회", list_candidates: "유치 후보 조회", build_scenario: "시나리오 생성", run_simulation: "조합 시뮬레이션", get_provenance: "출처 조회" };
 
   function addMsg(role, text, appendix) {
-    const el = document.createElement("div"); el.className = "msg " + role; el.textContent = text;
+    const el = document.createElement("div"); el.className = "msg " + role;
+    if (role === "assistant" && window.renderMarkdown) el.innerHTML = renderMarkdown(text); else el.textContent = text;
     if (appendix) { const a = document.createElement("div"); a.className = "appendix"; a.innerHTML = appendix; el.appendChild(a); }
     chat.appendChild(el); chat.scrollTop = chat.scrollHeight; return el;
   }
@@ -74,7 +75,7 @@
   document.querySelectorAll("#samples button").forEach((b) => b.addEventListener("click", () => { q.value = b.textContent; q.focus(); }));
   document.getElementById("hist-btn").addEventListener("click", async () => {
     openDialog("hist-dialog"); const body = document.getElementById("hist-body"); body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
-    try { const d = await api.get("/history" + qs({ mode: MODE })); body.innerHTML = d.items.length ? d.items.map((it) => `<details class="expandable"><summary>${esc(it.question)} <span class="faint">${esc((it.created_at || "").slice(0, 16))}</span></summary><div class="doc-preview mt-8">${esc(it.answer)}</div></details>`).join("") : '<p class="muted">기록이 없습니다.</p>'; }
+    try { const d = await api.get("/history" + qs({ mode: MODE })); body.innerHTML = d.items.length ? d.items.map((it) => `<details class="expandable"><summary>${esc(it.question)} <span class="faint">${esc((it.created_at || "").slice(0, 16))}</span></summary><div class="doc-preview mt-8">${window.renderMarkdown ? renderMarkdown(it.answer) : esc(it.answer)}</div></details>`).join("") : '<p class="muted">기록이 없습니다.</p>'; }
     catch (e) { body.innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
   });
   connect();

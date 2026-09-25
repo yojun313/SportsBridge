@@ -1,13 +1,13 @@
 {% set path = request.url.path %}
 {% if app_mode == 'user' %}
-  {% set nav = [("/user", "찾기"), ("/user/region", "내 동네"), ("/user/facilities", "시설"), ("/user/spaces", "무료 공간"), ("/user/voice", "목소리"), ("/user/planner", "플래너"), ("/user/ask", "질문"), ("/user/help", "도움말"), ("/user/guide", "설명서")] %}
+  {% set nav = [("/user", "강좌 찾기"), ("/user/region", "지역 현황"), ("/user/facilities", "시설 검색"), ("/user/spaces", "공공 공간"), ("/user/voice", "수요 등록"), ("/user/planner", "지원금 계산"), ("/user/ask", "질문하기"), ("/user/help", "이용 안내"), ("/user/guide", "서비스 안내")] %}
   {% set brand_href = "/" %}{% set brand_sub = "이용자용 · 내 조건에 맞는 운동 찾기" %}{% set switch_href = "/gap" %}{% set switch_label = "담당자용으로" %}
 {% elif app_mode == 'home' %}
   {% set nav = [("/user", "이용자용"), ("/gap", "담당자용"), ("/guide", "설명서")] %}
   {% set brand_href = "/" %}{% set brand_sub = APP_FULL_NAME %}{% set switch_href = none %}
 {% else %}
   {% set nav = [("/gap", "진단"), ("/candidates", "후보"), ("/scenario", "시나리오"), ("/agent", "에이전트"), ("/review", "검토"), ("/data", "데이터"), ("/guide", "설명서")] %}
-  {% set brand_href = "/" %}{% set brand_sub = "담당자용 · 공급 공백 복구" %}{% set switch_href = "/user" %}{% set switch_label = "이용자용으로" %}
+  {% set brand_href = "/" %}{% set brand_sub = "담당자용 · 지역별 공급 현황 분석" %}{% set switch_href = "/user" %}{% set switch_label = "이용자용으로" %}
 {% endif %}
 <header class="site-header">
   <div class="container">

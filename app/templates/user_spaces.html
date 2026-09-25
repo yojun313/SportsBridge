@@ -2,7 +2,7 @@
 {% block title %}무료 공간 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
-  <div class="page-head"><div><h1>무료·공공 운동 공간</h1><p class="sub">이용권이 없어도 쓸 수 있는 개방학교 체육시설(운영시간 있음)과 공공체육시설입니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div class="page-head"><div><h1>공공 운동 공간 <button class="help-button" type="button" data-help-title="공공 운동 공간 안내" data-help="학교 개방 체육시설과 공공체육시설 정보를 제공합니다. 이용 가능 시간과 요금은 자료에 없거나 최신 정보가 아닐 수 있으므로 방문 전에 시설에 확인해 주세요." aria-label="공공 운동 공간 안내">?</button></h1><p class="sub">학교 개방 체육시설과 공공체육시설 정보를 확인할 수 있습니다. 이용 가능 여부와 운영 시간은 시설에 문의해 주세요.</p></div>{% include "partials/user_region_picker.html" %}</div>
   <div class="card card-pad mb-16"><div class="input-row">
     <select class="input" id="s-dow" style="width:auto"><option value="">요일 무관</option><option value="0">월</option><option value="1">화</option><option value="2">수</option><option value="3">목</option><option value="4">금</option><option value="5">토</option><option value="6">일</option></select>
     <input class="input" type="time" id="s-start" value="18:00" step="900" style="width:auto" /> ~ <input class="input" type="time" id="s-end" value="21:00" step="900" style="width:auto" />

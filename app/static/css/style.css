@@ -293,6 +293,11 @@ textarea.input { resize: vertical; min-height: 72px; }
 .dialog-backdrop { position: fixed; inset: 0; background-color: rgba(10, 20, 40, 0.55); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; }
 .dialog-backdrop.open { display: flex; }
 .dialog { background-color: var(--color-surface-solid); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; padding: 22px; }
+.help-backdrop[hidden] { display: none; }
+.help-dialog { max-width: 420px; }
+.help-body { color: var(--color-text-muted); line-height: 1.65; margin: 4px 0 0; }
+.help-button { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; padding: 0; margin-left: 5px; border: 1px solid var(--color-border); border-radius: 50%; background: var(--color-surface-solid); color: var(--color-text-muted); font: 700 12px/1 sans-serif; cursor: pointer; vertical-align: 1px; }
+.help-button:hover, .help-button:focus-visible { color: var(--color-accent); border-color: var(--color-accent); outline: 2px solid color-mix(in srgb, var(--color-accent) 20%, transparent); }
 .dialog.dialog-lg { max-width: 860px; }
 .dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 16px; }
 .dialog-header h2 { font-size: 18px; margin: 0; }
@@ -406,6 +411,22 @@ table.table { width: 100%; border-collapse: collapse; font-size: 14px; }
 .msg { max-width: 92%; padding: 12px 14px; border-radius: 12px; line-height: 1.6; font-size: 14px; white-space: pre-wrap; }
 .msg.user { align-self: flex-end; background: var(--color-primary); color: #fff; border-bottom-right-radius: 4px; }
 .msg.assistant { align-self: flex-start; background: var(--color-surface-2); color: var(--color-text); border-bottom-left-radius: 4px; }
+.msg.assistant { white-space: normal; }
+.md > :first-child { margin-top: 0; } .md > :last-child { margin-bottom: 0; }
+.md h3, .md h4, .md h5, .md h6 { margin: 14px 0 6px; line-height: 1.35; }
+.md h3 { font-size: 15px; } .md h4 { font-size: 14px; } .md h5, .md h6 { font-size: 13.5px; }
+.md p { margin: 6px 0; }
+.md ul, .md ol { margin: 6px 0; padding-left: 22px; }
+.md ul { list-style: disc; } .md ol { list-style: decimal; } .md ul ul { list-style: circle; }
+.md li { margin: 3px 0; } .md li > ul, .md li > ol { margin: 2px 0; }
+.md code { font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 12.5px; padding: 1px 5px; border-radius: 4px; background: var(--color-surface); border: 1px solid var(--color-border); }
+.md pre { margin: 8px 0; padding: 10px 12px; border-radius: 8px; background: var(--color-surface); border: 1px solid var(--color-border); overflow-x: auto; }
+.md pre code { padding: 0; border: 0; background: none; font-size: 12.5px; white-space: pre; }
+.md blockquote { margin: 8px 0; padding: 6px 12px; border-left: 3px solid var(--color-primary); color: var(--color-text-muted); }
+.md hr { border: 0; border-top: 1px dashed var(--color-border); margin: 10px 0; }
+.md .table-wrap { margin: 8px 0; } .md .md-table th, .md .md-table td { font-size: 13px; padding: 6px 10px; }
+.md a { color: var(--color-primary); text-decoration: underline; }
+.md strong { font-weight: 700; }
 .msg.assistant .appendix { margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--color-border); font-size: 12px; color: var(--color-text-muted); }
 .chat-form { display: flex; gap: 8px; margin-top: 12px; }
 .chat-form textarea { flex: 1; }

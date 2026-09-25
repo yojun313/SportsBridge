@@ -60,13 +60,34 @@ function openDialog(id) { const el = document.getElementById(id); if (el) el.cla
 function closeDialog(id) { const el = document.getElementById(id); if (el) el.classList.remove("open"); }
 
 document.addEventListener("click", (e) => {
+  const help = e.target.closest("[data-help]");
+  if (help) {
+    const dialog = document.getElementById("help-dialog");
+    const title = document.getElementById("help-title");
+    const body = document.getElementById("help-body");
+    if (dialog && title && body) {
+      title.textContent = help.dataset.helpTitle || "기능 안내";
+      body.textContent = help.dataset.help;
+      dialog.hidden = false;
+      dialog.classList.add("open");
+      dialog.querySelector("[data-dialog-close]")?.focus();
+    }
+    return;
+  }
   document.querySelectorAll(".dialog-backdrop.open").forEach((backdrop) => {
-    if (e.target === backdrop) backdrop.classList.remove("open");
+    if (e.target === backdrop) { backdrop.classList.remove("open"); if (backdrop.id === "help-dialog") backdrop.hidden = true; }
   });
   const closeBtn = e.target.closest("[data-dialog-close]");
   if (closeBtn) {
     const backdrop = closeBtn.closest(".dialog-backdrop");
-    if (backdrop) backdrop.classList.remove("open");
+    if (backdrop) { backdrop.classList.remove("open"); if (backdrop.id === "help-dialog") backdrop.hidden = true; }
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const dialog = document.getElementById("help-dialog");
+    if (dialog && dialog.classList.contains("open")) { dialog.classList.remove("open"); dialog.hidden = true; }
   }
 });
 
