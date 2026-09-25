@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}검토 큐 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>검토 큐</h1><p class="sub">AI가 강좌 설명에서 읽어낸 대상 연령·출석 규칙과, 이름이 비슷한 두 시설이 같은 곳인지에 대한 판정을 사람이 확인하는 곳입니다. 여기서 승인한 것만 진단과 시나리오에 반영되고, 출처 표시가 "AI추출·미검토"에서 "검토완료"로 바뀝니다.</p></div>
+    <div class="row">
+      <select class="input" id="rv-kind" style="width:auto"><option value="">전체 유형</option><option value="extraction">강좌 설명 추출</option><option value="match">시설 동일성 판정</option><option value="class">시설 분류</option></select>
+      <select class="input" id="rv-status" style="width:auto"><option value="pending">대기</option><option value="approved">승인</option><option value="rejected">반려</option></select>
+    </div>
+  </div>
+  {% if not LLM_ENABLED %}<div class="notice warn">LLM이 비활성이라 새 추출은 생성되지 않습니다. 기존 큐 항목은 검토할 수 있습니다.</div>{% endif %}
+  <p class="faint" id="rv-counts"></p>
+  <div class="stack" id="rv-list"><div class="empty-state"><span class="spinner"></span></div></div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  const list = document.getElementById("rv-list"), kind = document.getElementById("rv-kind"), status = document.getElementById("rv-status"), counts = document.getElementById("rv-counts");
+  const ATT = { all_required: "전 요일 필수", selectable: "요일 선택", unknown: "미확인" };
+  async function load() {
+    list.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    try {
+      const d = await api.get("/api/review" + qs({ kind: kind.value, status: status.value }));
+      counts.textContent = Object.entries(d.counts).map(([k, v]) => `${k} ${v}`).join(" · ") || "큐가 비어 있습니다";
+      if (!d.items.length) { list.innerHTML = '<div class="empty-state">항목이 없습니다.</div>'; return; }
+      list.innerHTML = d.items.map((it) => {
+        const p = it.payload || {};
+        let body = "";
+        if (it.kind === "extraction") {
+          const f = p.facts || {};
+          body = `<b>${esc(p.courseName)}</b><div class="evidence">${esc((p.description || "").slice(0, 600))}</div>
+            <dl class="kv mt-8"><dt>연령</dt><dd><input class="input" style="width:70px;display:inline" data-edit="age_min" value="${f.age_min ?? ""}" placeholder="min" /> ~ <input class="input" style="width:70px;display:inline" data-edit="age_max" value="${f.age_max ?? ""}" placeholder="max" /> ${esc(f.grade_hint || "")}</dd>
+            <dt>출석 규칙</dt><dd><select class="input" style="width:auto;display:inline" data-edit="attendance_rule">${Object.entries(ATT).map(([k, l]) => `<option value="${k}" ${k === f.attendance_rule ? "selected" : ""}>${l}</option>`).join("")}</select></dd>
+            <dt>수준/셔틀</dt><dd>${esc(f.level)} / ${esc(f.shuttle)}</dd><dt>근거 문장</dt><dd>${(f.evidence || []).map((e) => `“${esc(e)}”`).join("<br>") || "–"}</dd><dt>신뢰도</dt><dd>${esc(f.confidence)} ${(f.flags || []).map((x) => `<span class="badge badge-warn">${esc(x)}</span>`).join(" ")}</dd></dl>`;
+        } else if (it.kind === "match") {
+          body = `<b>가맹시설:</b> ${esc(p.voucherName)} <span class="faint">${esc(p.voucherAddress || "")}</span><br><b>전체시설 후보:</b> ${esc(p.candidateName)} <span class="faint">${esc(p.candidateAddress || "")}</span><div class="evidence">판정 ${esc(p.verdict)} · ${esc(p.reason || "")}</div>`;
+        } else {
+          body = `<b>${esc(p.name || it.refId)}</b><div class="evidence">${esc(JSON.stringify(p))}</div>`;
+        }
+        const actions = it.status === "pending" ? `<div class="stack"><button class="btn btn-primary btn-sm" data-decide="approve" data-id="${esc(it.id)}">승인</button><button class="btn btn-ghost btn-sm" data-decide="reject" data-id="${esc(it.id)}">반려</button></div>` : `<span class="badge ${it.status === "approved" ? "badge-ok" : "badge-muted"}">${esc(it.status)}</span>`;
+        return `<div class="review-item" data-item="${esc(it.id)}"><div><span class="badge">${esc(it.kind)}</span> <span class="faint">${esc(it.refId)}</span><div class="mt-8">${body}</div></div>${actions}</div>`;
+      }).join("");
+      list.querySelectorAll("[data-decide]").forEach((b) => b.addEventListener("click", async () => {
+        const item = b.closest(".review-item"); const edits = {};
+        item.querySelectorAll("[data-edit]").forEach((i) => { const v = i.value; if (v !== "") edits[i.dataset.edit] = (i.dataset.edit.startsWith("age") ? Number(v) : v); });
+        try { await api.post(`/api/review/${b.dataset.id}`, { decision: b.dataset.decide, edits }); showSnackbar(b.dataset.decide === "approve" ? "승인했습니다" : "반려했습니다", "success"); load(); }
+        catch (e) { showSnackbar(e.message, "error"); }
+      }));
+    } catch (e) { list.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
+  }
+  kind.addEventListener("change", load); status.addEventListener("change", load); load();
+})();
+</script>
+{% endblock %}

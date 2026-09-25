@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}무료 공간 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>무료·공공 운동 공간</h1><p class="sub">이용권이 없어도 쓸 수 있는 개방학교 체육시설(운영시간 있음)과 공공체육시설입니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div class="card card-pad mb-16"><div class="input-row">
+    <select class="input" id="s-dow" style="width:auto"><option value="">요일 무관</option><option value="0">월</option><option value="1">화</option><option value="2">수</option><option value="3">목</option><option value="4">금</option><option value="5">토</option><option value="6">일</option></select>
+    <input class="input" type="time" id="s-start" value="18:00" step="900" style="width:auto" /> ~ <input class="input" type="time" id="s-end" value="21:00" step="900" style="width:auto" />
+    <button class="btn btn-primary" id="s-go">찾기</button>
+  </div></div>
+  <div id="us-body"><div class="notice">시군구를 고르세요.</div></div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  const body = document.getElementById("us-body"); const DOWS = ["월", "화", "수", "목", "금", "토", "일"];
+  const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + (m || 0); };
+  async function load() {
+    const code = window.currentRegion && window.currentRegion(); if (!code) return;
+    body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    const dow = document.getElementById("s-dow").value;
+    try {
+      const d = await api.get("/api/user/spaces" + qs({ region: code, weekday: dow === "" ? undefined : dow, start: dow === "" ? undefined : toMin(document.getElementById("s-start").value), end: dow === "" ? undefined : toMin(document.getElementById("s-end").value) }));
+      body.innerHTML = `
+        <div class="card card-pad mb-16"><div class="card-head"><h3>개방학교 체육시설 ${fmtNum(d.schools.length)}곳</h3><span class="faint">기준연도가 시설마다 달라 운영 여부 확인이 필요합니다</span></div>
+          ${d.schools.length ? `<div class="tile-grid">${d.schools.map((o) => `<div class="tile"><div class="t">${esc(o.name)}</div><div class="m">${esc(o.address || "")}</div><div class="m">종목 ${esc(o.items || "–")} · 샤워실 ${o.showers ?? "–"} · 탈의실 ${o.lockers ?? "–"} · ${esc(o.baseYear || "")}년</div><div class="m">${(o.overlap.length ? o.overlap : o.hours).map((w) => `${DOWS[w.weekday]} ${fmtTime(w.startMinute)}~${fmtTime(w.endMinute)}`).join(", ") || "운영시간 미상"}</div></div>`).join("")}</div>` : '<p class="muted">이 조건에 열린 개방학교가 없습니다.</p>'}</div>
+        <div class="card card-pad"><div class="card-head"><h3>공공체육시설 ${fmtNum(d.public.length)}곳</h3><span class="faint">운영시간은 시설에 문의</span></div>
+          <div class="tile-grid">${d.public.map((f) => `<div class="tile"><div class="t">${esc(f.name)}</div><div class="m">${esc(f.category || "")} · ${esc(f.facilityType || "")}${f.voucherMatch ? ' · <span class="badge badge-ok">이용권 가맹</span>' : ""}</div><div class="m">${esc(f.address || "")}${f.tel ? " · " + esc(f.tel) : ""}</div><div class="m">${f.transit ? `정류장 ${esc(f.transit.stopName)} 도보 ${Math.round(f.transit.minWalkSec / 60)}분` : ""}${f.safety ? ` · 안전점검 ${esc(f.safety.grade)}` : ""}</div></div>`).join("") || '<p class="muted">없음</p>'}</div></div>`;
+    } catch (e) { body.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
+  }
+  document.getElementById("s-go").addEventListener("click", load);
+  document.addEventListener("region-change", load);
+  if (window.currentRegion && window.currentRegion()) load();
+})();
+</script>
+{% endblock %}

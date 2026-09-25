@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}이용권 플래너 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>이용권 플래너</h1><p class="sub">남은 지원 기간과 예산을 계산하고, 찾기에서 저장한 강좌를 모아 봅니다. 모두 이 브라우저에만 저장됩니다.</p></div></div>
+  <div class="grid-2">
+    <div class="card card-pad">
+      <h3>남은 기간·예산</h3>
+      <div class="field"><label for="pl-type">이용권</label><select class="input" id="pl-type"><option value="105000">유·청소년 (월 105,000원)</option><option value="110000">장애인 (월 110,000원)</option></select></div>
+      <div class="field"><label for="pl-start">지원 시작 월</label><input class="input" type="month" id="pl-start" /></div>
+      <div class="field"><label for="pl-months">지원 개월 수</label><input class="input" type="number" id="pl-months" min="1" max="12" value="12" /><p class="hint">연도별 사업 기준에 따라 다릅니다. 통지서의 기간을 넣으세요.</p></div>
+      <div class="field"><label for="pl-price">다니려는 강좌 월 수강료</label><input class="input" type="number" id="pl-price" step="1000" placeholder="예: 120000" /></div>
+      <div id="pl-out" class="notice">시작 월을 넣으면 계산합니다.</div>
+    </div>
+    <div class="card card-pad">
+      <div class="card-head"><h3>저장한 강좌</h3><button class="btn btn-sm btn-ghost" id="pl-clear">모두 지우기</button></div>
+      <div id="pl-favs"><p class="muted">찾기 화면에서 ☆ 저장을 누른 강좌가 여기에 모입니다.</p></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  function calc() {
+    const start = $("pl-start").value; if (!start) return;
+    const [y, m] = start.split("-").map(Number); const months = Number($("pl-months").value || 12); const sup = Number($("pl-type").value); const price = Number($("pl-price").value || 0);
+    const now = new Date(); const nowIdx = now.getFullYear() * 12 + now.getMonth(); const startIdx = y * 12 + (m - 1); const endIdx = startIdx + months - 1;
+    const remaining = Math.max(0, Math.min(months, endIdx - Math.max(nowIdx, startIdx) + 1));
+    const used = Math.max(0, Math.min(months, nowIdx - startIdx));
+    const endY = Math.floor(endIdx / 12), endM = endIdx % 12 + 1;
+    let html = `<p><b>${remaining}개월</b> 남았습니다 (${endY}년 ${endM}월까지). 지금까지 ${used}개월이 지났고, 남은 지원 총액은 <b>${fmtWon(remaining * sup)}</b>입니다.</p>`;
+    if (price) { const own = Math.max(0, price - sup); html += `<p>월 수강료 ${fmtWon(price)}이면 매달 본인 부담은 <b>${fmtWon(own)}</b>${own === 0 ? " (지원 범위 안)" : ""}, 남은 기간 총 본인 부담은 <b>${fmtWon(own * remaining)}</b>입니다.</p>`; }
+    if (remaining <= 2 && remaining > 0) html += `<p style="color:var(--color-warm)"><b>기간이 얼마 남지 않았습니다.</b> 이번 달 안에 시작할 수 있는 강좌를 <a href="/user">찾기</a>에서 확인하세요.</p>`;
+    html += `<p class="faint">지원 금액·기간은 연도별 사업 기준을 따르며, 정확한 잔액은 공식 사이트에서 확인하세요.</p>`;
+    $("pl-out").innerHTML = html;
+    try { localStorage.setItem("sb_planner", JSON.stringify({ start, months, sup, price })); } catch (e) {}
+  }
+  ["pl-type", "pl-start", "pl-months", "pl-price"].forEach((id) => $(id).addEventListener("input", calc));
+  try { const s = JSON.parse(localStorage.getItem("sb_planner") || "null"); if (s) { $("pl-start").value = s.start; $("pl-months").value = s.months; $("pl-type").value = String(s.sup); if (s.price) $("pl-price").value = s.price; calc(); } } catch (e) {}
+  function favs() { try { return JSON.parse(localStorage.getItem("sb_favorites") || "[]"); } catch (e) { return []; } }
+  function renderFavs() {
+    const f = favs(); const el = $("pl-favs");
+    if (!f.length) { el.innerHTML = '<p class="muted">찾기 화면에서 ☆ 저장을 누른 강좌가 여기에 모입니다.</p>'; return; }
+    el.innerHTML = `<div class="list-editor">${f.map((c, i) => `<div class="list-item"><div class="head"><b>${esc(c.name)}</b><button class="btn-icon" data-del="${i}">&times;</button></div><div class="small">${esc(c.facility)} · ${esc(c.sport)} · ${esc(c.sessions)} · 월 ${fmtWon(c.priceWon)}</div><div class="small faint">${esc(c.address || "")}${c.tel ? " · " + esc(c.tel) : ""} · 저장 ${esc(c.savedAt)}</div></div>`).join("")}</div>`;
+    el.querySelectorAll("[data-del]").forEach((b) => b.addEventListener("click", () => { const arr = favs(); arr.splice(Number(b.dataset.del), 1); localStorage.setItem("sb_favorites", JSON.stringify(arr)); renderFavs(); }));
+  }
+  $("pl-clear").addEventListener("click", () => { localStorage.removeItem("sb_favorites"); renderFavs(); });
+  renderFavs();
+})();
+</script>
+{% endblock %}

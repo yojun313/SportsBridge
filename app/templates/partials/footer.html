@@ -1,0 +1,15 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-title">{{ APP_NAME }}{% if app_mode == 'user' %} · 이용자용{% elif app_mode == 'admin' %} · 담당자용{% endif %}</div>
+      {% if app_mode == 'user' %}
+      <p>스포츠강좌이용권 시설·강좌·이용현황, 전국체육시설현황, 안전점검, 인접 대중교통 등 국민체육진흥공단 공공데이터로 내 조건에 맞는 강좌와 공간을 찾습니다. 입력한 조건은 저장하지 않으며, 수요 등록은 지역·종목·요일·시간대·연령대만 익명으로 남깁니다.</p>
+      <div class="footer-links"><a href="/user/help">도움말</a><a href="https://svoucher.kspo.or.kr/main.do" target="_blank" rel="noopener">스포츠강좌이용권 공식 사이트(신청·결제)</a><a href="/gap">담당자용으로 이동</a></div>
+      {% else %}
+      <p>국민체육진흥공단·문화빅데이터플랫폼 공공데이터(스포츠강좌이용권 시설·강좌·이용현황, 전국체육시설현황, 안전점검, 인접 대중교통, 지역별 이용권 활용정보)를 결합한 담당자용 분석 도구입니다. 모든 수치는 기준일과 출처 등급을 함께 표시하고, 순위는 상대 비교입니다.</p>
+      <div class="footer-links"><a href="/data">데이터 출처</a><a href="/guide">설명서</a><a href="https://svoucher.kspo.or.kr/main.do" target="_blank" rel="noopener">스포츠강좌이용권 공식 사이트</a><a href="/user">이용자용으로 이동</a></div>
+      {% endif %}
+      <div class="copyright">2026 국민체육진흥공단 공공데이터 활용 경진대회 출품용 시제품</div>
+    </div>
+  </div>
+</footer>

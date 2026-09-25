@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}시나리오 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>시나리오 편집</h1><p class="sub">"이 시설을 가맹시키고 이 강좌를 새로 열면 아이들이 몇 명이나 더 다닐 수 있을까?"를 계산하는 화면입니다. 1번부터 5번까지 순서대로 채우고 "조합 계산"을 누르면, 조치를 하나만 했을 때와 함께 했을 때의 결과를 예산 안에서 비교해 줍니다. 입력한 내용은 이 브라우저에만 저장되고 서버로 보내지 않습니다.</p></div>
+    <div class="row">
+      <button class="btn btn-ghost btn-sm" id="sc-reset">새로 만들기</button>
+      <button class="btn btn-ghost btn-sm" id="sc-export">JSON 내보내기</button>
+      <label class="btn btn-ghost btn-sm" for="sc-import">JSON 불러오기</label><input type="file" id="sc-import" accept="application/json" hidden />
+    </div>
+  </div>
+
+  <div class="card card-pad mb-16">
+    <div class="card-head"><h3>1. 지역과 종목</h3>{% if LLM_ENABLED %}<a class="btn btn-sm btn-outline" href="/agent">문장으로 만들기 (에이전트)</a>{% endif %}</div>
+    <div class="input-row">
+      <select class="input" id="sc-sido" aria-label="시도"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
+      <select class="input" id="sc-sigungu" aria-label="시군구"><option value="">시군구</option></select>
+      <select class="input" id="sc-sport" aria-label="종목"></select>
+      <button class="btn btn-primary" id="sc-load">공급 옵션·후보 불러오기</button>
+    </div>
+    <p class="faint mt-8" id="sc-load-note">지역과 종목을 고르고 불러오기를 누르면, 그 지역에서 최근 1년 안에 수업을 연 가맹 강좌가 3번 "공급 옵션"에, 가맹 후보 시설 상위 5곳이 "가맹 협의 + 강좌 신설" 짝으로 4번 "개선 조치"에 자동으로 들어갑니다. 정원과 비용은 공공데이터에 없으니 아는 값을 넣거나 "가정"으로 두면 됩니다.</p>
+  </div>
+
+  <div class="card card-pad mb-16">
+    <div class="card-head"><h3>2. 수요 집단 <span class="faint">(익명 집단, 최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-group">+ 집단</button></div>
+    <p class="faint mb-8">강좌를 다니고 싶어 하는 아이들 묶음입니다. 예를 들어 "지역아동센터 A의 8명, 월·수·금 15~18시에 가능"처럼 인원과 가능한 시간을 넣습니다. 이름이나 개인정보는 넣지 않습니다. 이용자가 "목소리"에서 남긴 수요가 있으면 자동으로 함께 들어옵니다.</p>
+    <div class="list-editor" id="groups"></div>
+  </div>
+
+  <div class="card card-pad mb-16">
+    <div class="card-head"><h3>3. 공급 옵션 <span class="faint">(기존 강좌 + 신설 슬롯, 최대 30)</span></h3><button class="btn btn-sm btn-secondary" id="add-option">+ 옵션</button></div>
+    <p class="faint mb-8">아이들이 갈 수 있는 강좌 목록입니다. 이미 열려 있는 강좌와, 조치를 하면 새로 열 수 있는 강좌(신설 슬롯)를 함께 둡니다. 시간표가 없는 강좌는 시간이 맞는지 알 수 없어 배정에서 빠지고, 정원을 비워 두면 "미확인"으로 취급되어 확정 배정에 쓰이지 않습니다.</p>
+    <div class="list-editor" id="options"></div>
+  </div>
+
+  <div class="card card-pad mb-16">
+    <div class="card-head"><h3>4. 개선 조치 <span class="faint">(최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-action">+ 조치</button></div>
+    <p class="faint mb-8">담당자가 할 수 있는 일입니다. 가맹 협의(시설을 이용권 가맹으로 만들기), 강좌 신설(새 수업 열기), 정원 추가(기존 수업 자리 늘리기), 이동 지원(차량 등으로 데려다주기)의 네 가지입니다. 강좌 신설은 그 시설의 가맹 협의가 먼저 되어야 하므로 "선행 조치"에 가맹 협의가 자동으로 걸립니다. 비용을 알면 넣고, 모르면 "가정"으로 두세요.</p>
+    <div class="list-editor" id="actions"></div>
+  </div>
+
+  <div class="card card-pad">
+    <h3>5. 예산과 모드</h3>
+    <p class="faint mb-8">예산을 넣으면 그 금액 안에서 할 수 있는 조합만 "최선"으로 고릅니다. "정원·비용 시뮬레이션"은 몇 명이 배정되는지를 세고, "구조 탐색"은 정원을 아직 모를 때 어떤 집단이 어느 강좌와 연결될 수 있는지만 봅니다.</p>
+    <div class="input-row">
+      <div class="field" style="flex:1;min-width:180px"><label for="sc-budget">예산(원, 비우면 무제한)</label><input class="input" id="sc-budget" type="number" min="0" step="10000" /></div>
+      <div class="field" style="flex:1;min-width:220px"><label for="sc-mode">모드</label><select class="input" id="sc-mode"><option value="capacity">정원·비용 시뮬레이션 (사람 수 배정)</option><option value="structure">구조 탐색 (정원 없이 연결 가능 집단 수)</option></select></div>
+      <div class="field" style="flex:2;min-width:220px"><label for="sc-title">제목</label><input class="input" id="sc-title" placeholder="예: 종로구 초등 저학년 수영" /></div>
+    </div>
+    <div id="sc-validation"></div>
+  </div>
+  <div class="sticky-actions">
+    <span class="faint" id="sc-saved"></span>
+    <button class="btn btn-ghost" id="sc-validate">검증</button>
+    <button class="btn btn-primary" id="sc-compare">조합 계산 →</button>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>window.META = {{ meta | tojson }};</script>
+<script src="{{ asset('js/scenario-store.js') }}"></script>
+<script src="{{ asset('js/scenario.js') }}"></script>
+{% endblock %}

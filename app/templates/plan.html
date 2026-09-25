@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}협의 계획 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>협의 계획서</h1><p class="sub">조합 비교에서 고른 조치를 시설·기관과 협의할 때 쓸 문서 초안입니다. 왼쪽이 초안, 오른쪽이 초안의 근거입니다. 초안에 적힌 숫자와 이름은 오른쪽 근거에 있는 값만 쓰도록 검사했으니, "확인 필요"와 "가정" 항목을 채운 뒤 검토해서 쓰면 됩니다.</p></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario/compare">조합 비교로</a><button class="btn btn-ghost btn-sm" id="print-btn">인쇄</button>{% if LLM_ENABLED %}<button class="btn btn-primary btn-sm" id="llm-btn">AI로 다듬기 (GPT-5.6 Luna)</button>{% endif %}</div>
+  </div>
+  <div id="plan-root"><div class="empty-state"><span class="spinner"></span></div></div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ asset('js/scenario-store.js') }}"></script>
+<script src="{{ asset('js/plan.js') }}"></script>
+{% endblock %}

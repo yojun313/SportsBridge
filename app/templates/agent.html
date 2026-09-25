@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ "질문하기" if agent_mode == "user" else "복구 에이전트" }} - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container" data-agent-mode="{{ agent_mode or 'admin' }}">
+  <div class="page-head">
+    {% if agent_mode == 'user' %}
+    <div><h1>물어보기</h1><p class="sub">"강남구에 저녁에 하는 수영 있어?"처럼 물으면 공공데이터에서 찾아 답합니다. 숫자는 데이터에서 그대로 가져오고, 없으면 "확인되지 않음"이라고 말합니다.</p></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/user">조건으로 찾기</a><button class="btn btn-ghost btn-sm" id="hist-btn">이전 질문</button></div>
+    {% else %}
+    <div><h1>복구 에이전트</h1><p class="sub">"종로구에 저녁 수영 강좌가 왜 적어?"처럼 문장으로 물어보면 진단·후보 조회·조합 계산을 대신 실행하고 결과를 설명합니다. 숫자는 전부 코드가 계산한 값을 그대로 옮기고, 데이터에 없는 것은 "확인되지 않음"이라고 답합니다. 오른쪽에서 어떤 도구를 불렀는지와 근거를 볼 수 있습니다.</p></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario">시나리오 편집</a><button class="btn btn-ghost btn-sm" id="hist-btn">질의 기록</button></div>
+    {% endif %}
+  </div>
+  {% if not LLM_ENABLED %}<div class="notice warn">OpenAI API 키가 없어 에이전트가 비활성입니다. <code>.env</code>에 <code>OPENAI_API_KEY</code>와 <code>LLM_ENABLED=true</code>를 넣으면 켜집니다. 아래 예시 질문은 사전 차단·형식 확인용으로만 동작합니다.</div>{% endif %}
+  <div class="agent-layout">
+    <section class="card card-pad">
+      <div class="sample-qs" id="samples">
+        {% if agent_mode == 'user' %}
+        <button>종로구에 초등학생이 저녁에 갈 수 있는 수영 강좌 있어?</button>
+        <button>마포구 태권도 중에 월 10만 5천원 이하인 곳 알려줘</button>
+        <button>부산 동래구는 어떤 종목이 많아?</button>
+        <button>강남구에서 아직 가맹 안 된 수영장이 있어?</button>
+        {% else %}
+        <button>종로구에서 초등학생이 저녁에 갈 수 있는 수영 강좌가 왜 적어?</button>
+        <button>부산 동래구 진단 결과와 유치 후보 5곳 알려줘</button>
+        <button>종로구와 중구를 비교해줘</button>
+        <button>종로구 센터 A 아이들 8명이 수영을 월수금 오후 3~6시에 하고 싶어. 가맹 20만원, 개설 60만원에 8석 가정, 예산 90만원이면 뭘 해야 해?</button>
+        {% endif %}
+      </div>
+      <div class="chat" id="chat"><div class="msg assistant">{% if agent_mode == "user" %}안녕하세요. 사는 곳(시군구)과 하고 싶은 운동, 가능한 시간을 말씀해 주시면 이용권으로 갈 수 있는 강좌를 찾아 드립니다.{% else %}안녕하세요. 지역(시군구), 종목, 시간대, 수요 인원·예산을 말씀해 주시면 진단과 조치 조합을 계산해 드립니다.{% endif %}</div></div>
+      <form class="chat-form" id="chat-form">
+        <textarea class="input" id="q" rows="2" placeholder="{{ '예: 노원구에 주말 축구 강좌 있어?' if agent_mode == 'user' else '예: 강남구 유치 후보 중 안전점검 양호한 곳부터 알려줘' }}" maxlength="2000"></textarea>
+        <button class="btn btn-primary" id="send" type="submit">질문</button>
+      </form>
+    </section>
+    <aside class="stack">
+      <div class="card card-pad"><div class="card-head"><h3>실시간 도구 호출</h3><span class="faint" id="run-status">대기</span></div><div class="timeline" id="timeline"><div class="empty-state small">질문을 보내면 턴·도구 호출·가드 발동이 여기에 표시됩니다.</div></div></div>
+      <div class="card card-pad"><div class="card-head"><h3>근거 카드</h3></div><div class="stack" id="evidence"><p class="faint">답변 뒤 근거가 표시됩니다.</p></div></div>
+    </aside>
+  </div>
+</div>
+<div class="dialog-backdrop" id="hist-dialog"><div class="dialog dialog-lg"><div class="dialog-header"><h2>질의 기록</h2><button class="btn-icon" data-dialog-close>&times;</button></div><div id="hist-body"></div></div></div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ asset('js/agent.js') }}"></script>
+{% endblock %}

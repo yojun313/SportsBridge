@@ -1,0 +1,153 @@
+{
+ "id": "local",
+ "title": "종로구 초등 수영",
+ "regionCode": "11110",
+ "sport": "수영",
+ "demandGroups": [
+  {
+   "id": "g1",
+   "label": "지역아동센터 A",
+   "sport": "수영",
+   "size": 8,
+   "ageMin": 8,
+   "ageMax": 10,
+   "bufferMinutes": 0,
+   "transport": "walk",
+   "sessionsPerWeek": null,
+   "availability": [
+    {
+     "weekday": 0,
+     "startMinute": 900,
+     "endMinute": 1080
+    },
+    {
+     "weekday": 2,
+     "startMinute": 900,
+     "endMinute": 1080
+    },
+    {
+     "weekday": 4,
+     "startMinute": 900,
+     "endMinute": 1080
+    }
+   ],
+   "provenance": "confirmed"
+  }
+ ],
+ "supplyOptions": [
+  {
+   "id": "c:2815533",
+   "label": "종로구민회관 · 16시어린이수영 월수금(주3회)",
+   "facilityId": "vf:dd9fa9ca77e0eb",
+   "facilityName": "종로구민회관",
+   "sport": "수영",
+   "sessions": [
+    {
+     "weekday": 0,
+     "startMinute": 960,
+     "endMinute": 1020
+    },
+    {
+     "weekday": 2,
+     "startMinute": 960,
+     "endMinute": 1020
+    },
+    {
+     "weekday": 4,
+     "startMinute": 960,
+     "endMinute": 1020
+    }
+   ],
+   "attendanceRule": "unknown",
+   "ageMin": null,
+   "ageMax": null,
+   "capacity": 2,
+   "capacityProvenance": "confirmed",
+   "voucherAffiliated": true,
+   "affiliationProvenance": "public",
+   "priceWon": 147400,
+   "exists": true,
+   "reachable": {},
+   "provenance": "public",
+   "meta": {
+    "lastMonth": "2026-08",
+    "lastApplicants": 1,
+    "scheduleAmbiguous": false,
+    "scheduleSource": "course_table",
+    "factsProvenance": null
+   }
+  },
+  {
+   "id": "new:af:4d83639137ed1c",
+   "label": "올림픽기념국민생활관수영장 · 신설 수영 강좌",
+   "facilityId": "af:4d83639137ed1c",
+   "facilityName": "올림픽기념국민생활관수영장",
+   "sport": "수영",
+   "sessions": [
+    {
+     "weekday": 0,
+     "startMinute": 960,
+     "endMinute": 1020
+    },
+    {
+     "weekday": 2,
+     "startMinute": 960,
+     "endMinute": 1020
+    },
+    {
+     "weekday": 4,
+     "startMinute": 960,
+     "endMinute": 1020
+    }
+   ],
+   "attendanceRule": "unknown",
+   "ageMin": null,
+   "ageMax": null,
+   "capacity": null,
+   "capacityProvenance": "assumed",
+   "voucherAffiliated": false,
+   "affiliationProvenance": "public",
+   "priceWon": null,
+   "exists": false,
+   "reachable": {},
+   "provenance": "assumed"
+  }
+ ],
+ "actions": [
+  {
+   "id": "aff1",
+   "label": "올림픽기념국민생활관수영장 가맹 협의",
+   "kind": "affiliate",
+   "facilityId": "af:4d83639137ed1c",
+   "supplyOptionId": null,
+   "demandGroupId": null,
+   "capacity": null,
+   "costWon": 200000,
+   "costProvenance": "assumed",
+   "requires": [],
+   "conflicts": [],
+   "leadWeeks": null,
+   "provenance": "assumed"
+  },
+  {
+   "id": "open1",
+   "label": "올림픽기념국민생활관수영장 수영 강좌 신설",
+   "kind": "open_course",
+   "facilityId": null,
+   "supplyOptionId": "new:af:4d83639137ed1c",
+   "demandGroupId": null,
+   "capacity": 8,
+   "costWon": 600000,
+   "costProvenance": "assumed",
+   "requires": [
+    "aff1"
+   ],
+   "conflicts": [],
+   "leadWeeks": null,
+   "provenance": "assumed"
+  }
+ ],
+ "budgetWon": 900000,
+ "mode": "capacity",
+ "notes": ""
+}

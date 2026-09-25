@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ko" data-app="{{ app_mode or 'admin' }}" data-theme="{{ 'light' if app_mode == 'user' else 'dark' }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>{% block title %}{{ APP_NAME }} - {{ APP_FULL_NAME }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}스포츠강좌이용권 이용자에게는 내 조건에 맞는 강좌를, 담당자에게는 공급 공백 진단과 조치 조합을 제공하는 서비스{% endblock %}" />
+    <meta name="theme-color" content="{{ '#eef0f9' if app_mode == 'user' else '#05070f' }}" />
+    <link rel="manifest" href="/static/manifest.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="{{ APP_NAME }}" />
+    <meta name="application-name" content="{{ APP_NAME }}" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('icons/favicon.svg') }}" />
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('icons/favicon-32.png') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('icons/apple-touch-icon.png') }}" />
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}" />
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body>
+    {% include "partials/header.html" %}
+    <div class="global-import" id="global-import-bar" hidden><div class="global-import-inner"><span class="spinner" style="width:14px;height:14px"></span><span id="global-import-text">데이터 적재 중…</span><div class="progress"><div class="progress-bar" id="global-import-fill"></div></div><a href="/data" class="small">자세히</a></div></div>
+    {% if DEMO_MODE %}<div class="demo-banner" role="status">합성·시연 데이터 모드입니다. 실제 지역 통계로 해석하지 마세요.</div>{% endif %}
+    <main id="main">
+      {% block content %}{% endblock %}
+    </main>
+    {% block footer %}{% include "partials/footer.html" %}{% endblock %}
+    {% include "partials/tabbar.html" %}
+    <div id="snackbar-root" aria-live="polite"></div>
+    <script src="{{ asset('js/api.js') }}"></script>
+    <script src="{{ asset('js/ui.js') }}"></script>
+    <script src="{{ asset('js/viewport.js') }}"></script>
+    {% block extra_scripts %}{% endblock %}
+  </body>
+</html>

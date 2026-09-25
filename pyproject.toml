@@ -1,0 +1,33 @@
+[project]
+name = "sportsbridge"
+version = "0.1.0"
+description = "스포츠브릿지 - 스포츠강좌이용권 공급 공백 진단·후보 발굴·조치 조합 시뮬레이션"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "httpx>=0.27",
+    "jinja2>=3.1",
+    "motor>=3.5",
+    "openai>=1.60",
+    "pydantic>=2.8",
+    "pymongo>=4.8",
+    "python-dotenv>=1.0",
+    "python-multipart>=0.0.32",
+    "uvicorn>=0.30",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

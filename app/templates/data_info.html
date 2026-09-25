@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}데이터 관리 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>데이터 관리</h1><p class="sub">이 서비스가 쓰는 공단 원본 데이터 10종의 출처 주소와 파일, 적재 상태를 관리합니다. 새 CSV 파일을 올리고 <b>전체 다시 적재</b>를 누르면 약 1분 뒤 모든 화면이 새 데이터로 바뀝니다. 진행 상황은 서버에 기록되므로 다른 컴퓨터에서 열어도 똑같이 보입니다.</p></div>
+    <div class="row"><button class="btn btn-primary" id="import-btn">전체 다시 적재</button></div>
+  </div>
+  <div class="card card-pad mb-16" id="job-card">
+    <div class="card-head"><h3>적재 상태</h3><span class="faint" id="job-meta">–</span></div>
+    <div class="progress" aria-label="적재 진행률"><div class="progress-bar" id="job-bar" style="width:0%"></div></div>
+    <div class="row mt-8 between"><span id="job-step" class="small">대기 중</span><span id="job-pct" class="small mono">0%</span></div>
+    <details class="expandable mt-8"><summary>단계 로그</summary><ul class="trace small" id="job-log"></ul></details>
+  </div>
+  <div class="card mb-16">
+    <div class="table-wrap"><table class="table responsive" id="src-table"><thead><tr><th>데이터</th><th>역할</th><th>출처</th><th>파일</th><th>적재</th><th>교체</th></tr></thead><tbody id="src-body"><tr><td colspan="6" class="empty-state"><span class="spinner"></span></td></tr></tbody></table></div>
+  </div>
+  <div class="grid-2">
+    <div class="card card-pad"><div class="card-head"><h3>버전 이력</h3></div><div class="table-wrap"><table class="table"><thead><tr><th>버전</th><th>상태</th><th>적재 시각</th><th class="num">가맹시설</th><th class="num">강좌</th><th class="num">전체시설</th><th class="num">소요</th></tr></thead><tbody id="ver-body"></tbody></table></div></div>
+    <div class="card card-pad">
+      <h3>해석 규칙</h3>
+      <ul class="small stack">
+        <li>• <b>지역코드</b>: 지역별 이용권 활용정보의 5자리 코드가 표준. 2026 개편 코드(12xxx)·시 안의 구 코드는 이름으로 결합, 인천 신설구는 옛 중구·서구로 근사.</li>
+        <li>• <b>강좌 시간표</b>: 이용현황의 강좌번호를 기본 단위로 삼고 (종목·강좌명·가격·연도)로 결합. 후보가 여럿이면 "모호".</li>
+        <li>• <b>수강료</b>: 이용현황의 월별 금액을 월 수강료로 해석. <b>활동</b>: 최신 강좌월({{ meta.dataMaxMonth or '–' }}) 기준 12개월 내 기록.</li>
+        <li>• <b>가맹↔전체 매칭</b>: 이름+주소 → 지역 내 유일 이름 → 전화 → 블로킹 후보(AI 판정·검토 큐).</li>
+        <li>• LLM {{ '활성' if LLM_ENABLED else '비활성' }} ({{ meta.llm.modelMain }}).</li>
+      </ul>
+      <h3 class="mt-16">출처 등급</h3>
+      <div class="row">{% for p, label in [('public','공공자료'),('rule','규칙'),('llm_extracted','AI추출·미검토'),('llm_reviewed','AI추출·검토완료'),('confirmed','담당자확인'),('assumed','가정')] %}<span class="prov prov-{{ p }}">{{ label }}</span>{% endfor %}</div>
+    </div>
+  </div>
+</div>
+<div class="dialog-backdrop" id="src-dialog"><div class="dialog"><div class="dialog-header"><h2 id="src-dialog-title">출처 편집</h2><button class="btn-icon" data-dialog-close>&times;</button></div>
+  <div class="field"><label for="src-url">출처 URL</label><input class="input" id="src-url" /></div>
+  <div class="field"><label for="src-asof">기준일(원본 기준)</label><input class="input" id="src-asof" placeholder="예: 2026-08-20" /></div>
+  <div class="field"><label for="src-note">메모</label><textarea class="input" id="src-note" rows="3"></textarea></div>
+  <div class="dialog-footer"><button class="btn btn-ghost" data-dialog-close>취소</button><button class="btn btn-primary" id="src-save">저장</button></div></div></div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ asset('js/data-admin.js') }}"></script>
+{% endblock %}

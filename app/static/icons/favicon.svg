@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#8b5cf6"/></linearGradient></defs>
+  <rect width="64" height="64" rx="14" fill="url(#g)"/>
+  <g fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 바벨 -->
+    <line x1="10" y1="15" x2="54" y2="15"/>
+    <rect x="9" y="9" width="6" height="12" rx="1.5" fill="#fff" stroke="none"/>
+    <rect x="49" y="9" width="6" height="12" rx="1.5" fill="#fff" stroke="none"/>
+    <!-- 팔: 어깨에서 바벨로 -->
+    <path d="M26 34 L21 17 M38 34 L43 17"/>
+    <!-- 몸통 -->
+    <path d="M32 33 L32 42"/>
+    <!-- 다리: 스쿼트 -->
+    <path d="M32 42 L19 44 L17 55 M32 42 L45 44 L47 55"/>
+    <!-- 발 -->
+    <path d="M12 55 L19 55 M45 55 L52 55"/>
+  </g>
+  <!-- 머리 -->
+  <circle cx="32" cy="26" r="4.5" fill="#fff"/>
+</svg>

@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}내 조건으로 찾기 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>내 조건에 맞는 운동 찾기</h1><p class="sub">지역·종목·가능한 시간·예산을 넣으면 조건에 맞는 이용권 강좌와 무료 공간을 찾습니다. 입력한 조건은 저장하지 않습니다.</p></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/guide#user-mode">사용법</a></div>
+  </div>
+  <div class="layout-side">
+    <aside class="side">
+      <form class="card card-pad" id="u-form">
+        <div class="field"><label>지역</label><div class="stack">
+          <select class="input" id="u-sido"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
+          <select class="input" id="u-sigungu" required><option value="">시군구</option></select></div></div>
+        <div class="field"><label>나는</label><select class="input" id="u-type"><option value="youth_voucher">유·청소년 이용권 대상(만 5~18세)</option><option value="disability_voucher">장애인 이용권 대상</option><option value="general">일반(이용권 없이 동네 운동 공간)</option></select></div>
+        <div class="field"><label>희망 종목 <span class="faint">최대 3개, 먼저 고른 순서가 우선</span></label><div class="chips" id="u-sports"></div></div>
+        <div class="field"><label for="u-age">나이(만, 선택)</label><input class="input" id="u-age" type="number" min="3" max="100" placeholder="예: 10" /></div>
+        <div class="field"><label>가능한 요일·시간</label>
+          <div class="dow-toggle-row" id="u-dows"></div>
+          <div class="row mt-8"><input class="input" type="time" id="u-start" value="16:00" step="900" style="width:auto" /> ~ <input class="input" type="time" id="u-end" value="18:00" step="900" style="width:auto" /></div>
+          <p class="hint">고른 요일 모두 같은 시간대로 적용됩니다. 요일별로 다르게 하려면 결과 화면에서 조건 변경을 쓰세요.</p></div>
+        <div class="field"><label for="u-buffer">이동·준비 여유(분)</label><input class="input" id="u-buffer" type="number" min="0" max="120" value="15" /></div>
+        <div class="field"><label for="u-budget">월 예산(원, 선택)</label><input class="input" id="u-budget" type="number" min="0" step="10000" placeholder="예: 105000" /><p class="hint">유·청소년 이용권은 월 10만 5천 원까지 지원됩니다(초과분 본인 부담).</p></div>
+        <div class="field"><label for="u-transport">이동 수단</label><select class="input" id="u-transport"><option value="walk">걸어서·대중교통</option><option value="own_vehicle">가족·기관 차량</option><option value="needs_support">이동 지원이 필요함</option></select></div>
+        <button class="btn btn-primary btn-block" type="submit" id="u-go">찾기</button>
+      </form>
+    </aside>
+    <section id="u-results">
+      <div class="notice">왼쪽에 조건을 넣고 <b>찾기</b>를 누르세요. 결과는 <b>조건 일치 · 확인 필요 · 조건 불일치</b> 세 묶음으로 나오고, 결과가 적으면 무엇을 바꾸면 되는지 제안합니다.</div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>window.META = {{ meta | tojson }};</script>
+<script src="{{ asset('js/user.js') }}"></script>
+{% endblock %}

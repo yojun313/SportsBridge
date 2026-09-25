@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}조합 비교 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head">
+    <div><h1>조치 조합 비교</h1><p class="sub" id="cmp-sub">시나리오를 불러오는 중…</p></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario">편집으로</a><button class="btn btn-primary btn-sm" id="to-plan" disabled>선택 조합으로 협의 계획 →</button></div>
+  </div>
+  <div class="notice mb-16">읽는 법: <b>현재 상태</b>는 아무 조치도 하지 않았을 때 지금 강좌만으로 다닐 수 있는 인원, <b>예산 내 최선 조합</b>은 예산 안에서 가장 많은 인원이 다닐 수 있게 하는 조치 묶음, <b>탐욕 방식</b>은 조치를 하나씩 효과가 큰 순서로 고르는 단순한 방법의 결과입니다. 최선 조합이 탐욕 방식보다 많으면 "함께 해야 효과가 나는" 조치가 있다는 뜻입니다. 배정 인원은 입력한 조건과 가정에 따른 계산값이며 실제 참여 인원이 아닙니다.</div>
+  <div id="cmp-root"><div class="empty-state"><span class="spinner"></span></div></div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{{ asset('js/scenario-store.js') }}"></script>
+<script src="{{ asset('js/compare.js') }}"></script>
+{% endblock %}

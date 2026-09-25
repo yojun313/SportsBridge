@@ -1,0 +1,41 @@
+{#- 하단 탭바 (768px 미만에서만 보임). 메뉴는 모드별로 header.html과 같은 목록에서 앞 4개 + 더보기 -#}
+{% set path = request.url.path %}
+{% if path == '/' %}
+  {% set tabs = [] %}{% set more_items = [] %}{% set switch = none %}
+{% elif app_mode == 'user' %}
+  {% set tabs = [("/user", "찾기", "🔎"), ("/user/region", "내 동네", "🏘"), ("/user/facilities", "시설", "🏊"), ("/user/voice", "목소리", "📣")] %}
+  {% set more_items = [("/user/spaces", "무료 공간", "🏫"), ("/user/planner", "플래너", "🗓"), ("/user/ask", "질문", "💬"), ("/user/help", "도움말", "❓"), ("/user/guide", "설명서", "📖")] %}
+  {% set switch = ("/gap", "담당자용으로") %}
+{% elif app_mode == 'admin' %}
+  {% set tabs = [("/gap", "진단", "📊"), ("/candidates", "후보", "📍"), ("/scenario", "시나리오", "🧩"), ("/agent", "에이전트", "🤖")] %}
+  {% set more_items = [("/review", "검토", "✅"), ("/data", "데이터", "🗂"), ("/guide", "설명서", "📖")] %}
+  {% set switch = ("/user", "이용자용으로") %}
+{% else %}
+  {% set tabs = [("/", "홈", "🏠"), ("/user", "이용자용", "🔎"), ("/gap", "담당자용", "📊"), ("/guide", "설명서", "📖")] %}
+  {% set more_items = [] %}
+  {% set switch = none %}
+{% endif %}
+{% macro is_active(href) -%}{{ 'active' if path == href or (href not in ('/', '/user') and path.startswith(href + '/')) else '' }}{%- endmacro %}
+{% if tabs %}
+<nav class="tabbar" aria-label="하단 메뉴">
+  {% for href, label, icon in tabs %}
+  <a href="{{ href }}" class="tab-item {{ is_active(href) }}" {% if is_active(href) %}aria-current="page"{% endif %}><span class="tab-icon" aria-hidden="true">{{ icon }}</span><span class="tab-label">{{ label }}</span></a>
+  {% endfor %}
+  {% if more_items %}
+  <button type="button" class="tab-item {{ 'active' if more_items | selectattr(0, 'in', [path]) | list else '' }}" id="tab-more" aria-expanded="false" aria-controls="more-sheet"><span class="tab-icon" aria-hidden="true">⋯</span><span class="tab-label">더보기</span></button>
+  {% endif %}
+</nav>
+{% endif %}
+{% if more_items %}
+<div class="more-sheet" id="more-sheet" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-label="더보기 메뉴">
+    <div class="sheet-grip"></div>
+    <div class="sheet-title">더보기</div>
+    {% for href, label, icon in more_items %}
+    <a href="{{ href }}" class="sheet-action {{ is_active(href) }}"><span class="tab-icon" aria-hidden="true">{{ icon }}</span>{{ label }}</a>
+    {% endfor %}
+    {% if switch %}<a href="{{ switch[0] }}" class="sheet-action switch"><span class="tab-icon" aria-hidden="true">↔</span>{{ switch[1] }}</a>{% endif %}
+    <button type="button" class="sheet-action" data-sheet-close><span class="tab-icon" aria-hidden="true">✕</span>닫기</button>
+  </div>
+</div>
+{% endif %}

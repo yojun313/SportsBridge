@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# 비밀·로컬 설정
+.env
+logs/
+*.log
+
+# 공단 원본 CSV는 압축본(.csv.gz)만 올립니다. 풀어 놓은 .csv는 올리지 않습니다.
+data/raw/*.csv
+
+# MongoDB 데이터 파일(DB 자체는 git 대상이 아님)
+data/mongo/
+
+# 임시
+.DS_Store
+node_modules/

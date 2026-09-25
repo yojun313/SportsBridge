@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}내 동네 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>내 동네 운동 사정</h1><p class="sub">우리 시군구에 이용권으로 갈 수 있는 시설과 강좌가 얼마나 있는지 쉬운 말로 보여줍니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div id="ur-body"><div class="notice">시군구를 고르세요.</div></div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  const body = document.getElementById("ur-body");
+  const DOWS = ["월", "화", "수", "목", "금", "토", "일"];
+  function bars(pairs, labelFn) { const max = Math.max(1, ...pairs.map((p) => p[1])); return `<div class="bar-list">${pairs.map(([k, v]) => `<div class="bar-row"><span class="k">${esc(labelFn ? labelFn(k) : k)}</span><div class="bar"><span style="width:${(v / max * 100).toFixed(1)}%"></span></div><span class="v">${fmtNum(v)}</span></div>`).join("")}</div>`; }
+  async function load(code) {
+    if (!code) return;
+    body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    try {
+      const d = await api.get(`/api/user/region/${code}`); const r = d.region; const sig = d.signals || {};
+      body.innerHTML = `
+        <div class="card card-pad mb-16"><h2>${esc(r.sidoName)} ${esc(r.sigunguName)}</h2><ul class="stack">${d.plain.map((t) => `<li class="guide-list">• ${esc(t)}</li>`).join("")}</ul></div>
+        <div class="grid-4 mb-16">
+          <div class="card stat"><div class="label">이용권으로 갈 수 있는 시설</div><div class="value">${fmtNum(r.activeFacilityCount)}<small>곳</small></div><div class="desc">최근 1년 강좌 운영 기준</div></div>
+          <div class="card stat"><div class="label">열린 강좌</div><div class="value">${fmtNum(r.activeCourseCount)}<small>개</small></div><div class="desc">종목 ${fmtNum(r.sportCount)}가지</div></div>
+          <div class="card stat"><div class="label">저녁 강좌</div><div class="value">${fmtPct(r.eveningShare)}</div><div class="desc">18시 이후 시작</div></div>
+          <div class="card stat"><div class="label">동네 목소리</div><div class="value">${fmtNum((sig.demand || {}).total || 0)}<small>건</small></div><div class="desc">수요 등록 · 가맹 요청 ${fmtNum(sig.voteTotal || 0)}건</div></div>
+        </div>
+        <div class="grid-2 mb-16">
+          <div class="card card-pad"><div class="card-head"><h3>어떤 종목이 있나</h3></div>${d.sportCounts.length ? bars(d.sportCounts.slice(0, 10)) : '<p class="muted">최근 강좌가 없습니다.</p>'}</div>
+          <div class="card card-pad"><div class="card-head"><h3>몇 시에 시작하나</h3></div>${bars(Object.entries(d.hourBins).map(([h, v]) => [h + "시", v]))}<div class="mt-16">${bars(DOWS.map((n, i) => [n, d.dowCounts[i]]))}</div></div>
+        </div>
+        <div class="card card-pad"><div class="card-head"><h3>시설 ${fmtNum(d.facilities.length)}곳</h3><a class="btn btn-sm btn-primary" href="/user/facilities?region=${esc(code)}">시설 자세히</a></div>
+          <div class="tile-grid">${d.facilities.slice(0, 24).map((f) => `<div class="tile"><div class="t">${esc(f.name)}</div><div class="m">${esc((f.sports || []).join(", "))}</div><div class="m">${esc(f.address || "")}</div><div class="m">${f.usage && f.usage.active ? '<span class="badge badge-ok">최근 운영</span>' : '<span class="badge badge-muted">최근 기록 없음</span>'} ${f.transit ? `정류장 ${Math.round(f.transit.minWalkSec / 60)}분` : ""}</div></div>`).join("")}</div>
+        </div>`;
+    } catch (e) { body.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
+  }
+  document.addEventListener("region-change", (e) => load(e.detail));
+  if (window.currentRegion && window.currentRegion()) load(window.currentRegion());
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{
+  "version": "v20260918-094222",
+  "steps": {
+    "regions": {
+      "count": 230
+    },
+    "voucher_facilities": {
+      "count": 30334,
+      "unmappedRegions": 0
+    },
+    "courses": {
+      "count": 58955,
+      "unique": 23032,
+      "ambiguous": 30491,
+      "no_schedule": 5432,
+      "course_table_rows": 66808,
+      "monthlyDocs": 381882
+    },
+    "all_facilities": {
+      "allFacilities": 159031,
+      "safetyJoined": 97538,
+      "safetyRows": 114694,
+      "transitJoined": 14633
+    },
+    "voucher_transit": {
+      "joined": 18822
+    },
+    "matching": {
+      "none": 6588,
+      "exact_name_addr": 6973,
+      "exact_tel_region": 2659,
+      "exact_name_region": 5167,
+      "candidates": 8947
+    },
+    "aggregates": {
+      "count": 230,
+      "dataMaxMonth": "2026-08"
+    }
+  },
+  "unmappedRegions": {
+    "50000": "제주특별자치도",
+    "41000": "경기도",
+    "28000": "인천광역시",
+    "27000": "대구광역시",
+    "12000": "전남광주통합특별시",
+    "51000": "강원특별자치도",
+    "52000": "전북특별자치도",
+    "43000": "",
+    "44000": "",
+    "47000": "경상남도",
+    "48000": "",
+    "31000": "울산광역시",
+    "30000": "대전광역시",
+    "11000": "서울특별시",
+    "26000": "부산광역시",
+    "36000": "",
+    "28180": "인천광역시",
+    "28240": "인천광역시",
+    "11210": "서울특별시",
+    "29150": "전남광주통합특별시",
+    "28230": "인천광역시",
+    "46000": "평촌길",
+    "29000": "광주광역시"
+  },
+  "written": {
+    "region_stats": 230,
+    "facilities_voucher": 30334,
+    "courses": 58955,
+    "usage_monthly": 381882,
+    "facilities_all": 159031,
+    "match_results": 30334,
+    "gap_aggregates": 230
+  },
+  "previousVersion": null,
+  "elapsedSec": 61.8
+}

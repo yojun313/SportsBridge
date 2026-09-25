@@ -1,0 +1,19 @@
+<div class="row" id="u-picker">
+  <select class="input" id="p-sido" aria-label="시도" style="width:auto;min-width:130px"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
+  <select class="input" id="p-sigungu" aria-label="시군구" style="width:auto;min-width:140px"><option value="">시군구</option></select>
+</div>
+<script>
+(function () {
+  const meta = {{ meta | tojson }};
+  const sido = document.getElementById("p-sido"), sg = document.getElementById("p-sigungu");
+  function fill() { sg.innerHTML = '<option value="">시군구</option>'; const s = (meta.sidos || []).find((x) => x.sidoCode === sido.value); (s ? s.regions : []).forEach((r) => { const o = document.createElement("option"); o.value = r.regionCode; o.textContent = r.name; sg.appendChild(o); }); }
+  sido.addEventListener("change", fill);
+  let saved = null; try { saved = localStorage.getItem("sb_region"); } catch (e) {}
+  const fromUrl = new URLSearchParams(location.search).get("region");
+  const initial = fromUrl || saved;
+  if (initial) { sido.value = initial.slice(0, 2); fill(); sg.value = initial; }
+  sg.addEventListener("change", () => { try { localStorage.setItem("sb_region", sg.value); } catch (e) {} document.dispatchEvent(new CustomEvent("region-change", { detail: sg.value })); });
+  window.currentRegion = () => sg.value;
+  window.currentRegionName = () => sg.options[sg.selectedIndex] ? sg.options[sg.selectedIndex].textContent : "";
+})();
+</script>

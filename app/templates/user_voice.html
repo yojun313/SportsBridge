@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}동네 목소리 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>동네 목소리</h1><p class="sub">"이런 강좌가 있었으면", "이 시설이 가맹되면 다닐게요"를 익명으로 남깁니다. 담당자의 공급 계획에 그대로 들어갑니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
+  <div class="layout-side">
+    <aside class="side">
+      <form class="card card-pad" id="v-form">
+        <h3>이런 강좌가 있었으면</h3>
+        <div class="field"><label for="v-sport">종목</label><select class="input" id="v-sport"></select></div>
+        <div class="field"><label>요일</label><div class="dow-toggle-row" id="v-dows"></div></div>
+        <div class="field"><label>시간대</label><div class="row"><input class="input" type="time" id="v-start" value="18:00" step="900" style="width:auto" /> ~ <input class="input" type="time" id="v-end" value="20:00" step="900" style="width:auto" /></div></div>
+        <div class="field"><label for="v-band">누가</label><select class="input" id="v-band"><option value="10">초등학생</option><option value="15">중·고등학생</option><option value="35">성인</option><option value="70">어르신</option></select></div>
+        <div class="field"><label for="v-type">이용권</label><select class="input" id="v-type"><option value="youth_voucher">유·청소년 이용권</option><option value="disability_voucher">장애인 이용권</option><option value="general">없음(일반)</option></select></div>
+        <button class="btn btn-primary btn-block" type="submit">익명으로 남기기</button>
+        <p class="hint">이름·주소·정확한 나이는 저장하지 않습니다.</p>
+      </form>
+    </aside>
+    <section id="uv-body"><div class="notice">시군구를 고르세요.</div></section>
+  </div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script>
+(function () {
+  const body = document.getElementById("uv-body"); const DOWS = ["월", "화", "수", "목", "금", "토", "일"];
+  const SPORTS = ["수영", "태권도", "헬스", "축구(풋살)", "복싱", "필라테스", "댄스(줌바 등)", "무용(발레 등)", "줄넘기", "농구", "야구", "검도", "유도", "합기도", "요가", "주짓수", "배드민턴", "탁구", "기타종목"];
+  const sel = document.getElementById("v-sport"); SPORTS.forEach((s) => { const o = document.createElement("option"); o.value = s; o.textContent = s; sel.appendChild(o); });
+  let dows = new Set([1, 3]); const dw = document.getElementById("v-dows");
+  function renderDows() { dw.innerHTML = DOWS.map((d, i) => `<button type="button" class="dow-toggle ${dows.has(i) ? "active" : ""}" data-d="${i}">${d}</button>`).join(""); dw.querySelectorAll("[data-d]").forEach((b) => b.addEventListener("click", () => { const i = Number(b.dataset.d); dows.has(i) ? dows.delete(i) : dows.add(i); renderDows(); })); }
+  renderDows();
+  const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + (m || 0); };
+  async function load() {
+    const code = window.currentRegion && window.currentRegion(); if (!code) return;
+    body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
+    try {
+      const d = await api.get(`/api/user/voice/${code}`);
+      const slots = Object.entries(d.bySlot).map(([k, v]) => { const [dd, h] = k.split(":").map(Number); return [`${DOWS[dd]} ${String(h).padStart(2, "0")}시`, v]; }).sort((a, b) => b[1] - a[1]).slice(0, 8);
+      const max = Math.max(1, ...slots.map((s) => s[1]));
+      body.innerHTML = `
+        <div class="grid-3 mb-16"><div class="card stat"><div class="label">등록된 수요</div><div class="value">${fmtNum(d.demand.total)}<small>건</small></div></div><div class="card stat"><div class="label">가맹 요청</div><div class="value">${fmtNum(d.voteTotal)}<small>건</small></div></div><div class="card stat"><div class="label">가장 많은 종목</div><div class="value" style="font-size:18px">${d.demand.bySport.length ? esc(d.demand.bySport[0].sport) + " " + d.demand.bySport[0].count + "건" : "–"}</div></div></div>
+        <div class="grid-2 mb-16">
+          <div class="card card-pad"><div class="card-head"><h3>종목별 수요</h3></div>${d.demand.bySport.length ? `<div class="bar-list">${d.demand.bySport.map((s) => `<div class="bar-row"><span class="k">${esc(s.sport)}</span><div class="bar"><span style="width:${(s.count / d.demand.bySport[0].count * 100).toFixed(0)}%"></span></div><span class="v">${s.count}</span></div>`).join("")}</div>` : '<p class="muted">아직 없습니다. 첫 목소리를 남겨 주세요.</p>'}</div>
+          <div class="card card-pad"><div class="card-head"><h3>원하는 시간대</h3></div>${slots.length ? `<div class="bar-list">${slots.map(([k, v]) => `<div class="bar-row"><span class="k">${esc(k)}</span><div class="bar"><span style="width:${(v / max * 100).toFixed(0)}%"></span></div><span class="v">${v}</span></div>`).join("")}</div>` : '<p class="muted">–</p>'}</div>
+        </div>
+        <div class="card card-pad"><div class="card-head"><h3>가맹되면 다니고 싶은 시설</h3><span class="faint">아직 가맹하지 않은 것으로 보이는 근처 체육시설</span></div>
+          <div class="table-wrap"><table class="table responsive"><thead><tr><th>시설</th><th>업종</th><th class="num">요청</th><th></th></tr></thead><tbody>${d.candidates.map((f) => `<tr><td class="name" data-label="시설"><b>${esc(f.name)}</b><span class="sub">${esc(f.address || "")}</span></td><td data-label="업종">${esc(f.category || "")}${f.safety ? " · 안전 " + esc(f.safety) : ""}</td><td class="num" data-label="요청"><span id="v-${esc(f.facilityId)}">${f.votes}</span></td><td><button class="btn btn-sm btn-outline" data-vote="${esc(f.facilityId)}">가맹되면 다닐게요</button></td></tr>`).join("") || '<tr><td colspan="4" class="empty-state">후보가 없습니다.</td></tr>'}</tbody></table></div></div>`;
+      body.querySelectorAll("[data-vote]").forEach((b) => b.addEventListener("click", async () => { b.disabled = true; try { const r = await api.post("/api/user/vote", { facilityId: b.dataset.vote, regionCode: code, sport: sel.value }); document.getElementById("v-" + b.dataset.vote).textContent = r.votes; b.textContent = "표시됨"; showSnackbar("담당자 유치 순서에 반영됩니다", "success"); } catch (e) { showSnackbar(e.message, "error"); b.disabled = false; } }));
+    } catch (e) { body.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
+  }
+  document.getElementById("v-form").addEventListener("submit", async (e) => {
+    e.preventDefault(); const code = window.currentRegion && window.currentRegion(); if (!code) { showSnackbar("시군구를 고르세요", "error"); return; }
+    const s = toMin(document.getElementById("v-start").value), en = toMin(document.getElementById("v-end").value);
+    const profile = { regionCode: code, userType: document.getElementById("v-type").value, sports: [sel.value], age: Number(document.getElementById("v-band").value), availability: [...dows].sort().map((d) => ({ weekday: d, startMinute: s, endMinute: Math.max(en, s + 15) })), bufferMinutes: 0, monthlyBudgetWon: null, transport: "walk" };
+    try { await api.post("/api/user/demand", { profile, note: "" }); showSnackbar("남겼습니다. 고맙습니다!", "success"); load(); } catch (err) { showSnackbar(err.message, "error"); }
+  });
+  document.addEventListener("region-change", load);
+  if (window.currentRegion && window.currentRegion()) load();
+})();
+</script>
+{% endblock %}

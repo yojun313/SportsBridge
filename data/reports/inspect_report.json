@@ -1,0 +1,1517 @@
+{
+  "files": {
+    "regional_usage": {
+      "file": "데이터_지역별스포츠강좌이용권활용정보.csv",
+      "sha256": "09189a606e513ffbe662fa0fc2a45c1fcb992297b36dd068178bcc665e16ac70",
+      "bytes": 52003,
+      "rows": 460,
+      "columns": [
+        "BASE_YEAR",
+        "CTPRVN_CD",
+        "CTPRVN_NM",
+        "SIGNGU_CD",
+        "SIGNGU_NM",
+        "SIGNGU_ACCTO_POPLTN_CO",
+        "SIGNGU_ACCTO_FCLTY_CO",
+        "RECIPT_FLAG_CD",
+        "RECIPT_FLAG_NM",
+        "CRRSPND_FLAG_TRGET_NMPR_CO",
+        "CRRSPND_FLAG_RECIPT_NMPR_CO"
+      ],
+      "emptyRate": {
+        "BASE_YEAR": 0.0,
+        "CTPRVN_CD": 0.0,
+        "CTPRVN_NM": 0.0,
+        "SIGNGU_CD": 0.0,
+        "SIGNGU_NM": 0.0,
+        "SIGNGU_ACCTO_POPLTN_CO": 0.0,
+        "SIGNGU_ACCTO_FCLTY_CO": 0.0,
+        "RECIPT_FLAG_CD": 0.0,
+        "RECIPT_FLAG_NM": 0.0,
+        "CRRSPND_FLAG_TRGET_NMPR_CO": 0.0043,
+        "CRRSPND_FLAG_RECIPT_NMPR_CO": 0.0
+      },
+      "distributions": {
+        "BASE_YEAR": [
+          {
+            "value": "2026",
+            "count": 460
+          }
+        ],
+        "RECIPT_FLAG_NM": [
+          {
+            "value": "차상위계층 및 한부모가정",
+            "count": 230
+          },
+          {
+            "value": "기초수급생활대상자",
+            "count": 230
+          }
+        ]
+      }
+    },
+    "voucher_facilities": {
+      "file": "데이터_스포츠강좌이용권시설.csv",
+      "sha256": "d16d39029f353986b92fad3b46b263253163b065bac2d48b389b8df423c163b3",
+      "bytes": 6528619,
+      "rows": 28892,
+      "columns": [
+        "CTPRVN_CD",
+        "CTPRVN_NM",
+        "SIGNGU_CD",
+        "SIGNGU_NM",
+        "FCLTY_NM",
+        "RPRSNTV_NM",
+        "RPRSNTV_TEL_NO",
+        "ZIP_NO",
+        "FCLTY_ADDR",
+        "DETAIL_ADDR",
+        "ITEM_CD",
+        "ITEM_NM",
+        "FCLTY_X_CRDNT_VALUE",
+        "FCLTY_Y_CRDNT_VALUE",
+        "FCLTY_COURSE_SDIV_NM",
+        "COURSE_ITEM_NM",
+        "COURSE_NM",
+        "FCLTY_DECSN_DE"
+      ],
+      "emptyRate": {
+        "CTPRVN_CD": 0.0,
+        "CTPRVN_NM": 0.0,
+        "SIGNGU_CD": 0.0,
+        "SIGNGU_NM": 0.0,
+        "FCLTY_NM": 0.0,
+        "RPRSNTV_NM": 0.0,
+        "RPRSNTV_TEL_NO": 0.5812,
+        "ZIP_NO": 0.0,
+        "FCLTY_ADDR": 0.0,
+        "DETAIL_ADDR": 0.0104,
+        "ITEM_CD": 0.0,
+        "ITEM_NM": 0.0,
+        "FCLTY_X_CRDNT_VALUE": 0.0173,
+        "FCLTY_Y_CRDNT_VALUE": 0.0173,
+        "FCLTY_COURSE_SDIV_NM": 0.3268,
+        "COURSE_ITEM_NM": 1.0,
+        "COURSE_NM": 1.0,
+        "FCLTY_DECSN_DE": 0.0002
+      },
+      "distributions": {
+        "ITEM_NM": [
+          {
+            "value": "태권도",
+            "count": 9846
+          },
+          {
+            "value": "기타종목",
+            "count": 3420
+          },
+          {
+            "value": "헬스",
+            "count": 2400
+          },
+          {
+            "value": "필라테스",
+            "count": 1848
+          },
+          {
+            "value": "복싱",
+            "count": 1599
+          },
+          {
+            "value": "합기도",
+            "count": 1408
+          },
+          {
+            "value": "검도",
+            "count": 864
+          },
+          {
+            "value": "유도",
+            "count": 798
+          },
+          {
+            "value": "수영",
+            "count": 763
+          },
+          {
+            "value": "요가",
+            "count": 657
+          },
+          {
+            "value": "축구(풋살)",
+            "count": 499
+          },
+          {
+            "value": "축구",
+            "count": 480
+          }
+        ],
+        "FCLTY_COURSE_SDIV_NM": [
+          {
+            "value": "강좌",
+            "count": 19450
+          },
+          {
+            "value": "",
+            "count": 9442
+          }
+        ],
+        "CTPRVN_NM": [
+          {
+            "value": "경기",
+            "count": 7538
+          },
+          {
+            "value": "서울",
+            "count": 3756
+          },
+          {
+            "value": "경남",
+            "count": 2208
+          },
+          {
+            "value": "부산",
+            "count": 1953
+          },
+          {
+            "value": "인천",
+            "count": 1780
+          },
+          {
+            "value": "대구",
+            "count": 1455
+          },
+          {
+            "value": "경북",
+            "count": 1419
+          },
+          {
+            "value": "전북",
+            "count": 1183
+          },
+          {
+            "value": "충남",
+            "count": 1068
+          },
+          {
+            "value": "광주",
+            "count": 1062
+          },
+          {
+            "value": "강원",
+            "count": 981
+          },
+          {
+            "value": "대전",
+            "count": 914
+          }
+        ]
+      }
+    },
+    "voucher_courses": {
+      "file": "데이터_스포츠강좌이용권이용시설강좌.csv",
+      "sha256": "9f4f0055c3135795af2e8cc5b1454173a3cfe88edf42dd3ca336f0bd9f59bbd0",
+      "bytes": 15823845,
+      "rows": 66808,
+      "columns": [
+        "ITEM_CD",
+        "ITEM_NM",
+        "COURSE_NM",
+        "LCTRR_NM",
+        "BEGIN_TIME",
+        "END_TIME",
+        "WKDAY_NM",
+        "COURSE_DETAIL_CN",
+        "SUPLI_SLE_AT",
+        "SETLE_PRICE_VALUE",
+        "ATNLC_PRC",
+        "TRGET_YEAR"
+      ],
+      "emptyRate": {
+        "ITEM_CD": 0.0,
+        "ITEM_NM": 0.0,
+        "COURSE_NM": 0.0,
+        "LCTRR_NM": 0.0022,
+        "BEGIN_TIME": 0.0,
+        "END_TIME": 0.0,
+        "WKDAY_NM": 0.0002,
+        "COURSE_DETAIL_CN": 0.393,
+        "SUPLI_SLE_AT": 1.0,
+        "SETLE_PRICE_VALUE": 0.0,
+        "ATNLC_PRC": 0.0325,
+        "TRGET_YEAR": 0.0
+      },
+      "distributions": {
+        "ITEM_NM": [
+          {
+            "value": "태권도",
+            "count": 20990
+          },
+          {
+            "value": "기타종목",
+            "count": 5456
+          },
+          {
+            "value": "헬스",
+            "count": 4549
+          },
+          {
+            "value": "수영",
+            "count": 3800
+          },
+          {
+            "value": "필라테스",
+            "count": 3798
+          },
+          {
+            "value": "복싱",
+            "count": 3076
+          },
+          {
+            "value": "댄스(줌바 등)",
+            "count": 3045
+          },
+          {
+            "value": "축구(풋살)",
+            "count": 2934
+          },
+          {
+            "value": "합기도",
+            "count": 2378
+          },
+          {
+            "value": "무용(발레 등)",
+            "count": 1931
+          },
+          {
+            "value": "줄넘기",
+            "count": 1723
+          },
+          {
+            "value": "유도",
+            "count": 1718
+          }
+        ],
+        "TRGET_YEAR": [
+          {
+            "value": "2025",
+            "count": 15259
+          },
+          {
+            "value": "2026",
+            "count": 13066
+          },
+          {
+            "value": "2024",
+            "count": 11943
+          },
+          {
+            "value": "2023",
+            "count": 8511
+          },
+          {
+            "value": "2022",
+            "count": 7960
+          },
+          {
+            "value": "2021",
+            "count": 2649
+          },
+          {
+            "value": "2020",
+            "count": 2234
+          },
+          {
+            "value": "2017",
+            "count": 1802
+          },
+          {
+            "value": "2019",
+            "count": 1121
+          },
+          {
+            "value": "2018",
+            "count": 1100
+          },
+          {
+            "value": "2016",
+            "count": 635
+          },
+          {
+            "value": "2013",
+            "count": 136
+          }
+        ],
+        "SUPLI_SLE_AT": [
+          {
+            "value": "",
+            "count": 66808
+          }
+        ],
+        "WKDAY_NM": [
+          {
+            "value": "1111100",
+            "count": 34615
+          },
+          {
+            "value": "1111110",
+            "count": 8432
+          },
+          {
+            "value": "1111111",
+            "count": 5362
+          },
+          {
+            "value": "1010100",
+            "count": 3561
+          },
+          {
+            "value": "0101000",
+            "count": 3250
+          },
+          {
+            "value": "0000010",
+            "count": 1930
+          },
+          {
+            "value": "1010000",
+            "count": 1312
+          },
+          {
+            "value": "1111000",
+            "count": 1022
+          },
+          {
+            "value": "1000000",
+            "count": 672
+          },
+          {
+            "value": "0000100",
+            "count": 561
+          },
+          {
+            "value": "0010000",
+            "count": 542
+          },
+          {
+            "value": "0000011",
+            "count": 517
+          }
+        ]
+      },
+      "timeParseRate": 1.0,
+      "weekdayParseRate": 0.9956,
+      "descriptionLength": {
+        "0": 26254,
+        "100+": 16729,
+        "20-99": 18586,
+        "1-19": 5239
+      },
+      "uniqueItemCourseName": 22297
+    },
+    "voucher_usage": {
+      "file": "데이터_스포츠강좌이용권.csv",
+      "sha256": "13f5528b9f6e5c8cddabf681112c3dbd2392c7a7c6fa8753758ce04f89f8e7a0",
+      "bytes": 141787701,
+      "rows": 517101,
+      "columns": [
+        "BSNS_NO",
+        "FCLTY_NM",
+        "ITEM_CD",
+        "ITEM_NM",
+        "CTPRVN_CD",
+        "CTPRVN_NM",
+        "SIGNGU_CD",
+        "SIGNGU_NM",
+        "FCLTY_ADDR",
+        "FCLTY_DETAIL_ADDR",
+        "ZIP_NO",
+        "TEL_NO",
+        "COURSE_NM",
+        "COURSE_NO",
+        "COURSE_ESTBL_YEAR",
+        "COURSE_ESTBL_MT",
+        "COURSE_BEGIN_DE",
+        "COURSE_END_DE",
+        "COURSE_REQST_NMPR_CO",
+        "COURSE_PRC"
+      ],
+      "emptyRate": {
+        "BSNS_NO": 0.0,
+        "FCLTY_NM": 0.0,
+        "ITEM_CD": 0.0,
+        "ITEM_NM": 0.0,
+        "CTPRVN_CD": 0.0,
+        "CTPRVN_NM": 0.0,
+        "SIGNGU_CD": 0.0,
+        "SIGNGU_NM": 0.0,
+        "FCLTY_ADDR": 0.0,
+        "FCLTY_DETAIL_ADDR": 0.0119,
+        "ZIP_NO": 0.0,
+        "TEL_NO": 0.3111,
+        "COURSE_NM": 0.0,
+        "COURSE_NO": 0.0,
+        "COURSE_ESTBL_YEAR": 0.0,
+        "COURSE_ESTBL_MT": 0.0,
+        "COURSE_BEGIN_DE": 0.0001,
+        "COURSE_END_DE": 0.0001,
+        "COURSE_REQST_NMPR_CO": 0.0,
+        "COURSE_PRC": 0.0
+      },
+      "distributions": {
+        "ITEM_NM": [
+          {
+            "value": "태권도",
+            "count": 192573
+          },
+          {
+            "value": "기타종목",
+            "count": 42296
+          },
+          {
+            "value": "헬스",
+            "count": 32059
+          },
+          {
+            "value": "필라테스",
+            "count": 27245
+          },
+          {
+            "value": "복싱",
+            "count": 27171
+          },
+          {
+            "value": "합기도",
+            "count": 25594
+          },
+          {
+            "value": "수영",
+            "count": 22107
+          },
+          {
+            "value": "댄스(줌바 등)",
+            "count": 18428
+          },
+          {
+            "value": "축구(풋살)",
+            "count": 16694
+          },
+          {
+            "value": "유도",
+            "count": 15418
+          },
+          {
+            "value": "검도",
+            "count": 14001
+          },
+          {
+            "value": "주짓수",
+            "count": 11219
+          }
+        ],
+        "COURSE_ESTBL_YEAR": [
+          {
+            "value": "2025",
+            "count": 200505
+          },
+          {
+            "value": "2024",
+            "count": 124135
+          },
+          {
+            "value": "2026",
+            "count": 123406
+          },
+          {
+            "value": "2023",
+            "count": 30763
+          },
+          {
+            "value": "2022",
+            "count": 18391
+          },
+          {
+            "value": "2021",
+            "count": 11828
+          },
+          {
+            "value": "2020",
+            "count": 8073
+          }
+        ],
+        "CTPRVN_NM": [
+          {
+            "value": "경기",
+            "count": 126249
+          },
+          {
+            "value": "서울",
+            "count": 65969
+          },
+          {
+            "value": "경남",
+            "count": 41295
+          },
+          {
+            "value": "부산",
+            "count": 38931
+          },
+          {
+            "value": "전남광주",
+            "count": 38268
+          },
+          {
+            "value": "인천",
+            "count": 32480
+          },
+          {
+            "value": "대구",
+            "count": 26669
+          },
+          {
+            "value": "경북",
+            "count": 26497
+          },
+          {
+            "value": "전북",
+            "count": 21703
+          },
+          {
+            "value": "충남",
+            "count": 19690
+          },
+          {
+            "value": "충북",
+            "count": 16927
+          },
+          {
+            "value": "강원",
+            "count": 16209
+          }
+        ]
+      }
+    },
+    "all_facilities": {
+      "file": "데이터_전국체육시설현황.csv",
+      "sha256": "c27a428f40295298412ce845085a4648e932d221ce2cf71fa29ca90339f15ee7",
+      "bytes": 81889812,
+      "rows": 152968,
+      "columns": [
+        "FCLTY_NM",
+        "FCLTY_SDIV_CD",
+        "FCLTY_FLAG_NM",
+        "INDUTY_CD",
+        "INDUTY_NM",
+        "FCLTY_TY_CD",
+        "FCLTY_TY_NM",
+        "FCLTY_STATE_VALUE",
+        "ROAD_NM_ZIP_NO",
+        "RDNMADR_ONE_NM",
+        "RDNMADR_TWO_NM",
+        "ZIP_NO_VALUE",
+        "FCLTY_ADDR_ONE_NM",
+        "FCLTY_ADDR_TWO_NM",
+        "FCLTY_LO",
+        "FCLTY_LA",
+        "FCLTY_TEL_NO",
+        "FCLTY_HMPG_URL",
+        "CTPRVN_CD",
+        "CTPRVN_NM",
+        "SIGNGU_CD",
+        "SIGNGU_NM",
+        "FCLTY_MANAGE_CTPRVN_CD",
+        "FCLTY_MANAGE_CTPRVN_NM",
+        "FCLTY_MANAGE_SIGNGU_CD",
+        "FCLTY_MANAGE_SIGNGU_NM",
+        "FCLTY_MANAGE_EMD_CD",
+        "FCLTY_MANAGE_EMD_NM",
+        "FCLTY_MANAGE_LI_CD",
+        "FCLTY_MANAGE_LI_NM",
+        "FCLTY_OPER_STLE_VALUE",
+        "POSESN_MBY_CD",
+        "POSESN_MBY_NM",
+        "POSESN_MBY_CTPRVN_CD",
+        "POSESN_MBY_CTPRVN_NM",
+        "POSESN_MBY_SIGNGU_CD",
+        "POSESN_MBY_SIGNGU_NM",
+        "RSPNSBLTY_NM",
+        "RSPNSBLTY_TEL_NO",
+        "NDOR_SDIV_NM",
+        "ADTM_CO",
+        "ACMD_NMPR_CO",
+        "FCLTY_AR_CO",
+        "LVLH_OPN_AT",
+        "LVLH_GMNSM_NM",
+        "UTILIIZA_GRP_NM",
+        "FCLTY_CRTN_STDR_DE",
+        "ALSFC_REGIST_DE",
+        "COMPET_DE",
+        "SSS_DE",
+        "OPER_CLSBIZ_DE",
+        "NATION_ALSFC_AT",
+        "ERDSGN_AT",
+        "ATNM_CHCK_TRGET_AT",
+        "DATA_ORIGIN_FLAG_CD",
+        "DEL_AT",
+        "REGIST_DT",
+        "UPDT_DT"
+      ],
+      "emptyRate": {
+        "FCLTY_NM": 0.0,
+        "FCLTY_SDIV_CD": 0.0,
+        "FCLTY_FLAG_NM": 0.0,
+        "INDUTY_CD": 0.0,
+        "INDUTY_NM": 0.0,
+        "FCLTY_TY_CD": 0.0,
+        "FCLTY_TY_NM": 0.0001,
+        "FCLTY_STATE_VALUE": 0.0033,
+        "ROAD_NM_ZIP_NO": 0.2206,
+        "RDNMADR_ONE_NM": 0.0858,
+        "RDNMADR_TWO_NM": 0.7371,
+        "ZIP_NO_VALUE": 0.2062,
+        "FCLTY_ADDR_ONE_NM": 0.1137,
+        "FCLTY_ADDR_TWO_NM": 0.7281,
+        "FCLTY_LO": 0.0478,
+        "FCLTY_LA": 0.0478,
+        "FCLTY_TEL_NO": 0.4414,
+        "FCLTY_HMPG_URL": 0.9685,
+        "CTPRVN_CD": 0.0003,
+        "CTPRVN_NM": 0.0003,
+        "SIGNGU_CD": 0.0003,
+        "SIGNGU_NM": 0.0108,
+        "FCLTY_MANAGE_CTPRVN_CD": 0.1602,
+        "FCLTY_MANAGE_CTPRVN_NM": 0.1611,
+        "FCLTY_MANAGE_SIGNGU_CD": 0.1725,
+        "FCLTY_MANAGE_SIGNGU_NM": 0.1926,
+        "FCLTY_MANAGE_EMD_CD": 0.3822,
+        "FCLTY_MANAGE_EMD_NM": 0.4346,
+        "FCLTY_MANAGE_LI_CD": 1.0,
+        "FCLTY_MANAGE_LI_NM": 1.0,
+        "FCLTY_OPER_STLE_VALUE": 0.4685,
+        "POSESN_MBY_CD": 0.6554,
+        "POSESN_MBY_NM": 0.6562,
+        "POSESN_MBY_CTPRVN_CD": 0.4264,
+        "POSESN_MBY_CTPRVN_NM": 0.4264,
+        "POSESN_MBY_SIGNGU_CD": 0.4264,
+        "POSESN_MBY_SIGNGU_NM": 0.4353,
+        "RSPNSBLTY_NM": 0.7521,
+        "RSPNSBLTY_TEL_NO": 0.5965,
+        "NDOR_SDIV_NM": 0.3314,
+        "ADTM_CO": 0.9898,
+        "ACMD_NMPR_CO": 0.9881,
+        "FCLTY_AR_CO": 0.2912,
+        "LVLH_OPN_AT": 0.9997,
+        "LVLH_GMNSM_NM": 0.992,
+        "UTILIIZA_GRP_NM": 0.9938,
+        "FCLTY_CRTN_STDR_DE": 0.0074,
+        "ALSFC_REGIST_DE": 0.801,
+        "COMPET_DE": 0.8736,
+        "SSS_DE": 0.9955,
+        "OPER_CLSBIZ_DE": 0.7696,
+        "NATION_ALSFC_AT": 0.0,
+        "ERDSGN_AT": 0.8944,
+        "ATNM_CHCK_TRGET_AT": 0.0,
+        "DATA_ORIGIN_FLAG_CD": 0.2127,
+        "DEL_AT": 0.0,
+        "REGIST_DT": 0.0,
+        "UPDT_DT": 0.0
+      },
+      "distributions": {
+        "FCLTY_STATE_VALUE": [
+          {
+            "value": "정상운영",
+            "count": 117418
+          },
+          {
+            "value": "폐업",
+            "count": 35039
+          },
+          {
+            "value": "",
+            "count": 511
+          }
+        ],
+        "INDUTY_NM": [
+          {
+            "value": "간이운동장",
+            "count": 31866
+          },
+          {
+            "value": "당구장업",
+            "count": 31272
+          },
+          {
+            "value": "체육도장업",
+            "count": 23768
+          },
+          {
+            "value": "체력단련장업",
+            "count": 22434
+          },
+          {
+            "value": "골프연습장업",
+            "count": 13924
+          },
+          {
+            "value": "가상체험 체육시설업",
+            "count": 7675
+          },
+          {
+            "value": "체육교습업",
+            "count": 4004
+          },
+          {
+            "value": "기타시설",
+            "count": 2778
+          },
+          {
+            "value": "전천후게이트볼장",
+            "count": 2232
+          },
+          {
+            "value": "체육관",
+            "count": 1767
+          },
+          {
+            "value": "축구장",
+            "count": 1481
+          },
+          {
+            "value": "수영장업",
+            "count": 1426
+          }
+        ],
+        "FCLTY_TY_NM": [
+          {
+            "value": "간이운동장",
+            "count": 31866
+          },
+          {
+            "value": "당구장",
+            "count": 31272
+          },
+          {
+            "value": "체력단련장",
+            "count": 22434
+          },
+          {
+            "value": "태권도",
+            "count": 16447
+          },
+          {
+            "value": "골프",
+            "count": 7299
+          },
+          {
+            "value": "실내",
+            "count": 7156
+          },
+          {
+            "value": "스크린",
+            "count": 6121
+          },
+          {
+            "value": "권투",
+            "count": 3105
+          },
+          {
+            "value": "기타시설",
+            "count": 2778
+          },
+          {
+            "value": "전천후게이트볼장",
+            "count": 2232
+          },
+          {
+            "value": "실외",
+            "count": 2073
+          },
+          {
+            "value": "축구",
+            "count": 1723
+          }
+        ],
+        "NDOR_SDIV_NM": [
+          {
+            "value": "실내",
+            "count": 54155
+          },
+          {
+            "value": "",
+            "count": 50688
+          },
+          {
+            "value": "없음",
+            "count": 37098
+          },
+          {
+            "value": "실외",
+            "count": 6941
+          },
+          {
+            "value": "실내외",
+            "count": 4085
+          },
+          {
+            "value": "043-850-2422",
+            "count": 1
+          }
+        ],
+        "DEL_AT": [
+          {
+            "value": "N",
+            "count": 139124
+          },
+          {
+            "value": "Y",
+            "count": 13843
+          },
+          {
+            "value": "SFMS",
+            "count": 1
+          }
+        ],
+        "CTPRVN_NM": [
+          {
+            "value": "경기도",
+            "count": 35403
+          },
+          {
+            "value": "서울특별시",
+            "count": 22170
+          },
+          {
+            "value": "경상북도",
+            "count": 15443
+          },
+          {
+            "value": "전남광주통합특별시",
+            "count": 12474
+          },
+          {
+            "value": "경상남도",
+            "count": 10320
+          },
+          {
+            "value": "부산광역시",
+            "count": 7894
+          },
+          {
+            "value": "인천광역시",
+            "count": 7560
+          },
+          {
+            "value": "강원특별자치도",
+            "count": 7039
+          },
+          {
+            "value": "충청남도",
+            "count": 6551
+          },
+          {
+            "value": "충청북도",
+            "count": 6272
+          },
+          {
+            "value": "대구광역시",
+            "count": 6140
+          },
+          {
+            "value": "전북특별자치도",
+            "count": 5360
+          }
+        ]
+      }
+    },
+    "public_facilities": {
+      "file": "데이터_전국공공체육시설.csv",
+      "sha256": "f1ec5eca249f7876c99d66cfacb61661471611b86773659994bc7694bafc9800",
+      "bytes": 16019900,
+      "rows": 44612,
+      "columns": [
+        "FCLTY_NM",
+        "FCLTY_SDIV_CD",
+        "FCLTY_FLAG_NM",
+        "INDUTY_CD",
+        "INDUTY_NM",
+        "FCLTY_TY_CD",
+        "FCLTY_TY_NM",
+        "POSESN_MBY_CD",
+        "POSESN_MBY_NM",
+        "POSESN_MBY_CTPRVN_CD",
+        "POSESN_MBY_CTPRVN_NM",
+        "POSESN_MBY_SIGNGU_CD",
+        "POSESN_MBY_SIGNGU_NM",
+        "RSPNSBLTY_DEPT_NM",
+        "RSPNSBLTY_TEL_NO",
+        "ROAD_NM_CTPRVN_CD",
+        "ROAD_NM_CTPRVN_NM",
+        "ROAD_NM_SIGNGU_CD",
+        "ROAD_NM_SIGNGU_NM",
+        "ROAD_NM_EMD_CD",
+        "ROAD_NM_EMD_NM",
+        "ROAD_NM_LI_CD",
+        "ROAD_NM_LI_NM",
+        "RDNMADR_NM",
+        "FCLTY_LO",
+        "FCLTY_LA",
+        "FCLTY_AR_CO",
+        "ACMD_NMPR_CO",
+        "ADTM_CO",
+        "FCLTY_HMPG_URL",
+        "NATION_ALSFC_AT",
+        "FCLTY_STATE_CD",
+        "DEL_AT"
+      ],
+      "emptyRate": {
+        "FCLTY_NM": 0.0,
+        "FCLTY_SDIV_CD": 0.0,
+        "FCLTY_FLAG_NM": 0.0,
+        "INDUTY_CD": 0.0,
+        "INDUTY_NM": 0.0,
+        "FCLTY_TY_CD": 0.0,
+        "FCLTY_TY_NM": 0.0,
+        "POSESN_MBY_CD": 0.011,
+        "POSESN_MBY_NM": 0.011,
+        "POSESN_MBY_CTPRVN_CD": 0.0011,
+        "POSESN_MBY_CTPRVN_NM": 0.0011,
+        "POSESN_MBY_SIGNGU_CD": 0.0011,
+        "POSESN_MBY_SIGNGU_NM": 0.0011,
+        "RSPNSBLTY_DEPT_NM": 0.7189,
+        "RSPNSBLTY_TEL_NO": 0.7246,
+        "ROAD_NM_CTPRVN_CD": 0.0003,
+        "ROAD_NM_CTPRVN_NM": 0.0014,
+        "ROAD_NM_SIGNGU_CD": 0.0024,
+        "ROAD_NM_SIGNGU_NM": 0.0176,
+        "ROAD_NM_EMD_CD": 0.2492,
+        "ROAD_NM_EMD_NM": 0.3037,
+        "ROAD_NM_LI_CD": 1.0,
+        "ROAD_NM_LI_NM": 1.0,
+        "RDNMADR_NM": 0.272,
+        "FCLTY_LO": 0.0388,
+        "FCLTY_LA": 0.0388,
+        "FCLTY_AR_CO": 0.7624,
+        "ACMD_NMPR_CO": 0.9597,
+        "ADTM_CO": 0.9655,
+        "FCLTY_HMPG_URL": 0.9517,
+        "NATION_ALSFC_AT": 0.0,
+        "FCLTY_STATE_CD": 0.0,
+        "DEL_AT": 0.0
+      },
+      "distributions": {
+        "INDUTY_NM": [
+          {
+            "value": "간이운동장",
+            "count": 31856
+          },
+          {
+            "value": "기타시설",
+            "count": 2754
+          },
+          {
+            "value": "전천후게이트볼장",
+            "count": 2191
+          },
+          {
+            "value": "체육관",
+            "count": 1755
+          },
+          {
+            "value": "축구장",
+            "count": 1472
+          },
+          {
+            "value": "테니스장",
+            "count": 1107
+          },
+          {
+            "value": "수영장",
+            "count": 657
+          },
+          {
+            "value": "기타체육시설(체력단련장)",
+            "count": 414
+          },
+          {
+            "value": "야구장",
+            "count": 399
+          },
+          {
+            "value": "국궁장",
+            "count": 344
+          },
+          {
+            "value": "육상경기장",
+            "count": 319
+          },
+          {
+            "value": "풋살장",
+            "count": 295
+          }
+        ],
+        "FCLTY_STATE_CD": [
+          {
+            "value": "00",
+            "count": 43573
+          },
+          {
+            "value": "99",
+            "count": 1039
+          }
+        ],
+        "DEL_AT": [
+          {
+            "value": "N",
+            "count": 35573
+          },
+          {
+            "value": "Y",
+            "count": 9039
+          }
+        ]
+      }
+    },
+    "open_schools": {
+      "file": "데이터_개방학교체육시설.csv",
+      "sha256": "c1cce5adedc98ae487ae5cdb63099e8aab0eede6a824d78091c4007698761a49",
+      "bytes": 424378,
+      "rows": 1206,
+      "columns": [
+        "BASE_YEAR",
+        "ALSFC_CTPRVN_NM",
+        "ALSFC_SIGNGU_NM",
+        "SCHUL_TY_NM",
+        "SCHUL_NM",
+        "OPN_PD",
+        "ARBY_COT_CO_VALUE",
+        "ALSFC_ADDR",
+        "OPER_ITEM_CN",
+        "OPER_TIME_CN",
+        "SHWERRM_CO",
+        "TOILET_CO",
+        "LOCKERRM_CO"
+      ],
+      "emptyRate": {
+        "BASE_YEAR": 0.0,
+        "ALSFC_CTPRVN_NM": 0.0,
+        "ALSFC_SIGNGU_NM": 0.0174,
+        "SCHUL_TY_NM": 0.0,
+        "SCHUL_NM": 0.0,
+        "OPN_PD": 0.0,
+        "ARBY_COT_CO_VALUE": 0.0,
+        "ALSFC_ADDR": 0.0,
+        "OPER_ITEM_CN": 0.0,
+        "OPER_TIME_CN": 0.0282,
+        "SHWERRM_CO": 0.0,
+        "TOILET_CO": 0.0,
+        "LOCKERRM_CO": 0.0
+      },
+      "distributions": {
+        "BASE_YEAR": [
+          {
+            "value": "2017",
+            "count": 233
+          },
+          {
+            "value": "2018",
+            "count": 182
+          },
+          {
+            "value": "2020",
+            "count": 175
+          },
+          {
+            "value": "2019",
+            "count": 165
+          },
+          {
+            "value": "2023",
+            "count": 133
+          },
+          {
+            "value": "2022",
+            "count": 132
+          },
+          {
+            "value": "2021",
+            "count": 117
+          },
+          {
+            "value": "2024",
+            "count": 66
+          },
+          {
+            "value": "2025",
+            "count": 3
+          }
+        ],
+        "SCHUL_TY_NM": [
+          {
+            "value": "초등학교",
+            "count": 684
+          },
+          {
+            "value": "중학교",
+            "count": 307
+          },
+          {
+            "value": "고등학교",
+            "count": 215
+          }
+        ]
+      }
+    },
+    "safety": {
+      "file": "데이터_체육시설안전점검정보.csv",
+      "sha256": "146020d09012a597ab9671c9548e5db9f35cae4b144e2adbee231c997a2e9eb9",
+      "bytes": 74070876,
+      "rows": 192314,
+      "columns": [
+        "FCLTY_NM",
+        "FCLTY_NCM_NM",
+        "FCLTY_CL_CD",
+        "FCLTY_CL_NM",
+        "INDUTY_CD",
+        "INDUTY_NM",
+        "FCLTY_TY_CD",
+        "FCLTY_TY_NM",
+        "CMPTNC_CTPRVN_CD",
+        "CMPTNC_CTPRVN_NM",
+        "CMPTNC_SIGNGU_CD",
+        "CMPTNC_SIGNGU_NM",
+        "ZIP_NO",
+        "FCLTY_ROAD_NM_ADDR",
+        "FCLTY_ROAD_NM_DETAIL_ADDR",
+        "FCLTY_ADDR",
+        "FCLTY_DETAIL_ADDR",
+        "FCLTY_CRDNT_LO",
+        "FCLTY_CRDNT_LA",
+        "FCLTY_TEL_NO",
+        "FCLTY_TOTAR_CO",
+        "OPER_STATE_CD",
+        "OPER_STATE_NM",
+        "OPER_CLSBIZ_DE",
+        "FCLTY_INFO_UPDT_DE",
+        "SAFECHK_GNRLZ_GRAD_CD",
+        "SAFECHK_GNRLZ_GRAD_NM",
+        "SAFECHK_DE",
+        "SAFECHK_OTHBC_DE",
+        "FCLTY_INFO_REGIST_DE"
+      ],
+      "emptyRate": {
+        "FCLTY_NM": 0.0,
+        "FCLTY_NCM_NM": 0.9726,
+        "FCLTY_CL_CD": 0.0,
+        "FCLTY_CL_NM": 0.0,
+        "INDUTY_CD": 0.0,
+        "INDUTY_NM": 0.0,
+        "FCLTY_TY_CD": 0.0,
+        "FCLTY_TY_NM": 0.0,
+        "CMPTNC_CTPRVN_CD": 0.0,
+        "CMPTNC_CTPRVN_NM": 0.0,
+        "CMPTNC_SIGNGU_CD": 0.0,
+        "CMPTNC_SIGNGU_NM": 0.0,
+        "ZIP_NO": 0.0592,
+        "FCLTY_ROAD_NM_ADDR": 0.0167,
+        "FCLTY_ROAD_NM_DETAIL_ADDR": 0.6885,
+        "FCLTY_ADDR": 0.1236,
+        "FCLTY_DETAIL_ADDR": 0.6921,
+        "FCLTY_CRDNT_LO": 0.0517,
+        "FCLTY_CRDNT_LA": 0.0517,
+        "FCLTY_TEL_NO": 0.4941,
+        "FCLTY_TOTAR_CO": 0.1739,
+        "OPER_STATE_CD": 0.0,
+        "OPER_STATE_NM": 0.0,
+        "OPER_CLSBIZ_DE": 0.7555,
+        "FCLTY_INFO_UPDT_DE": 0.0,
+        "SAFECHK_GNRLZ_GRAD_CD": 0.0,
+        "SAFECHK_GNRLZ_GRAD_NM": 0.0,
+        "SAFECHK_DE": 0.3637,
+        "SAFECHK_OTHBC_DE": 0.3637,
+        "FCLTY_INFO_REGIST_DE": 0.0
+      },
+      "distributions": {
+        "SAFECHK_GNRLZ_GRAD_NM": [
+          {
+            "value": "양호",
+            "count": 117800
+          },
+          {
+            "value": "없음",
+            "count": 69950
+          },
+          {
+            "value": "주의",
+            "count": 4511
+          },
+          {
+            "value": "사용중지",
+            "count": 42
+          },
+          {
+            "value": "수리필요",
+            "count": 11
+          }
+        ],
+        "OPER_STATE_NM": [
+          {
+            "value": "정상운영",
+            "count": 144928
+          },
+          {
+            "value": "폐업",
+            "count": 46034
+          },
+          {
+            "value": "휴업",
+            "count": 809
+          },
+          {
+            "value": "운영폐쇄",
+            "count": 543
+          }
+        ],
+        "INDUTY_NM": [
+          {
+            "value": "당구장업",
+            "count": 46201
+          },
+          {
+            "value": "체육도장업",
+            "count": 39222
+          },
+          {
+            "value": "체력단련장업",
+            "count": 36604
+          },
+          {
+            "value": "골프연습장업",
+            "count": 21904
+          },
+          {
+            "value": "가상체험 체육시설업",
+            "count": 13199
+          },
+          {
+            "value": "체육교습업",
+            "count": 6699
+          },
+          {
+            "value": "기타시설",
+            "count": 4605
+          },
+          {
+            "value": "전천후게이트볼장",
+            "count": 3654
+          },
+          {
+            "value": "체육관",
+            "count": 2839
+          },
+          {
+            "value": "축구장",
+            "count": 2431
+          },
+          {
+            "value": "수영장업",
+            "count": 2368
+          },
+          {
+            "value": "무도학원업",
+            "count": 1879
+          }
+        ]
+      }
+    },
+    "transit_voucher": {
+      "file": "데이터_스포츠강좌이용권시설인접대중교통정보.csv",
+      "sha256": "bbc4ea6a9fb17b4bbcbdac38fd2bdfa0169b02a60a719173cf6e2f797226542e",
+      "bytes": 338923236,
+      "rows": 1004165,
+      "columns": [
+        "SVCH_FCLTY_NM",
+        "SVCH_FCLTY_SDIV_NM",
+        "SVCH_FCLTY_ITEM_NM",
+        "SVCH_FCLTY_CTPRVN_CD",
+        "SVCH_FCLTY_CTPRVN_NM",
+        "SVCH_FCLTY_SIGNGU_CD",
+        "SVCH_FCLTY_SIGNGU_NM",
+        "SVCH_FCLTY_ADDR",
+        "SVCH_FCLTY_DETAIL_ADDR",
+        "SVCH_FCLTY_LA",
+        "SVCH_FCLTY_LO",
+        "PBTRNSP_FCLTY_SDIV_NM",
+        "STRT_DSTNC_VALUE",
+        "WLKG_DSTNC_VALUE",
+        "WLKG_MVMN_TIME",
+        "BSTP_SUBWAYST_NM",
+        "PBTRNSP_FCLTY_LA",
+        "PBTRNSP_FCLTY_LO"
+      ],
+      "emptyRate": {
+        "SVCH_FCLTY_NM": 0.0,
+        "SVCH_FCLTY_SDIV_NM": 0.0,
+        "SVCH_FCLTY_ITEM_NM": 0.0,
+        "SVCH_FCLTY_CTPRVN_CD": 0.0,
+        "SVCH_FCLTY_CTPRVN_NM": 0.0,
+        "SVCH_FCLTY_SIGNGU_CD": 0.0,
+        "SVCH_FCLTY_SIGNGU_NM": 0.0,
+        "SVCH_FCLTY_ADDR": 0.0,
+        "SVCH_FCLTY_DETAIL_ADDR": 0.0086,
+        "SVCH_FCLTY_LA": 0.0,
+        "SVCH_FCLTY_LO": 0.0,
+        "PBTRNSP_FCLTY_SDIV_NM": 0.0,
+        "STRT_DSTNC_VALUE": 0.0,
+        "WLKG_DSTNC_VALUE": 0.0005,
+        "WLKG_MVMN_TIME": 0.0005,
+        "BSTP_SUBWAYST_NM": 0.0,
+        "PBTRNSP_FCLTY_LA": 0.0,
+        "PBTRNSP_FCLTY_LO": 0.0
+      },
+      "distributions": {
+        "PBTRNSP_FCLTY_SDIV_NM": [
+          {
+            "value": "버스",
+            "count": 930775
+          },
+          {
+            "value": "지하철",
+            "count": 73390
+          }
+        ],
+        "SVCH_FCLTY_SDIV_NM": [
+          {
+            "value": "스포츠강좌이용권시설",
+            "count": 779002
+          },
+          {
+            "value": "장애인스포츠강좌이용권시설",
+            "count": 225163
+          }
+        ]
+      }
+    },
+    "transit_public": {
+      "file": "데이터_체육시설인접대중교통정보.csv",
+      "sha256": "afe951e47cd23c04cf8fa36779c016882f64e0bc22c24c4f3d56c290deb27d45",
+      "bytes": 488440254,
+      "rows": 1639279,
+      "columns": [
+        "ALSFC_NM",
+        "ALSFC_SDIV_NM",
+        "ALSFC_TY_NM",
+        "ALSFC_CTPRVN_CD",
+        "ALSFC_CTPRVN_NM",
+        "ALSFC_SIGNGU_CD",
+        "ALSFC_SIGNGU_NM",
+        "ALSFC_ADDR",
+        "ALSFC_LA",
+        "ALSFC_LO",
+        "PBTRNSP_FCLTY_SDIV_NM",
+        "STRT_DSTNC_VALUE",
+        "WLKG_DSTNC_VALUE",
+        "WLKG_MVMN_TIME",
+        "BSTP_SUBWAYST_NM",
+        "PBTRNSP_FCLTY_LA",
+        "PBTRNSP_FCLTY_LO"
+      ],
+      "emptyRate": {
+        "ALSFC_NM": 0.0,
+        "ALSFC_SDIV_NM": 0.0,
+        "ALSFC_TY_NM": 0.0,
+        "ALSFC_CTPRVN_CD": 0.0,
+        "ALSFC_CTPRVN_NM": 0.0,
+        "ALSFC_SIGNGU_CD": 0.0,
+        "ALSFC_SIGNGU_NM": 0.0,
+        "ALSFC_ADDR": 0.1229,
+        "ALSFC_LA": 0.0,
+        "ALSFC_LO": 0.0,
+        "PBTRNSP_FCLTY_SDIV_NM": 0.0,
+        "STRT_DSTNC_VALUE": 0.0,
+        "WLKG_DSTNC_VALUE": 0.5387,
+        "WLKG_MVMN_TIME": 0.5387,
+        "BSTP_SUBWAYST_NM": 0.0,
+        "PBTRNSP_FCLTY_LA": 0.0,
+        "PBTRNSP_FCLTY_LO": 0.0
+      },
+      "distributions": {
+        "PBTRNSP_FCLTY_SDIV_NM": [
+          {
+            "value": "버스",
+            "count": 1549211
+          },
+          {
+            "value": "지하철",
+            "count": 90068
+          }
+        ],
+        "ALSFC_SDIV_NM": [
+          {
+            "value": "공공체육시설",
+            "count": 1639279
+          }
+        ]
+      }
+    }
+  },
+  "joins": {
+    "voucher_vs_all_facilities": {
+      "voucherRows": 28892,
+      "voucherUniqueFacilities": 27973,
+      "allRows": 152968,
+      "exactNameAddr": 6803,
+      "nameOnlySameSigungu": 5489,
+      "telOnlySameSigungu": 1670,
+      "exactMatchedStateDist": {
+        "정상운영": 6127,
+        "폐업": 669,
+        "": 7
+      },
+      "voucherCoverageByExact": 0.2432
+    },
+    "usage_vs_courses_vs_facilities": {
+      "usageRows": 517101,
+      "usageYears": {
+        "2022": 18391,
+        "2025": 200505,
+        "2026": 123406,
+        "2021": 11828,
+        "2024": 124135,
+        "2023": 30763,
+        "2020": 8073
+      },
+      "usageUniqueFacilities": 24802,
+      "usageFacilitiesFoundInVoucherFacilities": 20539,
+      "usageUniqueCourseNo": 58955,
+      "usageCoursesMatchedToCourseTable(item+name)": 53523,
+      "courseTableRows": 66808
+    },
+    "region_codes": {
+      "regionalUsageSigungu": 230,
+      "voucherFacilitySigungu": 276,
+      "voucherSigunguNotInRegional": [
+        "12110",
+        "12130",
+        "12150",
+        "12170",
+        "12190",
+        "12210",
+        "12240",
+        "12270",
+        "12300",
+        "12330",
+        "12710",
+        "12720",
+        "12740",
+        "12750",
+        "12760",
+        "12770",
+        "12780",
+        "12790",
+        "12800",
+        "12810"
+      ],
+      "regionalSigunguWithoutVoucherFacility": 2
+    }
+  }
+}
