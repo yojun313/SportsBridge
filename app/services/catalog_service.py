@@ -22,7 +22,10 @@ async def active_version() -> str | None:
 async def require_version() -> str:
     v = await active_version()
     if not v:
-        raise HTTPException(status_code=503, detail="활성 데이터셋이 없습니다. scripts/import_datasets.py 로 적재하세요.")
+        raise HTTPException(
+            status_code=503,
+            detail="활성 데이터셋이 없습니다. scripts/import_datasets.py 로 적재하세요.",
+        )
     return v
 
 
@@ -36,28 +39,51 @@ async def metadata() -> dict:
     info = await dataset_info(v) if v else None
     sidos: dict[str, dict] = {}
     if v:
-        async for r in region_stats_col.find({"datasetVersion": v}, {"_id": 0, "regionCode": 1, "sidoCode": 1, "sidoName": 1, "sigunguName": 1}).sort("regionCode", 1):
-            s = sidos.setdefault(r["sidoCode"], {"sidoCode": r["sidoCode"], "sidoName": r["sidoName"], "regions": []})
+        async for r in region_stats_col.find(
+            {"datasetVersion": v},
+            {"_id": 0, "regionCode": 1, "sidoCode": 1, "sidoName": 1, "sigunguName": 1},
+        ).sort("regionCode", 1):
+            s = sidos.setdefault(
+                r["sidoCode"], {"sidoCode": r["sidoCode"], "sidoName": r["sidoName"], "regions": []}
+            )
             s["regions"].append({"regionCode": r["regionCode"], "name": r["sigunguName"]})
     log = (info or {}).get("log", {})
-    agg = await gap_aggregates_col.find_one({"datasetVersion": v}, {"_id": 0, "dataMaxMonth": 1, "activeCutoffMonth": 1}) if v else None
+    agg = (
+        await gap_aggregates_col.find_one(
+            {"datasetVersion": v}, {"_id": 0, "dataMaxMonth": 1, "activeCutoffMonth": 1}
+        )
+        if v
+        else None
+    )
     return {
         "datasetVersion": v,
         "importedAt": (info or {}).get("importedAt"),
         "isSynthetic": (info or {}).get("isSynthetic", DEMO_MODE),
-        "files": [{"key": f["key"], "name": f["name"], "sha256": f["sha256"][:16], "bytes": f["bytes"]} for f in (info or {}).get("files", [])],
+        "files": [
+            {"key": f["key"], "name": f["name"], "sha256": f["sha256"][:16], "bytes": f["bytes"]}
+            for f in (info or {}).get("files", [])
+        ],
         "steps": log.get("steps", {}),
         "dataMaxMonth": (agg or {}).get("dataMaxMonth"),
         "activeCutoffMonth": (agg or {}).get("activeCutoffMonth"),
         "sidos": list(sidos.values()),
         "llm": {"enabled": LLM_ENABLED, "modelMain": LLM_MODEL_MAIN, "modelBulk": LLM_MODEL_BULK},
-        "features": {"gap": bool(v), "candidates": bool(v), "scenario": bool(v), "agent": LLM_ENABLED,
-                     "documents": LLM_ENABLED, "extraction": LLM_ENABLED},
+        "features": {
+            "gap": bool(v),
+            "candidates": bool(v),
+            "scenario": bool(v),
+            "agent": LLM_ENABLED,
+            "documents": LLM_ENABLED,
+            "extraction": LLM_ENABLED,
+        },
     }
 
 
 async def region_options(version: str) -> list[dict]:
     out = []
-    async for r in region_stats_col.find({"datasetVersion": version}, {"_id": 0, "regionCode": 1, "sidoCode": 1, "sidoName": 1, "sigunguName": 1}).sort("regionCode", 1):
+    async for r in region_stats_col.find(
+        {"datasetVersion": version},
+        {"_id": 0, "regionCode": 1, "sidoCode": 1, "sidoName": 1, "sigunguName": 1},
+    ).sort("regionCode", 1):
         out.append(r)
     return out

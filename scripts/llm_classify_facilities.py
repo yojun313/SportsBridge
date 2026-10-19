@@ -27,15 +27,37 @@ def main() -> None:
         raise SystemExit("LLM 비활성")
     db = llm._sync_db()
     version = db["catalog_state"].find_one({"_id": "catalog"})["activeVersion"]
-    done = {d["facilityId"] for d in db["facility_class"].find({"datasetVersion": version}, {"facilityId": 1})}
+    done = {
+        d["facilityId"]
+        for d in db["facility_class"].find({"datasetVersion": version}, {"facilityId": 1})
+    }
     n = 0
-    for f in db["facilities_all"].find({"datasetVersion": version, "regionCode": args.region, "voucherMatch": None, "childSuitability": "unknown", "status": "정상운영"}):
+    for f in db["facilities_all"].find(
+        {
+            "datasetVersion": version,
+            "regionCode": args.region,
+            "voucherMatch": None,
+            "childSuitability": "unknown",
+            "status": "정상운영",
+        }
+    ):
         if f["_id"] in done:
             continue
         cls, _usage = classify_facility_sync(f)
-        db["facility_class"].update_one({"datasetVersion": version, "facilityId": f["_id"]}, {"$set": {
-            "datasetVersion": version, "facilityId": f["_id"], **cls.model_dump(), "provenance": "llm_extracted", "promptVersion": llm.LLM_PROMPT_VERSION,
-            "createdAt": datetime.now(UTC)}}, upsert=True)
+        db["facility_class"].update_one(
+            {"datasetVersion": version, "facilityId": f["_id"]},
+            {
+                "$set": {
+                    "datasetVersion": version,
+                    "facilityId": f["_id"],
+                    **cls.model_dump(),
+                    "provenance": "llm_extracted",
+                    "promptVersion": llm.LLM_PROMPT_VERSION,
+                    "createdAt": datetime.now(UTC),
+                }
+            },
+            upsert=True,
+        )
         n += 1
         print(n, f["name"], cls.child_suitability, cls.sports, cls.confidence)
         if n >= args.limit:

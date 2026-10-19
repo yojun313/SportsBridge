@@ -95,7 +95,14 @@ def main() -> None:
         "voucher_facilities": ["ITEM_NM", "FCLTY_COURSE_SDIV_NM", "CTPRVN_NM"],
         "voucher_courses": ["ITEM_NM", "TRGET_YEAR", "SUPLI_SLE_AT", "WKDAY_NM"],
         "voucher_usage": ["ITEM_NM", "COURSE_ESTBL_YEAR", "CTPRVN_NM"],
-        "all_facilities": ["FCLTY_STATE_VALUE", "INDUTY_NM", "FCLTY_TY_NM", "NDOR_SDIV_NM", "DEL_AT", "CTPRVN_NM"],
+        "all_facilities": [
+            "FCLTY_STATE_VALUE",
+            "INDUTY_NM",
+            "FCLTY_TY_NM",
+            "NDOR_SDIV_NM",
+            "DEL_AT",
+            "CTPRVN_NM",
+        ],
         "public_facilities": ["INDUTY_NM", "FCLTY_STATE_CD", "DEL_AT"],
         "open_schools": ["BASE_YEAR", "SCHUL_TY_NM"],
         "safety": ["SAFECHK_GNRLZ_GRAD_NM", "OPER_STATE_NM", "INDUTY_NM"],
@@ -121,7 +128,12 @@ def main() -> None:
         t = norm_tel(r["RPRSNTV_TEL_NO"])
         if t:
             vf_tel[(sigungu5(r["SIGNGU_CD"]), t)].add(k)
-    vf_unique = len({(sigungu5(r["SIGNGU_CD"]), norm_name(r["FCLTY_NM"]), norm_address(r["FCLTY_ADDR"])) for r in vf})
+    vf_unique = len(
+        {
+            (sigungu5(r["SIGNGU_CD"]), norm_name(r["FCLTY_NM"]), norm_address(r["FCLTY_ADDR"]))
+            for r in vf
+        }
+    )
     vf_name_region = defaultdict(set)
     for k in vf_keys:
         vf_name_region[(k[0], k[1])].add(k)
@@ -131,7 +143,11 @@ def main() -> None:
     for r in read_rows(find_file(raw, "all_facilities")):
         total += 1
         sg = sigungu5(r["SIGNGU_CD"])
-        k = (sg, norm_name(r["FCLTY_NM"]), norm_address(r["RDNMADR_ONE_NM"] or r["FCLTY_ADDR_ONE_NM"]))
+        k = (
+            sg,
+            norm_name(r["FCLTY_NM"]),
+            norm_address(r["RDNMADR_ONE_NM"] or r["FCLTY_ADDR_ONE_NM"]),
+        )
         if k in vf_keys:
             exact += 1
             state[r["FCLTY_STATE_VALUE"]] += 1
@@ -154,7 +170,12 @@ def main() -> None:
     print("[join] usage vs courses vs facilities", flush=True)
     course_rows = list(read_rows(find_file(raw, "voucher_courses")))
     cs_keys = Counter((r["ITEM_CD"], norm_name(r["COURSE_NM"])) for r in course_rows)
-    cs_time_ok = sum(1 for r in course_rows if parse_time_hhmm(r["BEGIN_TIME"]) is not None and parse_time_hhmm(r["END_TIME"]) is not None)
+    cs_time_ok = sum(
+        1
+        for r in course_rows
+        if parse_time_hhmm(r["BEGIN_TIME"]) is not None
+        and parse_time_hhmm(r["END_TIME"]) is not None
+    )
     cs_wk_ok = sum(1 for r in course_rows if parse_weekday_bits(r["WKDAY_NM"]) is not None)
     desc_len = Counter()
     for r in course_rows:
@@ -204,17 +225,26 @@ def main() -> None:
         "regionalSigunguWithoutVoucherFacility": len(reg - vreg),
     }
 
-    (out / "inspect_report.json").write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    (out / "inspect_report.json").write_text(
+        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
     lines = ["# 원본 데이터 검사 보고서", ""]
     for key, info in report["files"].items():
         if info.get("missing"):
             lines.append(f"- **{key}**: 파일 없음 ({info['file']})")
             continue
         lines.append(f"## {key} — `{info['file']}`")
-        lines.append(f"- 행 {info['rows']:,} · 컬럼 {len(info['columns'])} · SHA-256 `{info['sha256'][:16]}…`")
+        lines.append(
+            f"- 행 {info['rows']:,} · 컬럼 {len(info['columns'])} · SHA-256 `{info['sha256'][:16]}…`"
+        )
         worst = sorted(info["emptyRate"].items(), key=lambda kv: -(kv[1] or 0))[:8]
-        lines.append("- 결측 상위: " + ", ".join(f"{c} {int((v or 0)*100)}%" for c, v in worst))
-        for extra in ("timeParseRate", "weekdayParseRate", "descriptionLength", "uniqueItemCourseName"):
+        lines.append("- 결측 상위: " + ", ".join(f"{c} {int((v or 0) * 100)}%" for c, v in worst))
+        for extra in (
+            "timeParseRate",
+            "weekdayParseRate",
+            "descriptionLength",
+            "uniqueItemCourseName",
+        ):
             if extra in info:
                 lines.append(f"- {extra}: {info[extra]}")
         lines.append("")
@@ -224,7 +254,7 @@ def main() -> None:
     lines.append("```")
     (out / "inspect_report.md").write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps(report["joins"], ensure_ascii=False, indent=2))
-    print(f"written: {out/'inspect_report.json'}, {out/'inspect_report.md'}")
+    print(f"written: {out / 'inspect_report.json'}, {out / 'inspect_report.md'}")
 
 
 if __name__ == "__main__":

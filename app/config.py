@@ -32,7 +32,7 @@ BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8010")
 COOKIE_SECURE = BASE_URL.startswith("https://")
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017")
-DB_NAME = os.getenv("DB_NAME", "voucher_gap_dev")
+DB_NAME = os.getenv("DB_NAME", "sportsbridge")
 DATA_RAW_DIR = os.getenv("DATA_RAW_DIR", "./data/raw")
 DEMO_MODE = _bool("DEMO_MODE", "true")
 

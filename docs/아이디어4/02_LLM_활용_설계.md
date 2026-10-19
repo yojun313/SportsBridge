@@ -37,16 +37,22 @@
 from typing import Literal, Optional
 from pydantic import BaseModel, Field
 
+
 class CourseFacts(BaseModel):
     age_min: Optional[int] = Field(None, description="설명에 명시된 최소 연령(만). 없으면 null")
     age_max: Optional[int] = None
-    grade_hint: Optional[str] = Field(None, description="초등 저학년/고학년/중학생 등 원문 표현 그대로")
+    grade_hint: Optional[str] = Field(
+        None, description="초등 저학년/고학년/중학생 등 원문 표현 그대로"
+    )
     level: Literal["beginner", "intermediate", "advanced", "mixed", "unknown"]
     attendance_rule: Literal["all_required", "selectable", "unknown"] = Field(
-        description="표기된 요일 전부 출석 필수인지, 그중 선택인지")
+        description="표기된 요일 전부 출석 필수인지, 그중 선택인지"
+    )
     sessions_per_week: Optional[int] = None
     shuttle: Literal["yes", "no", "unknown"]
-    voucher_note: Optional[str] = Field(None, description="이용권 사용 조건 언급이 있으면 원문 요약")
+    voucher_note: Optional[str] = Field(
+        None, description="이용권 사용 조건 언급이 있으면 원문 요약"
+    )
     evidence: list[str] = Field(description="각 판단의 근거가 된 원문 문장. 원문에 없는 문장 금지")
     confidence: Literal["high", "medium", "low"]
 ```
@@ -74,17 +80,23 @@ SYSTEM = (
     "evidence에는 원문 문장을 그대로 복사합니다."
 )
 
+
 def build_request(course_id: str, name: str, description: str) -> Request:
     return Request(
         custom_id=f"course-{course_id}",
         params=MessageCreateParamsNonStreaming(
-            model=settings.LLM_MODEL_BULK,          # claude-sonnet-5
+            model=settings.LLM_MODEL_BULK,  # claude-sonnet-5
             max_tokens=2048,
             system=[{"type": "text", "text": SYSTEM, "cache_control": {"type": "ephemeral"}}],
-            messages=[{"role": "user", "content":
-                f"<course>\n강좌명: {name}\n설명: {description}\n</course>"}],
-            output_config={"format": {"type": "json_schema",
-                                      "schema": CourseFacts.model_json_schema()}},
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"<course>\n강좌명: {name}\n설명: {description}\n</course>",
+                }
+            ],
+            output_config={
+                "format": {"type": "json_schema", "schema": CourseFacts.model_json_schema()}
+            },
         ),
     )
 ```
@@ -129,6 +141,7 @@ class MatchVerdict(BaseModel):
 ```python
 from anthropic import beta_tool
 
+
 @beta_tool
 def run_simulation(scenario_json: str) -> str:
     """검증된 시나리오 JSON으로 엔진을 실행하고 조합 비교 결과를 JSON 문자열로 반환한다.
@@ -139,11 +152,18 @@ def run_simulation(scenario_json: str) -> str:
     scenario = Scenario.model_validate_json(scenario_json)
     return engine.compare_bundles(scenario).model_dump_json()
 
+
 runner = client.beta.messages.tool_runner(
-    model=settings.LLM_MODEL_MAIN,   # claude-opus-5
+    model=settings.LLM_MODEL_MAIN,  # claude-opus-5
     max_tokens=16000,
-    system=SCENARIO_SYSTEM,          # 역할, 숫자 인용 규칙, 미확인 조건 나열 의무
-    tools=[get_region_diagnosis, list_supply_options, build_scenario, run_simulation, get_provenance],
+    system=SCENARIO_SYSTEM,  # 역할, 숫자 인용 규칙, 미확인 조건 나열 의무
+    tools=[
+        get_region_diagnosis,
+        list_supply_options,
+        build_scenario,
+        run_simulation,
+        get_provenance,
+    ],
     messages=[{"role": "user", "content": user_text}],
 )
 final = None
@@ -167,13 +187,17 @@ resp = client.messages.create(
     model=settings.LLM_MODEL_MAIN,
     max_tokens=16000,
     system=[{"type": "text", "text": PLAN_DOC_SYSTEM, "cache_control": {"type": "ephemeral"}}],
-    messages=[{"role": "user", "content":
-        f"<facts>\n{facts_json}\n</facts>\n위 facts만 근거로 협의 계획서 초안을 마크다운으로 작성하세요."}],
+    messages=[
+        {
+            "role": "user",
+            "content": f"<facts>\n{facts_json}\n</facts>\n위 facts만 근거로 협의 계획서 초안을 마크다운으로 작성하세요.",
+        }
+    ],
 )
 draft = next(b.text for b in resp.content if b.type == "text")
-problems = verify_numbers_and_names(draft, facts)   # 숫자·시설명·강좌명 전수 대조
+problems = verify_numbers_and_names(draft, facts)  # 숫자·시설명·강좌명 전수 대조
 if problems:
-    draft = None   # 반려. 화면에는 "초안 생성 실패: 근거 없는 값 N개" 표시
+    draft = None  # 반려. 화면에는 "초안 생성 실패: 근거 없는 값 N개" 표시
 ```
 
 `verify_numbers_and_names`: 초안에서 정규식으로 숫자(원, 명, 석, %, 시각)와 고유명사를 뽑아 facts JSON에 존재하는지 검사. 한 건이라도 없으면 반려하고 재생성 1회. 초안에는 "자동 생성 초안, 담당자 검토 전" 워터마크와 출처 각주(데이터 기준일, 확인자)를 코드가 붙입니다.

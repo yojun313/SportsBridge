@@ -30,7 +30,9 @@ async def _run_and_store(question: str, run: dict | None, mode: str = "admin") -
     if key in _cache:
         res = _cache[key]
         if run:
-            registry.emit(run, {"type": "note", "level": "info", "text": "같은 질문의 이전 답변을 재사용"})
+            registry.emit(
+                run, {"type": "note", "level": "info", "text": "같은 질문의 이전 답변을 재사용"}
+            )
             registry.finish(run, res)
         return res
     emit = (lambda e: registry.emit(run, e)) if run else None
@@ -39,7 +41,9 @@ async def _run_and_store(question: str, run: dict | None, mode: str = "admin") -
     if res.get("completed") and not res.get("blocked") and not res.get("disabled"):
         _cache[key] = res
     try:
-        await agent_history_col.insert_one({**json.loads(json.dumps(jsonable(res), default=str)), "createdAt": datetime.now(UTC)})
+        await agent_history_col.insert_one(
+            {**json.loads(json.dumps(jsonable(res), default=str)), "createdAt": datetime.now(UTC)}
+        )
     except Exception:
         logger.warning("agent_history 저장 실패", exc_info=True)
     if run:
@@ -87,12 +91,36 @@ async def events(request: Request):
                     yield ": ping\n\n"
         finally:
             broadcaster.unsubscribe(q)
-    return StreamingResponse(gen(), media_type="text/event-stream", headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+    return StreamingResponse(
+        gen(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 @router.get("/history")
 async def history(limit: int = Query(20, ge=1, le=100), mode: str = Query("admin", max_length=10)):
     out = []
-    async for d in agent_history_col.find({"mode": mode} if mode == "user" else {"mode": {"$ne": "user"}}, {"_id": 0, "question": 1, "answer": 1, "created_at": 1, "cost_usd": 1, "completed": 1, "tool_trace": 1, "unresolved": 1, "provenance_summary": 1, "evidence": 1, "think_trace": 1}).sort("createdAt", -1).limit(limit):
+    async for d in (
+        agent_history_col.find(
+            {"mode": mode} if mode == "user" else {"mode": {"$ne": "user"}},
+            {
+                "_id": 0,
+                "question": 1,
+                "answer": 1,
+                "created_at": 1,
+                "cost_usd": 1,
+                "completed": 1,
+                "tool_trace": 1,
+                "unresolved": 1,
+                "provenance_summary": 1,
+                "evidence": 1,
+                "think_trace": 1,
+            },
+        )
+        .sort("createdAt", -1)
+        .limit(limit)
+    ):
         out.append(d)
     return jsonable({"items": out, "running": registry.recent()})

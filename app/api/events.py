@@ -45,8 +45,15 @@ class RunRegistry:
         self._runs: OrderedDict[str, dict[str, Any]] = OrderedDict()
 
     def create(self, question: str) -> dict[str, Any]:
-        run = {"run_id": uuid.uuid4().hex[:12], "question": question, "started_at": datetime.now(UTC).isoformat(),
-               "started_mono": time.monotonic(), "status": "running", "events": [], "result": None}
+        run = {
+            "run_id": uuid.uuid4().hex[:12],
+            "question": question,
+            "started_at": datetime.now(UTC).isoformat(),
+            "started_mono": time.monotonic(),
+            "status": "running",
+            "events": [],
+            "result": None,
+        }
         self._runs[run["run_id"]] = run
         while len(self._runs) > _KEEP_FINISHED + 4:
             self._runs.popitem(last=False)
@@ -67,7 +74,15 @@ class RunRegistry:
         broadcaster.publish({"type": "run_done", "run_id": run["run_id"], "result": result})
 
     def recent(self) -> list[dict[str, Any]]:
-        return [{"run_id": r["run_id"], "question": r["question"], "status": r["status"], "started_at": r["started_at"]} for r in reversed(self._runs.values())]
+        return [
+            {
+                "run_id": r["run_id"],
+                "question": r["question"],
+                "status": r["status"],
+                "started_at": r["started_at"],
+            }
+            for r in reversed(self._runs.values())
+        ]
 
 
 registry = RunRegistry()

@@ -43,8 +43,13 @@ async def lifespan(app: FastAPI):
     await close()
 
 
-app = FastAPI(title=APP_NAME, docs_url="/docs" if ENV == "development" else None,
-              redoc_url=None, openapi_url="/openapi.json" if ENV == "development" else None, lifespan=lifespan)
+app = FastAPI(
+    title=APP_NAME,
+    docs_url="/docs" if ENV == "development" else None,
+    redoc_url=None,
+    openapi_url="/openapi.json" if ENV == "development" else None,
+    lifespan=lifespan,
+)
 
 _MAX_BODY_BYTES = 2 * 1024 * 1024
 
@@ -52,7 +57,12 @@ _MAX_BODY_BYTES = 2 * 1024 * 1024
 @app.middleware("http")
 async def headers_middleware(request: Request, call_next):
     length = request.headers.get("content-length")
-    if length and length.isdigit() and int(length) > _MAX_BODY_BYTES and not request.url.path.startswith("/api/data/upload/"):
+    if (
+        length
+        and length.isdigit()
+        and int(length) > _MAX_BODY_BYTES
+        and not request.url.path.startswith("/api/data/upload/")
+    ):
         return JSONResponse(status_code=413, content={"detail": "요청이 너무 큽니다."})
     response = await call_next(request)
     if request.url.path.startswith("/api/"):
@@ -99,7 +109,9 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     if request.url.path.startswith("/api") or exc.status_code != 404:
         return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
-    return templates.TemplateResponse(request=request, name="errors/404.html", context={}, status_code=404)
+    return templates.TemplateResponse(
+        request=request, name="errors/404.html", context={}, status_code=404
+    )
 
 
 @app.exception_handler(Exception)
@@ -107,4 +119,6 @@ async def server_error_handler(request: Request, exc: Exception):
     logger.exception("unhandled error at %s", request.url.path)
     if request.url.path.startswith("/api"):
         return JSONResponse(status_code=500, content={"detail": "Internal server error"})
-    return templates.TemplateResponse(request=request, name="errors/500.html", context={}, status_code=500)
+    return templates.TemplateResponse(
+        request=request, name="errors/500.html", context={}, status_code=500
+    )

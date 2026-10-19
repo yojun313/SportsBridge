@@ -45,6 +45,7 @@ class Session(BaseModel):
 
 class SupplyOption(BaseModel):
     """공급 옵션: 기존 가맹 강좌 또는 신설 가능한 강좌 슬롯."""
+
     id: str = Field(min_length=1, max_length=60)
     label: str = Field(min_length=1, max_length=120)
     facilityId: str = Field(min_length=1, max_length=60)
@@ -60,7 +61,9 @@ class SupplyOption(BaseModel):
     affiliationProvenance: Provenance = "public"
     priceWon: int | None = None
     exists: bool = True  # False면 조치로 신설되어야 하는 슬롯
-    reachable: dict[str, bool] = Field(default_factory=dict)  # demandGroupId → 이동 가능 여부 (확인·가정)
+    reachable: dict[str, bool] = Field(
+        default_factory=dict
+    )  # demandGroupId → 이동 가능 여부 (확인·가정)
     provenance: Provenance = "public"
 
 
@@ -71,6 +74,7 @@ class Action(BaseModel):
     add_capacity: supplyOptionId 정원 증가
     transport: demandGroupId ↔ facilityId 이동 가능 처리
     """
+
     id: str = Field(min_length=1, max_length=40)
     label: str = Field(min_length=1, max_length=120)
     kind: Literal["affiliate", "open_course", "add_capacity", "transport"]

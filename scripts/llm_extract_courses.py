@@ -49,7 +49,13 @@ def _targets(db, version, region, sido, limit):
         q["regionCode"] = region
     elif sido:
         q["sidoCode"] = sido
-    done = {f["courseId"]: f.get("descriptionHash") for f in db["course_facts"].find({"datasetVersion": version, "promptVersion": llm.LLM_PROMPT_VERSION}, {"courseId": 1, "descriptionHash": 1})}
+    done = {
+        f["courseId"]: f.get("descriptionHash")
+        for f in db["course_facts"].find(
+            {"datasetVersion": version, "promptVersion": llm.LLM_PROMPT_VERSION},
+            {"courseId": 1, "descriptionHash": 1},
+        )
+    }
     rows = []
     for c in db["courses"].find(q, {"name": 1, "description": 1}).sort("lastMonth", -1):
         desc = c.get("description") or ""
@@ -65,11 +71,43 @@ def _targets(db, version, region, sido, limit):
 
 def _store(db, version, doc, name, desc):
     doc["datasetVersion"] = version
-    db["course_facts"].update_one({"datasetVersion": version, "courseId": doc["courseId"]}, {"$set": doc}, upsert=True)
+    db["course_facts"].update_one(
+        {"datasetVersion": version, "courseId": doc["courseId"]}, {"$set": doc}, upsert=True
+    )
     if doc.get("needsReview"):
-        db["review_queue"].update_one({"_id": f"rq:extraction:{doc['courseId']}"}, {"$set": {
-            "kind": "extraction", "refId": doc["courseId"], "datasetVersion": version, "status": "pending", "createdAt": datetime.now(UTC),
-            "payload": {"courseName": name, "description": desc, "facts": {k: doc.get(k) for k in ("age_min", "age_max", "grade_hint", "level", "attendance_rule", "sessions_per_week", "shuttle", "voucher_note", "evidence", "confidence", "flags")}}}}, upsert=True)
+        db["review_queue"].update_one(
+            {"_id": f"rq:extraction:{doc['courseId']}"},
+            {
+                "$set": {
+                    "kind": "extraction",
+                    "refId": doc["courseId"],
+                    "datasetVersion": version,
+                    "status": "pending",
+                    "createdAt": datetime.now(UTC),
+                    "payload": {
+                        "courseName": name,
+                        "description": desc,
+                        "facts": {
+                            k: doc.get(k)
+                            for k in (
+                                "age_min",
+                                "age_max",
+                                "grade_hint",
+                                "level",
+                                "attendance_rule",
+                                "sessions_per_week",
+                                "shuttle",
+                                "voucher_note",
+                                "evidence",
+                                "confidence",
+                                "flags",
+                            )
+                        },
+                    },
+                }
+            },
+            upsert=True,
+        )
 
 
 def main() -> None:
@@ -93,16 +131,35 @@ def main() -> None:
         est = len(rows) * 0.0005
         llm.check_budget(est)
         client = llm.sync_client()
-        jsonl_path = Path("data/reports") / f"batch_courses_{datetime.now(UTC).strftime('%Y%m%d%H%M%S')}.jsonl"
+        jsonl_path = (
+            Path("data/reports")
+            / f"batch_courses_{datetime.now(UTC).strftime('%Y%m%d%H%M%S')}.jsonl"
+        )
         jsonl_path.parent.mkdir(parents=True, exist_ok=True)
         jsonl_path.write_text("\n".join(build_course_batch_lines(rows)) + "\n", encoding="utf-8")
         with open(jsonl_path, "rb") as fh:
             up = client.files.create(file=fh, purpose="batch")
-        batch = client.batches.create(input_file_id=up.id, endpoint="/v1/responses", completion_window="24h",
-                                      metadata={"description": f"course_extract {version}"})
-        db["llm_batches"].insert_one({"batchId": batch.id, "kind": "course_extract", "datasetVersion": version, "count": len(rows),
-                                      "inputFileId": up.id, "jsonl": str(jsonl_path), "createdAt": datetime.now(UTC), "status": batch.status})
-        print(f"batch {batch.id} 제출: {len(rows)}건 (예상 비용 ≤ {est:.2f} USD, Batch 50% 할인 전). --collect {batch.id} 로 수집하세요.")
+        batch = client.batches.create(
+            input_file_id=up.id,
+            endpoint="/v1/responses",
+            completion_window="24h",
+            metadata={"description": f"course_extract {version}"},
+        )
+        db["llm_batches"].insert_one(
+            {
+                "batchId": batch.id,
+                "kind": "course_extract",
+                "datasetVersion": version,
+                "count": len(rows),
+                "inputFileId": up.id,
+                "jsonl": str(jsonl_path),
+                "createdAt": datetime.now(UTC),
+                "status": batch.status,
+            }
+        )
+        print(
+            f"batch {batch.id} 제출: {len(rows)}건 (예상 비용 ≤ {est:.2f} USD, Batch 50% 할인 전). --collect {batch.id} 로 수집하세요."
+        )
     elif args.collect:
         client = llm.sync_client()
         b = client.batches.retrieve(args.collect)
@@ -121,22 +178,50 @@ def main() -> None:
             if facts is None:
                 err += 1
                 if error == "refusal":
-                    _store(db, version, _facts_doc(cid, desc, CourseFacts(), ["refusal"], llm.model_bulk(), usage_from_dict(usage)), (course or {}).get("name", ""), desc)
+                    _store(
+                        db,
+                        version,
+                        _facts_doc(
+                            cid,
+                            desc,
+                            CourseFacts(),
+                            ["refusal"],
+                            llm.model_bulk(),
+                            usage_from_dict(usage),
+                        ),
+                        (course or {}).get("name", ""),
+                        desc,
+                    )
                 continue
             facts, flags = postprocess_course(facts, desc)
             u = usage_from_dict(usage)
             doc = _facts_doc(cid, desc, facts, flags, llm.model_bulk(), u)
-            llm.record_call("course_extract_batch", llm.model_bulk(), u, llm.input_hash(cid, desc), {"courseId": cid, "batchId": args.collect})
+            llm.record_call(
+                "course_extract_batch",
+                llm.model_bulk(),
+                u,
+                llm.input_hash(cid, desc),
+                {"courseId": cid, "batchId": args.collect},
+            )
             _store(db, version, doc, (course or {}).get("name", ""), desc)
             ok += 1
-        db["llm_batches"].update_one({"batchId": args.collect}, {"$set": {"status": "collected", "ok": ok, "err": err}})
+        db["llm_batches"].update_one(
+            {"batchId": args.collect}, {"$set": {"status": "collected", "ok": ok, "err": err}}
+        )
         print(f"수집 완료: 성공 {ok}, 실패 {err}")
     elif args.online:
         rows = _targets(db, version, args.region, args.sido, args.limit or 20)
         for r in rows:
             doc = extract_course_sync(r["courseId"], r["name"], r["description"])
             _store(db, version, doc, r["name"], r["description"])
-            print(r["courseId"], doc["confidence"], doc["attendance_rule"], doc["age_min"], doc["age_max"], doc["flags"])
+            print(
+                r["courseId"],
+                doc["confidence"],
+                doc["attendance_rule"],
+                doc["age_min"],
+                doc["age_max"],
+                doc["flags"],
+            )
     else:
         ap.print_help()
 

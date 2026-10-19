@@ -55,6 +55,7 @@ def sync_client():
         raise LLMDisabled("LLM이 비활성 상태입니다 (.env의 OPENAI_API_KEY, LLM_ENABLED 확인)")
     if _client is None:
         from openai import OpenAI
+
         _client = OpenAI(api_key=OPENAI_API_KEY, max_retries=3)
     return _client
 
@@ -65,6 +66,7 @@ def async_client():
         raise LLMDisabled("LLM이 비활성 상태입니다 (.env의 OPENAI_API_KEY, LLM_ENABLED 확인)")
     if _async_client is None:
         from openai import AsyncOpenAI
+
         _async_client = AsyncOpenAI(api_key=OPENAI_API_KEY, max_retries=3)
     return _async_client
 
@@ -109,14 +111,25 @@ def _sync_db():
     from pymongo import MongoClient
 
     from app.config import DB_NAME, MONGO_URI
+
     return MongoClient(MONGO_URI)[DB_NAME]
 
 
 def record_call(kind: str, model: str, usage, ihash: str, extra: dict | None = None) -> float:
     c = cost_usd(model, usage)
     try:
-        _sync_db()["llm_calls"].insert_one({"kind": kind, "model": model, "inputHash": ihash, "promptVersion": LLM_PROMPT_VERSION,
-                                            "usage": usage_dict(usage), "costUsd": c, "createdAt": datetime.now(UTC), **(extra or {})})
+        _sync_db()["llm_calls"].insert_one(
+            {
+                "kind": kind,
+                "model": model,
+                "inputHash": ihash,
+                "promptVersion": LLM_PROMPT_VERSION,
+                "usage": usage_dict(usage),
+                "costUsd": c,
+                "createdAt": datetime.now(UTC),
+                **(extra or {}),
+            }
+        )
     except Exception:
         logger.warning("llm_calls 기록 실패", exc_info=True)
     return c
@@ -125,7 +138,14 @@ def record_call(kind: str, model: str, usage, ihash: str, extra: dict | None = N
 def today_spend_usd() -> float:
     try:
         start = datetime.now(UTC).replace(hour=0, minute=0, second=0, microsecond=0)
-        agg = list(_sync_db()["llm_calls"].aggregate([{"$match": {"createdAt": {"$gte": start}}}, {"$group": {"_id": None, "s": {"$sum": "$costUsd"}}}]))
+        agg = list(
+            _sync_db()["llm_calls"].aggregate(
+                [
+                    {"$match": {"createdAt": {"$gte": start}}},
+                    {"$group": {"_id": None, "s": {"$sum": "$costUsd"}}},
+                ]
+            )
+        )
         return float(agg[0]["s"]) if agg else 0.0
     except Exception:  # noqa: BLE001
         return 0.0
@@ -134,7 +154,9 @@ def today_spend_usd() -> float:
 def check_budget(estimated_usd: float = 0.0) -> None:
     spent = today_spend_usd()
     if spent + estimated_usd > LLM_DAILY_BUDGET_USD:
-        raise BudgetExceeded(f"오늘 LLM 비용 {spent:.2f} USD가 한도 {LLM_DAILY_BUDGET_USD} USD에 도달했습니다")
+        raise BudgetExceeded(
+            f"오늘 LLM 비용 {spent:.2f} USD가 한도 {LLM_DAILY_BUDGET_USD} USD에 도달했습니다"
+        )
 
 
 def model_main() -> str:
@@ -160,4 +182,5 @@ def refusal_text(response) -> str | None:
 def strict_schema(model_cls) -> dict:
     """Pydantic 모델을 OpenAI strict JSON 스키마로 (Batch 요청 본문용)."""
     from openai.lib._pydantic import to_strict_json_schema
+
     return to_strict_json_schema(model_cls)

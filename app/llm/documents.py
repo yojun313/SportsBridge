@@ -20,17 +20,43 @@ async def draft_plan_document(facts: dict, kind: str = "plan") -> dict:
     for attempt in range(2):
         inputs = [{"role": "user", "content": user}]
         if attempt == 1:
-            inputs += [{"role": "assistant", "content": draft},
-                       {"role": "user", "content": "다음 값들은 facts에 없습니다: " + ", ".join(problems) + ". 해당 값을 제거하거나 '미확인'으로 바꿔 전체를 다시 작성하세요."}]
-        resp = await c.responses.create(model=model, instructions=system, input=inputs, reasoning=llm.reasoning(), max_output_tokens=6000, store=False)
-        total_cost += llm.record_call("plan_doc", model, resp.usage, llm.input_hash(user), {"attempt": attempt})
+            inputs += [
+                {"role": "assistant", "content": draft},
+                {
+                    "role": "user",
+                    "content": "다음 값들은 facts에 없습니다: "
+                    + ", ".join(problems)
+                    + ". 해당 값을 제거하거나 '미확인'으로 바꿔 전체를 다시 작성하세요.",
+                },
+            ]
+        resp = await c.responses.create(
+            model=model,
+            instructions=system,
+            input=inputs,
+            reasoning=llm.reasoning(),
+            max_output_tokens=6000,
+            store=False,
+        )
+        total_cost += llm.record_call(
+            "plan_doc", model, resp.usage, llm.input_hash(user), {"attempt": attempt}
+        )
         if llm.refusal_text(resp):
-            return {"ok": False, "draft": None, "problems": ["모델이 응답을 거부했습니다"], "costUsd": total_cost}
+            return {
+                "ok": False,
+                "draft": None,
+                "problems": ["모델이 응답을 거부했습니다"],
+                "costUsd": total_cost,
+            }
         draft = (resp.output_text or "").strip()
         problems = verify_numbers_and_names(draft, facts)
         if not problems:
             break
     if problems:
         return {"ok": False, "draft": None, "problems": problems, "costUsd": total_cost}
-    draft = f"> **자동 생성 초안({model}), 담당자 검토 전** · 데이터 버전 " + str(facts.get("datasetVersion")) + "\n\n" + draft
+    draft = (
+        f"> **자동 생성 초안({model}), 담당자 검토 전** · 데이터 버전 "
+        + str(facts.get("datasetVersion"))
+        + "\n\n"
+        + draft
+    )
     return {"ok": True, "draft": draft, "problems": [], "costUsd": total_cost}

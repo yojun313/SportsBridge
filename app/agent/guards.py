@@ -13,8 +13,12 @@ from typing import Any
 _CONTROL = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
 MAX_QUESTION_CHARS = 2000
 
-_PII_RE = re.compile(r"(주민등록번호|주민번호|생년월일|집\s*주소|전화번호를?\s*알려|아이\s*이름|아동\s*명단|누가\s*수급|수급자\s*명단|어느\s*가구|특정\s*아동|개인정보)")
-_ELIG_RE = re.compile(r"(자격이?\s*(되|돼|있)|지원\s*대상(자)?\s*(인지|이야|입니까|이니|맞)|수급\s*자격|받을\s*수\s*있(나|어|는지|을까))")
+_PII_RE = re.compile(
+    r"(주민등록번호|주민번호|생년월일|집\s*주소|전화번호를?\s*알려|아이\s*이름|아동\s*명단|누가\s*수급|수급자\s*명단|어느\s*가구|특정\s*아동|개인정보)"
+)
+_ELIG_RE = re.compile(
+    r"(자격이?\s*(되|돼|있)|지원\s*대상(자)?\s*(인지|이야|입니까|이니|맞)|수급\s*자격|받을\s*수\s*있(나|어|는지|을까))"
+)
 _META_RE = re.compile(r"(시스템\s*프롬프트|너의\s*(지침|규칙)|이전\s*지시|규칙\s*무시|무시하고)")
 
 PREBLOCK = {
@@ -24,18 +28,50 @@ PREBLOCK = {
 }
 
 # 성과·확정 단정 표현. 문장 단위로 제거하거나 재작성 요구.
-_BANNED = re.compile(r"(참여율이?\s*(오를|상승할|높아질)|예산이?\s*절감|가맹(이|될)\s*(확정|것입니다|될\s*것)|가장\s*안전한|확실히\s*(효과|성공)|반드시\s*(늘|증가)|보장)")
+_BANNED = re.compile(
+    r"(참여율이?\s*(오를|상승할|높아질)|예산이?\s*절감|가맹(이|될)\s*(확정|것입니다|될\s*것)|가장\s*안전한|확실히\s*(효과|성공)|반드시\s*(늘|증가)|보장)"
+)
 _ASSERT_WORDS = re.compile(r"(충분합니다|부족합니다)")
 
 HINTS = [
     (re.compile(r"저녁|야간|퇴근|18시|19시|20시"), "eveningOnly=true로 강좌를 보세요."),
     (re.compile(r"주말|토요일|일요일"), "주말 세션(weekday 5,6)만 골라 말하세요."),
-    (re.compile(r"초등|저학년|고학년|유아|중학"), "연령 조건은 AI추출·검토완료 값만 근거로 쓰고, 없으면 확인 필요로 두세요."),
+    (
+        re.compile(r"초등|저학년|고학년|유아|중학"),
+        "연령 조건은 AI추출·검토완료 값만 근거로 쓰고, 없으면 확인 필요로 두세요.",
+    ),
     (re.compile(r"비교|vs|보다|어디가"), "compare_regions를 쓰세요."),
-    (re.compile(r"몇\s*명|인원|아이들|수요|예산|만\s*원"), "수요·예산이 있으면 build_scenario → run_simulation."),
-    (re.compile(r"가맹\s*안|비가맹|후보|유치|어느\s*시설"), "list_candidates를 쓰고 '가맹 여부 확인 필요'를 명시하세요."),
+    (
+        re.compile(r"몇\s*명|인원|아이들|수요|예산|만\s*원"),
+        "수요·예산이 있으면 build_scenario → run_simulation.",
+    ),
+    (
+        re.compile(r"가맹\s*안|비가맹|후보|유치|어느\s*시설"),
+        "list_candidates를 쓰고 '가맹 여부 확인 필요'를 명시하세요.",
+    ),
 ]
-SPORT_WORDS = ["수영", "태권도", "헬스", "축구", "풋살", "복싱", "필라테스", "댄스", "발레", "무용", "줄넘기", "농구", "야구", "검도", "유도", "합기도", "요가", "주짓수", "배드민턴", "탁구"]
+SPORT_WORDS = [
+    "수영",
+    "태권도",
+    "헬스",
+    "축구",
+    "풋살",
+    "복싱",
+    "필라테스",
+    "댄스",
+    "발레",
+    "무용",
+    "줄넘기",
+    "농구",
+    "야구",
+    "검도",
+    "유도",
+    "합기도",
+    "요가",
+    "주짓수",
+    "배드민턴",
+    "탁구",
+]
 
 
 def sanitize(q: str) -> str:
@@ -52,7 +88,9 @@ def preblock(q: str) -> str | None:
         return PREBLOCK["eligibility"]
     # 지침·규칙을 캐묻는 것만 차단합니다. "규칙 무시하고 종로구 진단…"처럼 실제 질문이 섞여 있으면
     # 모델이 도구 결과로 답하게 두고, 주입 지시는 시스템 프롬프트가 데이터로 취급합니다.
-    if _META_RE.search(q) and not re.search(r"(구|시|군|지역|시군구|시설|강좌|수영|태권도|후보|진단)", q):
+    if _META_RE.search(q) and not re.search(
+        r"(구|시|군|지역|시군구|시설|강좌|수영|태권도|후보|진단)", q
+    ):
         return PREBLOCK["meta"]
     return None
 
@@ -104,7 +142,10 @@ def fabricated_numbers(answer: str, tool_log: list[dict]) -> list[str]:
 
 
 def banned_phrases(answer: str) -> list[str]:
-    return sorted({m.group(0) for m in _BANNED.finditer(answer)} | {m.group(0) for m in _ASSERT_WORDS.finditer(answer)})
+    return sorted(
+        {m.group(0) for m in _BANNED.finditer(answer)}
+        | {m.group(0) for m in _ASSERT_WORDS.finditer(answer)}
+    )
 
 
 def strip_banned_sentences(answer: str) -> str:
@@ -150,8 +191,14 @@ def ensure_appendix(answer: str, prov: dict, unresolved: list[str]) -> str:
 
 
 def gave_up_with_results(answer: str, tool_log: list[dict]) -> bool:
-    has_data = any(isinstance(e.get("result"), dict) and not e["result"].get("error") for e in tool_log)
-    return has_data and bool(re.search(r"(확인할 수 없|데이터가 없|알 수 없습니다)", answer)) and len(answer) < 200
+    has_data = any(
+        isinstance(e.get("result"), dict) and not e["result"].get("error") for e in tool_log
+    )
+    return (
+        has_data
+        and bool(re.search(r"(확인할 수 없|데이터가 없|알 수 없습니다)", answer))
+        and len(answer) < 200
+    )
 
 
 def tool_call_signature(name: str, args: dict[str, Any]) -> str:

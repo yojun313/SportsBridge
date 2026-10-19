@@ -13,14 +13,23 @@ def time_ok(group: DemandGroup, opt: SupplyOption) -> tuple[bool, str | None]:
     buf = group.bufferMinutes
     fits = []
     for s in opt.sessions:
-        ok = any(w.weekday == s.weekday and w.startMinute <= s.startMinute - buf and s.endMinute + buf <= w.endMinute
-                 for w in group.availability)
+        ok = any(
+            w.weekday == s.weekday
+            and w.startMinute <= s.startMinute - buf
+            and s.endMinute + buf <= w.endMinute
+            for w in group.availability
+        )
         fits.append(ok)
     if opt.attendanceRule == "all_required" or opt.attendanceRule == "unknown":
         # 불명은 보수적으로 전 요일 필수로 판정하되, 사유는 unknown으로 남깁니다.
         if all(fits):
             return True, None
-        return False, "time:required_days_conflict" if opt.attendanceRule == "all_required" else "time:attendance_rule_unknown"
+        return (
+            False,
+            "time:required_days_conflict"
+            if opt.attendanceRule == "all_required"
+            else "time:attendance_rule_unknown",
+        )
     # selectable: 필요한 주당 횟수만큼 맞는 세션이 있으면 OK
     need = group.sessionsPerWeek or 1
     return (sum(fits) >= need), (None if sum(fits) >= need else "time:not_enough_selectable_days")
@@ -42,7 +51,9 @@ def sport_ok(group: DemandGroup, opt: SupplyOption) -> tuple[bool, str | None]:
     return (group.sport == opt.sport), (None if group.sport == opt.sport else "sport:mismatch")
 
 
-def reach_ok(group: DemandGroup, opt: SupplyOption, transport_actions: set[tuple[str, str]]) -> tuple[bool, str | None]:
+def reach_ok(
+    group: DemandGroup, opt: SupplyOption, transport_actions: set[tuple[str, str]]
+) -> tuple[bool, str | None]:
     if (group.id, opt.facilityId) in transport_actions:
         return True, None
     r = opt.reachable.get(group.id)
@@ -63,8 +74,13 @@ def affiliation_ok(opt: SupplyOption, affiliated: set[str]) -> tuple[bool, str |
     return False, "affiliation:unknown"
 
 
-def compatible(group: DemandGroup, opt: SupplyOption, affiliated: set[str], transport_actions: set[tuple[str, str]],
-               exists: bool) -> tuple[bool, list[str]]:
+def compatible(
+    group: DemandGroup,
+    opt: SupplyOption,
+    affiliated: set[str],
+    transport_actions: set[tuple[str, str]],
+    exists: bool,
+) -> tuple[bool, list[str]]:
     reasons: list[str] = []
     if not exists:
         reasons.append("supply:not_opened")

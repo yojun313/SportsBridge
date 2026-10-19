@@ -5,8 +5,11 @@ from __future__ import annotations
 from collections import deque
 
 
-def max_flow_assign(groups: list[tuple[str, int]], options: list[tuple[str, int | None]],
-                    edges: set[tuple[str, str]]) -> tuple[int, dict[tuple[str, str], int]]:
+def max_flow_assign(
+    groups: list[tuple[str, int]],
+    options: list[tuple[str, int | None]],
+    edges: set[tuple[str, str]],
+) -> tuple[int, dict[tuple[str, str], int]]:
     """groups: [(gid, size)], options: [(oid, capacity or None)], edges: 호환 쌍.
     capacity None(미확인)은 배정 불가로 취급합니다(문서 규칙: 정원 불명 = 확정 배정 제외)."""
     S, T = "S", "T"

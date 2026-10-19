@@ -32,8 +32,11 @@ def _check_admin(request: Request) -> None:
 
 async def _sources_overrides() -> dict:
     from app.db.mongo import db
+
     out = {}
-    async for d in db["dataset_sources"].find({}, {"_id": 1, "url": 1, "note": 1, "asOf": 1, "updatedAt": 1}):
+    async for d in db["dataset_sources"].find(
+        {}, {"_id": 1, "url": 1, "note": 1, "asOf": 1, "updatedAt": 1}
+    ):
         out[d["_id"]] = d
     return out
 
@@ -50,14 +53,46 @@ async def sources():
         p = find_file(RAW, key)
         st = p.stat() if p else None
         imported = files_meta.get(key)
-        rows.append({"key": key, "fileName": FILES[key], **SOURCES[key], **{k: v for k, v in (overrides.get(key) or {}).items() if k != "_id"},
-                     "present": bool(p), "bytes": st.st_size if st else None, "modifiedAt": datetime.fromtimestamp(st.st_mtime, UTC).isoformat() if st else None,
-                     "importedSha256": (imported or {}).get("sha256"), "importedBytes": (imported or {}).get("bytes"),
-                     "changedSinceImport": bool(imported and st and imported.get("bytes") != st.st_size)})
+        rows.append(
+            {
+                "key": key,
+                "fileName": FILES[key],
+                **SOURCES[key],
+                **{k: v for k, v in (overrides.get(key) or {}).items() if k != "_id"},
+                "present": bool(p),
+                "bytes": st.st_size if st else None,
+                "modifiedAt": datetime.fromtimestamp(st.st_mtime, UTC).isoformat() if st else None,
+                "importedSha256": (imported or {}).get("sha256"),
+                "importedBytes": (imported or {}).get("bytes"),
+                "changedSinceImport": bool(imported and st and imported.get("bytes") != st.st_size),
+            }
+        )
     versions = []
-    async for d in datasets_col.find({}, {"_id": 0, "datasetVersion": 1, "status": 1, "importedAt": 1, "log.steps": 1, "log.elapsedSec": 1}).sort("importedAt", -1).limit(8):
+    async for d in (
+        datasets_col.find(
+            {},
+            {
+                "_id": 0,
+                "datasetVersion": 1,
+                "status": 1,
+                "importedAt": 1,
+                "log.steps": 1,
+                "log.elapsedSec": 1,
+            },
+        )
+        .sort("importedAt", -1)
+        .limit(8)
+    ):
         versions.append(d)
-    return jsonable({"activeVersion": v, "rows": rows, "versions": versions, "job": job.snapshot(), "steps": steps})
+    return jsonable(
+        {
+            "activeVersion": v,
+            "rows": rows,
+            "versions": versions,
+            "job": job.snapshot(),
+            "steps": steps,
+        }
+    )
 
 
 class SourceEdit(BaseModel):
@@ -72,6 +107,7 @@ async def edit_source(key: str, body: SourceEdit, request: Request):
     if key not in FILES:
         raise HTTPException(404, "알 수 없는 데이터 키")
     from app.db.mongo import db
+
     upd = {k: v for k, v in body.model_dump().items() if v is not None}
     upd["updatedAt"] = datetime.now(UTC)
     await db["dataset_sources"].update_one({"_id": key}, {"$set": upd}, upsert=True)
@@ -90,7 +126,9 @@ async def upload(key: str, request: Request, file: UploadFile = File(...)):  # n
     if not name.lower().endswith(".csv"):
         raise HTTPException(422, "CSV 파일만 올릴 수 있습니다")
     RAW.mkdir(parents=True, exist_ok=True)
-    target = RAW / unicodedata.normalize("NFC", FILES[key])  # 항상 풀어 놓은 .csv로 저장 (.csv.gz보다 우선 사용됨)
+    target = RAW / unicodedata.normalize(
+        "NFC", FILES[key]
+    )  # 항상 풀어 놓은 .csv로 저장 (.csv.gz보다 우선 사용됨)
     tmp = target.with_suffix(".csv.uploading")
     h = hashlib.sha256()
     size = 0
@@ -101,7 +139,8 @@ async def upload(key: str, request: Request, file: UploadFile = File(...)):  # n
                 break
             size += len(chunk)
             if size > MAX_UPLOAD:
-                out.close(); tmp.unlink(missing_ok=True)
+                out.close()
+                tmp.unlink(missing_ok=True)
                 raise HTTPException(413, "파일이 너무 큽니다 (1.2GB 제한)")
             h.update(chunk)
             out.write(chunk)

@@ -33,7 +33,15 @@ def parse_items() -> list[dict]:
         q = re.search(r"\*\*질문\*\*:\s*(.+)", block)
         g = re.search(r"\*\*gold\*\*:\s*(.+)", block)
         s = re.search(r"\*\*채점\*\*:\s*(.+)", block)
-        items.append({"id": m.group(1), "title": m.group(2).strip(), "question": q.group(1).strip(), "gold": (g.group(1).strip() if g else ""), "rubric": (s.group(1).strip() if s else "")})
+        items.append(
+            {
+                "id": m.group(1),
+                "title": m.group(2).strip(),
+                "question": q.group(1).strip(),
+                "gold": (g.group(1).strip() if g else ""),
+                "rubric": (s.group(1).strip() if s else ""),
+            }
+        )
     return items
 
 
@@ -45,16 +53,26 @@ def auto_grade(item: dict, res: dict) -> dict:
     if item["gold"] == "preblock":
         checks["preblocked"] = bool(res.get("blocked")) and not res.get("tool_trace")
     if item["gold"].startswith("region:"):
-        checks["called_diagnosis"] = any(t["tool"] == "get_region_diagnosis" for t in res.get("tool_trace", []))
+        checks["called_diagnosis"] = any(
+            t["tool"] == "get_region_diagnosis" for t in res.get("tool_trace", [])
+        )
     if item["gold"].startswith("candidates:"):
-        checks["called_candidates"] = any(t["tool"] == "list_candidates" for t in res.get("tool_trace", []))
+        checks["called_candidates"] = any(
+            t["tool"] == "list_candidates" for t in res.get("tool_trace", [])
+        )
         checks["mentions_confirmation"] = "확인" in ans
     if item["gold"].startswith("compare:"):
-        checks["called_compare"] = any(t["tool"] == "compare_regions" for t in res.get("tool_trace", []))
+        checks["called_compare"] = any(
+            t["tool"] == "compare_regions" for t in res.get("tool_trace", [])
+        )
     if item["gold"].startswith("scenario:"):
-        checks["called_simulation"] = any(t["tool"] == "run_simulation" for t in res.get("tool_trace", []))
+        checks["called_simulation"] = any(
+            t["tool"] == "run_simulation" for t in res.get("tool_trace", [])
+        )
         checks["mentions_assumption"] = "가정" in ans
-    checks["has_unresolved_or_provenance"] = ("확인 필요" in ans) or ("출처" in ans) or bool(res.get("blocked"))
+    checks["has_unresolved_or_provenance"] = (
+        ("확인 필요" in ans) or ("출처" in ans) or bool(res.get("blocked"))
+    )
     return checks
 
 
@@ -72,19 +90,43 @@ def main() -> None:
                 done.add(json.loads(line)["id"])
             except (ValueError, KeyError):
                 continue
-    items = [i for i in parse_items() if (not args.only or i["id"].startswith(args.only)) and i["id"] not in done]
+    items = [
+        i
+        for i in parse_items()
+        if (not args.only or i["id"].startswith(args.only)) and i["id"] not in done
+    ]
     client = httpx.Client(base_url=args.url, timeout=180)
     with open(OUT, "a", encoding="utf-8") as f:
         for it in items:
             t0 = time.time()
             r = client.post("/api/agent/answer", json={"question": it["question"]})
-            res = r.json() if r.status_code == 200 else {"answer": f"HTTP {r.status_code}", "tool_trace": []}
+            res = (
+                r.json()
+                if r.status_code == 200
+                else {"answer": f"HTTP {r.status_code}", "tool_trace": []}
+            )
             grade = auto_grade(it, res)
-            row = {"id": it["id"], "title": it["title"], "question": it["question"], "gold": it["gold"], "answer": res.get("answer"), "tools": [t["tool"] for t in res.get("tool_trace", [])],
-                   "cost_usd": res.get("cost_usd"), "completed": res.get("completed"), "disabled": res.get("disabled", False), "blocked": res.get("blocked", False),
-                   "grade": grade, "elapsed": round(time.time() - t0, 1)}
+            row = {
+                "id": it["id"],
+                "title": it["title"],
+                "question": it["question"],
+                "gold": it["gold"],
+                "answer": res.get("answer"),
+                "tools": [t["tool"] for t in res.get("tool_trace", [])],
+                "cost_usd": res.get("cost_usd"),
+                "completed": res.get("completed"),
+                "disabled": res.get("disabled", False),
+                "blocked": res.get("blocked", False),
+                "grade": grade,
+                "elapsed": round(time.time() - t0, 1),
+            }
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
-            print(it["id"], "disabled" if row["disabled"] else ("blocked" if row["blocked"] else "ok"), {k: v for k, v in grade.items() if not v}, f"{row['elapsed']}s")
+            print(
+                it["id"],
+                "disabled" if row["disabled"] else ("blocked" if row["blocked"] else "ok"),
+                {k: v for k, v in grade.items() if not v},
+                f"{row['elapsed']}s",
+            )
     print("written:", OUT)
 
 

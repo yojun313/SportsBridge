@@ -84,16 +84,34 @@ def evaluate(sc: Scenario, selected: set[str]) -> dict:
     per_group = {}
     for g in sc.demandGroups:
         got = sum(v for (gid, _), v in assigned.items() if gid == g.id)
-        per_group[g.id] = {"size": g.size, "assigned": got, "unmet": g.size - got,
-                           "connectedOptions": sorted(o for (gid, o) in edges if gid == g.id)}
+        per_group[g.id] = {
+            "size": g.size,
+            "assigned": got,
+            "unmet": g.size - got,
+            "connectedOptions": sorted(o for (gid, o) in edges if gid == g.id),
+        }
     connected_types = sum(1 for g in sc.demandGroups if per_group[g.id]["connectedOptions"])
     return {
-        "actions": sorted(selected), "assigned": flow if sc.mode == "capacity" else None,
-        "connectedGroups": connected_types, "totalDemand": sum(g.size for g in sc.demandGroups),
-        "costWon": cost, "unknownCostActions": unknown_cost, "unknownCapacityOptions": unknown_capacity,
-        "assignments": [{"groupId": g, "optionId": o, "count": n} for (g, o), n in sorted(assigned.items())],
+        "actions": sorted(selected),
+        "assigned": flow if sc.mode == "capacity" else None,
+        "connectedGroups": connected_types,
+        "totalDemand": sum(g.size for g in sc.demandGroups),
+        "costWon": cost,
+        "unknownCostActions": unknown_cost,
+        "unknownCapacityOptions": unknown_capacity,
+        "assignments": [
+            {"groupId": g, "optionId": o, "count": n} for (g, o), n in sorted(assigned.items())
+        ],
         "perGroup": per_group,
-        "blocked": [{"groupId": g, "optionId": o, "reasons": r, "labels": [TRACE_LABEL.get(x, x) for x in r]} for (g, o), r in sorted(blocked.items())],
+        "blocked": [
+            {
+                "groupId": g,
+                "optionId": o,
+                "reasons": r,
+                "labels": [TRACE_LABEL.get(x, x) for x in r],
+            }
+            for (g, o), r in sorted(blocked.items())
+        ],
     }
 
 
@@ -133,7 +151,11 @@ def compare_bundles(sc: Scenario, max_results: int = 12) -> dict:
             r["budgetUndetermined"] = has_unknown_cost
             r["assumptionDependent"] = _assumption_dependent(sc, sel)
             results.append(r)
-    objective = (lambda r: r["assigned"] or 0) if sc.mode == "capacity" else (lambda r: r["connectedGroups"])
+    objective = (
+        (lambda r: r["assigned"] or 0)
+        if sc.mode == "capacity"
+        else (lambda r: r["connectedGroups"])
+    )
     within = [r for r in results if not r["overBudget"] and not r["budgetUndetermined"]]
     within.sort(key=lambda r: (-objective(r), r["costWon"], len(r["actions"]), r["actions"]))
     best = within[0] if within else None
@@ -144,11 +166,20 @@ def compare_bundles(sc: Scenario, max_results: int = 12) -> dict:
     for aid in ids:
         feasible_single, _ = feasible(sc, {aid})
         singles[aid] = evaluate(sc, {aid}) if feasible_single else None
-    all_sorted = sorted(results, key=lambda r: (-objective(r), r["costWon"], len(r["actions"]), r["actions"]))
+    all_sorted = sorted(
+        results, key=lambda r: (-objective(r), r["costWon"], len(r["actions"]), r["actions"])
+    )
     return {
-        "mode": sc.mode, "objective": "assigned" if sc.mode == "capacity" else "connectedGroups",
-        "baseline": baseline, "best": best, "greedy": greedy, "singles": singles,
-        "bundles": all_sorted[:max_results], "evaluated": len(results), "infeasible": infeasible, "overBudget": over_budget,
+        "mode": sc.mode,
+        "objective": "assigned" if sc.mode == "capacity" else "connectedGroups",
+        "baseline": baseline,
+        "best": best,
+        "greedy": greedy,
+        "singles": singles,
+        "bundles": all_sorted[:max_results],
+        "evaluated": len(results),
+        "infeasible": infeasible,
+        "overBudget": over_budget,
         "synergy": _synergy_note(sc, singles, best, objective, baseline),
         "traceLabels": TRACE_LABEL,
     }
@@ -168,7 +199,9 @@ def _greedy(sc, ids, objective, baseline):
             if not ok:
                 continue
             r = evaluate(sc, sel)
-            if r["unknownCostActions"] or (sc.budgetWon is not None and r["costWon"] > sc.budgetWon):
+            if r["unknownCostActions"] or (
+                sc.budgetWon is not None and r["costWon"] > sc.budgetWon
+            ):
                 continue
             gain = objective(r) - objective(cur)
             if gain > best_gain:
@@ -187,9 +220,15 @@ def _synergy_note(sc, singles, best, objective, baseline):
     if not best or len(best["actions"]) < 2:
         return None
     base = objective(baseline)
-    single_gain = sum(max(0, objective(singles[a]) - base) for a in best["actions"] if singles.get(a))
+    single_gain = sum(
+        max(0, objective(singles[a]) - base) for a in best["actions"] if singles.get(a)
+    )
     combo_gain = objective(best) - base
-    return {"comboGain": combo_gain, "sumOfSingleGains": single_gain, "hasSynergy": combo_gain > single_gain}
+    return {
+        "comboGain": combo_gain,
+        "sumOfSingleGains": single_gain,
+        "hasSynergy": combo_gain > single_gain,
+    }
 
 
 def _assumption_dependent(sc: Scenario, selected: set[str]) -> list[str]:

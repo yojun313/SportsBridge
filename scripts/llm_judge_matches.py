@@ -28,7 +28,9 @@ def main() -> None:
     db = llm._sync_db()
     version = db["catalog_state"].find_one({"_id": "catalog"})["activeVersion"]
     n = 0
-    for m in db["match_results"].find({"datasetVersion": version, "status": "candidates", "llmJudged": {"$ne": True}}):
+    for m in db["match_results"].find(
+        {"datasetVersion": version, "status": "candidates", "llmJudged": {"$ne": True}}
+    ):
         v = db["facilities_voucher"].find_one({"_id": m["voucherFacilityId"]})
         if not v or v.get("regionCode") != args.region:
             continue
@@ -39,12 +41,40 @@ def main() -> None:
         if not a:
             continue
         verdict, _usage = judge_match_sync(v, a)
-        db["match_results"].update_one({"_id": m["_id"]}, {"$set": {"llmJudged": True, "llmVerdict": verdict.model_dump(), "llmJudgedAt": datetime.now(UTC)}})
+        db["match_results"].update_one(
+            {"_id": m["_id"]},
+            {
+                "$set": {
+                    "llmJudged": True,
+                    "llmVerdict": verdict.model_dump(),
+                    "llmJudgedAt": datetime.now(UTC),
+                }
+            },
+        )
         if verdict.verdict in ("same", "unsure"):
-            db["review_queue"].update_one({"_id": f"rq:match:{m['voucherFacilityId']}"}, {"$set": {
-                "kind": "match", "refId": m["voucherFacilityId"], "datasetVersion": version, "status": "pending", "createdAt": datetime.now(UTC),
-                "payload": {"voucherName": v["name"], "voucherAddress": v.get("address"), "candidateName": a["name"], "candidateAddress": a.get("address"),
-                            "allFacilityId": a["_id"], "verdict": verdict.verdict, "reason": verdict.reason, "score": top[0].get("score")}}}, upsert=True)
+            db["review_queue"].update_one(
+                {"_id": f"rq:match:{m['voucherFacilityId']}"},
+                {
+                    "$set": {
+                        "kind": "match",
+                        "refId": m["voucherFacilityId"],
+                        "datasetVersion": version,
+                        "status": "pending",
+                        "createdAt": datetime.now(UTC),
+                        "payload": {
+                            "voucherName": v["name"],
+                            "voucherAddress": v.get("address"),
+                            "candidateName": a["name"],
+                            "candidateAddress": a.get("address"),
+                            "allFacilityId": a["_id"],
+                            "verdict": verdict.verdict,
+                            "reason": verdict.reason,
+                            "score": top[0].get("score"),
+                        },
+                    }
+                },
+                upsert=True,
+            )
         n += 1
         print(n, v["name"], "↔", a["name"], verdict.verdict, "|", verdict.reason)
         if n >= args.limit:

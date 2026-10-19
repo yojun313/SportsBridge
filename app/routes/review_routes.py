@@ -8,8 +8,17 @@ router = APIRouter(prefix="/api/review", tags=["review"])
 
 
 @router.get("")
-async def list_items(status: str = Query("pending", max_length=20), kind: str | None = Query(None, max_length=20), limit: int = Query(50, ge=1, le=200)):
-    return jsonable({"items": await review_service.list_items(status, kind, limit), "counts": await review_service.counts()})
+async def list_items(
+    status: str = Query("pending", max_length=20),
+    kind: str | None = Query(None, max_length=20),
+    limit: int = Query(50, ge=1, le=200),
+):
+    return jsonable(
+        {
+            "items": await review_service.list_items(status, kind, limit),
+            "counts": await review_service.counts(),
+        }
+    )
 
 
 class DecideBody(BaseModel):

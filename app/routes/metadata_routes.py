@@ -20,6 +20,7 @@ async def health():
 @router.get("/ready")
 async def ready():
     from fastapi.responses import JSONResponse
+
     try:
         await ping()
     except Exception:  # noqa: BLE001

@@ -25,25 +25,53 @@ votes_col = db["facility_votes"]
 CATALOG_STATE_ID = "catalog"
 
 # 적재 때 통째로 교체되는 컬렉션 (staging → rename)
-VERSIONED_COLLECTIONS = ["region_stats", "facilities_voucher", "courses", "usage_monthly", "facilities_all", "match_results", "gap_aggregates"]
+VERSIONED_COLLECTIONS = [
+    "region_stats",
+    "facilities_voucher",
+    "courses",
+    "usage_monthly",
+    "facilities_all",
+    "match_results",
+    "gap_aggregates",
+]
 
 INDEX_SPECS: dict[str, list[tuple[list[tuple[str, int]], dict]]] = {
     "datasets": [([("datasetVersion", 1)], {"unique": True})],
-    "facilities_all": [([("datasetVersion", 1), ("sourceFacilityId", 1)], {}), ([("datasetVersion", 1), ("regionCode", 1)], {}),
-                       ([("datasetVersion", 1), ("nameNorm", 1), ("addressNorm", 1)], {}),
-                       ([("datasetVersion", 1), ("regionCode", 1), ("voucherMatch", 1), ("status", 1)], {}), ([("name", 1)], {})],
-    "facilities_voucher": [([("datasetVersion", 1), ("sourceFacilityId", 1)], {}), ([("datasetVersion", 1), ("regionCode", 1)], {}),
-                           ([("datasetVersion", 1), ("nameNorm", 1), ("addressNorm", 1)], {}), ([("name", 1)], {}), ([("regionCode", 1), ("usage.last12mApplicants", -1)], {})],
-    "courses": [([("datasetVersion", 1), ("facilityId", 1)], {}), ([("datasetVersion", 1), ("regionCode", 1), ("sport", 1)], {}),
-                ([("datasetVersion", 1), ("sourceCourseId", 1)], {}), ([("regionCode", 1), ("lastMonth", -1)], {})],
+    "facilities_all": [
+        ([("datasetVersion", 1), ("sourceFacilityId", 1)], {}),
+        ([("datasetVersion", 1), ("regionCode", 1)], {}),
+        ([("datasetVersion", 1), ("nameNorm", 1), ("addressNorm", 1)], {}),
+        ([("datasetVersion", 1), ("regionCode", 1), ("voucherMatch", 1), ("status", 1)], {}),
+        ([("name", 1)], {}),
+    ],
+    "facilities_voucher": [
+        ([("datasetVersion", 1), ("sourceFacilityId", 1)], {}),
+        ([("datasetVersion", 1), ("regionCode", 1)], {}),
+        ([("datasetVersion", 1), ("nameNorm", 1), ("addressNorm", 1)], {}),
+        ([("name", 1)], {}),
+        ([("regionCode", 1), ("usage.last12mApplicants", -1)], {}),
+    ],
+    "courses": [
+        ([("datasetVersion", 1), ("facilityId", 1)], {}),
+        ([("datasetVersion", 1), ("regionCode", 1), ("sport", 1)], {}),
+        ([("datasetVersion", 1), ("sourceCourseId", 1)], {}),
+        ([("regionCode", 1), ("lastMonth", -1)], {}),
+    ],
     "course_facts": [([("datasetVersion", 1), ("courseId", 1)], {"unique": True})],
     "facility_class": [([("datasetVersion", 1), ("facilityId", 1)], {"unique": True})],
     "usage_monthly": [([("datasetVersion", 1), ("facilityId", 1), ("yearMonth", 1)], {})],
     "region_stats": [([("datasetVersion", 1), ("regionCode", 1)], {"unique": True})],
-    "match_results": [([("datasetVersion", 1), ("allFacilityId", 1)], {}), ([("datasetVersion", 1), ("voucherFacilityId", 1)], {"unique": True}), ([("datasetVersion", 1), ("status", 1)], {})],
+    "match_results": [
+        ([("datasetVersion", 1), ("allFacilityId", 1)], {}),
+        ([("datasetVersion", 1), ("voucherFacilityId", 1)], {"unique": True}),
+        ([("datasetVersion", 1), ("status", 1)], {}),
+    ],
     "gap_aggregates": [([("datasetVersion", 1), ("regionCode", 1)], {"unique": True})],
     "review_queue": [([("status", 1), ("kind", 1), ("createdAt", -1)], {})],
-    "llm_calls": [([("createdAt", 1)], {}), ([("inputHash", 1), ("promptVersion", 1), ("model", 1)], {})],
+    "llm_calls": [
+        ([("createdAt", 1)], {}),
+        ([("inputHash", 1), ("promptVersion", 1), ("model", 1)], {}),
+    ],
     "agent_history": [([("createdAt", 1)], {})],
     "demand_signals": [([("regionCode", 1), ("sport", 1), ("createdAt", -1)], {})],
     "facility_votes": [([("facilityId", 1)], {}), ([("regionCode", 1)], {})],
