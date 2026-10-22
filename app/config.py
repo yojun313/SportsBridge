@@ -1,6 +1,7 @@
 """환경변수 설정. 비밀값은 .env에만 두고 여기서는 읽기만 합니다."""
 
 import os
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 
@@ -30,6 +31,22 @@ APP_FULL_NAME = "이용권과 시설을 잇는 지자체 공급 플래너"
 ENV = os.getenv("ENV", "development")
 BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8010")
 COOKIE_SECURE = BASE_URL.startswith("https://")
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "").strip()
+ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",") if host.strip()]
+if not ALLOWED_HOSTS:
+    configured_host = urlsplit(BASE_URL).hostname or "localhost"
+    ALLOWED_HOSTS = (
+        list(dict.fromkeys([configured_host, "localhost", "127.0.0.1"]))
+        if ENV == "development"
+        else [configured_host]
+    )
+if ENV != "development":
+    if not COOKIE_SECURE:
+        raise ValueError("운영 환경의 BASE_URL은 https:// 주소여야 합니다.")
+    if "*" in ALLOWED_HOSTS:
+        raise ValueError("운영 환경에서 ALLOWED_HOSTS=* 는 허용되지 않습니다.")
+    if ADMIN_TOKEN and len(ADMIN_TOKEN) < 32:
+        raise ValueError("운영 환경의 ADMIN_TOKEN은 32자 이상이어야 합니다.")
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017")
 DB_NAME = os.getenv("DB_NAME", "sportsbridge")

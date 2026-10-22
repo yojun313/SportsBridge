@@ -12,7 +12,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const body = document.getElementById("us-body"); const DOWS = ["월", "화", "수", "목", "금", "토", "일"];
   const toMin = (t) => { const [h, m] = t.split(":").map(Number); return h * 60 + (m || 0); };

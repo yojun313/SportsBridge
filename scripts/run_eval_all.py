@@ -18,6 +18,7 @@ import httpx
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from app.agent import guards
+from app.config import ADMIN_TOKEN
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = ROOT / "docs" / "eval" / "EVAL_ALL.md"
@@ -95,7 +96,13 @@ def main() -> None:
         for i in parse_items()
         if (not args.only or i["id"].startswith(args.only)) and i["id"] not in done
     ]
-    client = httpx.Client(base_url=args.url, timeout=180)
+    if not ADMIN_TOKEN:
+        ap.error("평가 API를 호출하려면 .env의 ADMIN_TOKEN이 필요합니다.")
+    client = httpx.Client(
+        base_url=args.url,
+        timeout=180,
+        headers={"X-Admin-Token": ADMIN_TOKEN, "X-Requested-With": "XMLHttpRequest"},
+    )
     with open(OUT, "a", encoding="utf-8") as f:
         for it in items:
             t0 = time.time()

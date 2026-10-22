@@ -1,3 +1,5 @@
+import re
+
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
@@ -127,7 +129,7 @@ async def facilities(
     if sport:
         query["sports"] = sport
     if q:
-        query["name"] = {"$regex": q, "$options": "i"}
+        query["name"] = {"$regex": re.escape(q), "$options": "i"}
     if active_only:
         query["usage.lastMonth"] = {"$gte": cutoff}
     items = []
@@ -177,6 +179,25 @@ async def facilities(
         if len(out) >= limit:
             break
     return jsonable({"datasetVersion": v, "items": out, "cutoff": cutoff})
+
+
+@router.get("/facility/{facility_id}")
+async def facility_detail(facility_id: str):
+    """이용자에게 필요한 가맹시설·강좌 정보만 제공합니다."""
+    from app.services import supply_service
+
+    if len(facility_id) > 80:
+        raise HTTPException(404, "시설을 찾을 수 없습니다.")
+    v = await catalog_service.require_version()
+    facility = await supply_service.get_facility(v, facility_id)
+    if not facility:
+        raise HTTPException(404, "시설을 찾을 수 없습니다.")
+    return jsonable(
+        {
+            key: facility.get(key)
+            for key in ("name", "address", "detailAddress", "tel", "transit", "courses")
+        }
+    )
 
 
 @router.get("/spaces")

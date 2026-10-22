@@ -58,7 +58,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>window.META = {{ meta | tojson }};</script>
+<script nonce="{{ request.state.csp_nonce }}">window.META = {{ meta | tojson }};</script>
 <script src="{{ asset('js/scenario-store.js') }}"></script>
 <script src="{{ asset('js/scenario.js') }}"></script>
 {% endblock %}

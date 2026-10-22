@@ -21,7 +21,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const body = document.getElementById("uv-body"); const DOWS = ["월", "화", "수", "목", "금", "토", "일"];
   const SPORTS = ["수영", "태권도", "헬스", "축구(풋살)", "복싱", "필라테스", "댄스(줌바 등)", "무용(발레 등)", "줄넘기", "농구", "야구", "검도", "유도", "합기도", "요가", "주짓수", "배드민턴", "탁구", "기타종목"];

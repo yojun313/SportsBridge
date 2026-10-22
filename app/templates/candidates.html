@@ -35,7 +35,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const meta = {{ meta | tojson }};
   const root = document.getElementById("cand-root");

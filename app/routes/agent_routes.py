@@ -11,6 +11,7 @@ from app.agent.answer import answer_question
 from app.api.events import broadcaster, registry
 from app.core.serialize import jsonable
 from app.db import agent_history_col
+from app.security import require_admin
 from app.services import catalog_service
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class AskBody(BaseModel):
 async def _run_and_store(question: str, run: dict | None, mode: str = "admin") -> dict:
     v = await catalog_service.active_version()
     key = f"{v}|{mode}|{question.strip()}"
-    if key in _cache:
+    if mode == "admin" and key in _cache:
         res = _cache[key]
         if run:
             registry.emit(
@@ -38,26 +39,39 @@ async def _run_and_store(question: str, run: dict | None, mode: str = "admin") -
     emit = (lambda e: registry.emit(run, e)) if run else None
     res = await answer_question(question, emit, mode)
     res["dataset_version"] = v
-    if res.get("completed") and not res.get("blocked") and not res.get("disabled"):
+    if (
+        mode == "admin"
+        and res.get("completed")
+        and not res.get("blocked")
+        and not res.get("disabled")
+    ):
         _cache[key] = res
-    try:
-        await agent_history_col.insert_one(
-            {**json.loads(json.dumps(jsonable(res), default=str)), "createdAt": datetime.now(UTC)}
-        )
-    except Exception:
-        logger.warning("agent_history 저장 실패", exc_info=True)
+    if mode == "admin":
+        try:
+            await agent_history_col.insert_one(
+                {
+                    **json.loads(json.dumps(jsonable(res), default=str)),
+                    "createdAt": datetime.now(UTC),
+                }
+            )
+        except Exception:
+            logger.warning("agent_history 저장 실패", exc_info=True)
     if run:
         registry.finish(run, jsonable(res))
     return res
 
 
 @router.post("/api/agent/answer")
-async def answer(body: AskBody):
+async def answer(body: AskBody, request: Request):
+    if body.mode == "admin":
+        require_admin(request)
     return jsonable(await _run_and_store(body.question, None, body.mode))
 
 
 @router.post("/runs")
-async def start_run(body: AskBody):
+async def start_run(body: AskBody, request: Request):
+    if body.mode == "admin":
+        require_admin(request)
     run = registry.create(body.question)
     run["mode"] = body.mode
     asyncio.create_task(_run_and_store(body.question, run, body.mode))
@@ -65,15 +79,18 @@ async def start_run(body: AskBody):
 
 
 @router.get("/runs/{run_id}")
-async def get_run(run_id: str):
+async def get_run(run_id: str, request: Request):
     run = registry.get(run_id)
     if not run:
         raise HTTPException(404, "실행을 찾을 수 없습니다")
+    if run.get("mode") == "admin":
+        require_admin(request)
     return jsonable({k: v for k, v in run.items() if k != "started_mono"})
 
 
 @router.get("/events")
 async def events(request: Request):
+    require_admin(request)
     q = broadcaster.subscribe()
     if q is None:
         raise HTTPException(503, "구독자 한도 초과")
@@ -100,11 +117,12 @@ async def events(request: Request):
 
 
 @router.get("/history")
-async def history(limit: int = Query(20, ge=1, le=100), mode: str = Query("admin", max_length=10)):
+async def history(request: Request, limit: int = Query(20, ge=1, le=100)):
+    require_admin(request)
     out = []
     async for d in (
         agent_history_col.find(
-            {"mode": mode} if mode == "user" else {"mode": {"$ne": "user"}},
+            {"mode": {"$ne": "user"}},
             {
                 "_id": 0,
                 "question": 1,

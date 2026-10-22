@@ -1,5 +1,12 @@
 (function () {
   const $ = (id) => document.getElementById(id);
+  function sourceLink(raw) {
+    try {
+      const url = new URL(raw);
+      if (url.protocol === "http:" || url.protocol === "https:") return `<a href="${esc(url.href)}" target="_blank" rel="noopener noreferrer" class="small">상품 페이지</a>`;
+    } catch (e) {}
+    return '<span class="faint">주소 확인 필요</span>';
+  }
   let editingKey = null;
   function fmtBytes(b) { if (b == null) return "–"; return b > 1048576 ? (b / 1048576).toFixed(1) + " MB" : (b / 1024).toFixed(0) + " KB"; }
   function renderJob(j) {
@@ -20,7 +27,7 @@
         <tr>
           <td class="name" data-label="데이터"><b>${esc(r.title)}</b><span class="sub">${esc(r.fileName)} · ${esc(r.provider)} · ${esc(r.cycle)} 갱신${r.required ? ' · <span class="badge">필수</span>' : ""}</span></td>
           <td data-label="역할"><span class="small">${esc(r.role)}</span>${r.note ? `<span class="sub">${esc(r.note)}</span>` : ""}</td>
-          <td data-label="출처"><a href="${esc(r.url)}" target="_blank" rel="noopener" class="small">상품 페이지</a>${r.asOf ? `<span class="sub">기준일 ${esc(r.asOf)}</span>` : ""}<br><button class="btn btn-sm btn-ghost mt-8" data-edit="${esc(r.key)}">출처 편집</button></td>
+          <td data-label="출처">${sourceLink(r.url)}${r.asOf ? `<span class="sub">기준일 ${esc(r.asOf)}</span>` : ""}<br><button class="btn btn-sm btn-ghost mt-8" data-edit="${esc(r.key)}">출처 편집</button></td>
           <td data-label="파일">${r.present ? `${fmtBytes(r.bytes)}<span class="sub">수정 ${esc((r.modifiedAt || "").slice(0, 16).replace("T", " "))}</span>` : '<span class="badge badge-danger">없음</span>'}</td>
           <td data-label="적재">${r.importedSha256 ? `<span class="mono small">${esc(r.importedSha256.slice(0, 10))}…</span>${r.changedSinceImport ? '<span class="sub"><span class="badge badge-warn">파일 변경됨 · 재적재 필요</span></span>' : '<span class="sub"><span class="badge badge-ok">적재됨</span></span>'}` : '<span class="badge badge-muted">미적재</span>'}</td>
           <td data-label="교체"><label class="btn btn-sm btn-outline" for="up-${esc(r.key)}">CSV 올리기</label><input type="file" id="up-${esc(r.key)}" accept=".csv" data-upload="${esc(r.key)}" hidden /><div class="progress mt-8" id="upbar-${esc(r.key)}" hidden><div class="progress-bar"></div></div></td>
@@ -38,6 +45,7 @@
     const key = inp.dataset.upload; const bar = $("upbar-" + key); bar.hidden = false; const fill = bar.querySelector(".progress-bar"); fill.style.width = "0%";
     const xhr = new XMLHttpRequest(); const fd = new FormData(); fd.append("file", file, file.name);
     xhr.open("POST", "/api/data/upload/" + key);
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
     xhr.upload.onprogress = (e) => { if (e.lengthComputable) fill.style.width = Math.round(e.loaded / e.total * 100) + "%"; };
     xhr.onload = () => { if (xhr.status === 200) { showSnackbar("파일을 교체했습니다. '전체 다시 적재'를 누르세요.", "success"); load(); } else { let m = "업로드 실패"; try { m = JSON.parse(xhr.responseText).detail || m; } catch (e) {} showSnackbar(m, "error"); bar.hidden = true; } inp.value = ""; };
     xhr.onerror = () => { showSnackbar("업로드 중 연결 오류", "error"); bar.hidden = true; };

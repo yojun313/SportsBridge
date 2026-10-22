@@ -46,7 +46,7 @@ class RunRegistry:
 
     def create(self, question: str) -> dict[str, Any]:
         run = {
-            "run_id": uuid.uuid4().hex[:12],
+            "run_id": uuid.uuid4().hex,
             "question": question,
             "started_at": datetime.now(UTC).isoformat(),
             "started_mono": time.monotonic(),
@@ -66,12 +66,14 @@ class RunRegistry:
         event = {**event, "t": round(time.monotonic() - run["started_mono"], 2)}
         if len(run["events"]) < 400:
             run["events"].append(event)
-        broadcaster.publish({"type": "run_event", "run_id": run["run_id"], "event": event})
+        if run.get("mode") == "admin":
+            broadcaster.publish({"type": "run_event", "run_id": run["run_id"], "event": event})
 
     def finish(self, run: dict[str, Any], result: dict[str, Any]) -> None:
         run["status"] = "done"
         run["result"] = result
-        broadcaster.publish({"type": "run_done", "run_id": run["run_id"], "result": result})
+        if run.get("mode") == "admin":
+            broadcaster.publish({"type": "run_done", "run_id": run["run_id"], "result": result})
 
     def recent(self) -> list[dict[str, Any]]:
         return [

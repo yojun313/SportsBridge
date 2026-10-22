@@ -29,7 +29,7 @@
   }
   function renderEvidence(res) {
     const E = res.evidence || {}; const parts = [];
-    (E.regions || []).forEach((r) => { const g = r.region || {}; parts.push(`<div class="evidence-card"><div class="k">${esc(g.sidoName)} ${esc(g.sigunguName)} ${provBadge("public")}</div><div>대상자 ${fmtNum(g.targetsTotal)} · 활동 가맹시설 ${fmtNum(g.activeFacilityCount)} · 1,000명당 ${g.facilitiesPer1000Targets ?? "–"} (전국 ${g.rankFacilitiesPer1000}/${g.regionTotal}) · 종목 ${g.sportCount} · 저녁 ${fmtPct(g.eveningShare)}</div><a href="/gap/${esc(g.regionCode)}" class="small">진단 화면 열기</a></div>`); });
+    (E.regions || []).forEach((r) => { const g = r.region || {}; const target = MODE === "user" ? `/user/region?region=${encodeURIComponent(g.regionCode || "")}` : `/gap/${encodeURIComponent(g.regionCode || "")}`; parts.push(`<div class="evidence-card"><div class="k">${esc(g.sidoName)} ${esc(g.sigunguName)} ${provBadge("public")}</div><div>대상자 ${fmtNum(g.targetsTotal)} · 활동 가맹시설 ${fmtNum(g.activeFacilityCount)} · 1,000명당 ${g.facilitiesPer1000Targets ?? "–"} (전국 ${g.rankFacilitiesPer1000}/${g.regionTotal}) · 종목 ${g.sportCount} · 저녁 ${fmtPct(g.eveningShare)}</div><a href="${target}" class="small">지역 현황 보기</a></div>`); });
     if (E.compare && E.compare.regions) parts.push(`<div class="evidence-card"><div class="k">지역 비교 ${provBadge("public")}</div>${E.compare.regions.map((g) => `<div>${esc(g.sidoName)} ${esc(g.sigunguName)}: 대상자 ${fmtNum(g.targetsTotal)}, 활동시설 ${fmtNum(g.activeFacilityCount)}, 종목 ${g.sportCount}</div>`).join("")}</div>`);
     (E.courses || []).slice(0, 5).forEach((c) => parts.push(`<div class="evidence-card"><div class="k">${esc(c.facility)} · ${esc(c.name)} ${provBadge("public")}${c.facts && c.facts.provenance ? provBadge(c.facts.provenance) : ""}</div><div>${esc(fmtSessions(c.sessions))} · ${fmtWon(c.priceWon)} · 최근 신청 ${fmtNum(c.lastApplicants)}</div></div>`));
     (E.candidates || []).slice(0, 5).forEach((c) => parts.push(`<div class="evidence-card"><div class="k">${esc(c.name)} ${provBadge("rule")}</div><div>${esc(c.category || "")} · 점수 ${c.score} · ${(c.reasons || []).map(esc).join(", ")}</div><div class="faint">${(c.needsConfirmation || []).map(esc).join("; ")}</div></div>`));
@@ -73,10 +73,10 @@
   form.addEventListener("submit", (e) => { e.preventDefault(); const t = q.value; q.value = ""; ask(t); });
   q.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); form.requestSubmit(); } });
   document.querySelectorAll("#samples button").forEach((b) => b.addEventListener("click", () => { q.value = b.textContent; q.focus(); }));
-  document.getElementById("hist-btn").addEventListener("click", async () => {
+  if (MODE === "admin") document.getElementById("hist-btn").addEventListener("click", async () => {
     openDialog("hist-dialog"); const body = document.getElementById("hist-body"); body.innerHTML = '<div class="empty-state"><span class="spinner"></span></div>';
     try { const d = await api.get("/history" + qs({ mode: MODE })); body.innerHTML = d.items.length ? d.items.map((it) => `<details class="expandable"><summary>${esc(it.question)} <span class="faint">${esc((it.created_at || "").slice(0, 16))}</span></summary><div class="doc-preview mt-8">${window.renderMarkdown ? renderMarkdown(it.answer) : esc(it.answer)}</div></details>`).join("") : '<p class="muted">기록이 없습니다.</p>'; }
     catch (e) { body.innerHTML = `<p class="muted">${esc(e.message)}</p>`; }
   });
-  connect();
+  if (MODE === "admin") connect();
 })();

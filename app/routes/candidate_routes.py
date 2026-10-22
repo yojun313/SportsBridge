@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Path, Query
 from fastapi.responses import Response
 
 from app.core.serialize import jsonable
@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/gap", tags=["candidates"])
 
 @router.get("/{region_code}/candidates")
 async def candidates(
-    region_code: str,
+    region_code: str = Path(pattern=r"^\d{5}$"),
     sport: str | None = Query(None, max_length=40),
     category: str | None = Query(None, max_length=60),
     unknown: bool = True,
@@ -29,7 +29,7 @@ async def candidates(
 
 @router.get("/{region_code}/candidates.csv")
 async def candidates_csv(
-    region_code: str,
+    region_code: str = Path(pattern=r"^\d{5}$"),
     sport: str | None = Query(None, max_length=40),
     category: str | None = Query(None, max_length=60),
     unknown: bool = True,

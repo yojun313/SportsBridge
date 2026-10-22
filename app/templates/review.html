@@ -15,7 +15,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const list = document.getElementById("rv-list"), kind = document.getElementById("rv-kind"), status = document.getElementById("rv-status"), counts = document.getElementById("rv-counts");
   const ATT = { all_required: "전 요일 필수", selectable: "요일 선택", unknown: "미확인" };

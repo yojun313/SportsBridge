@@ -1,5 +1,6 @@
 async function apiRequest(method, url, body) {
   const options = { method, headers: {}, credentials: "same-origin" };
+  if (method !== "GET") options.headers["X-Requested-With"] = "XMLHttpRequest";
   if (body !== undefined) {
     options.headers["Content-Type"] = "application/json";
     options.body = JSON.stringify(body);

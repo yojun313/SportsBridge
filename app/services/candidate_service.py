@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import io
+import re
 
 from app.db import facilities_all_col, gap_aggregates_col, match_results_col
 
@@ -92,7 +93,7 @@ async def list_candidates(
     if category:
         query["category"] = category
     if q:
-        query["name"] = {"$regex": q, "$options": "i"}
+        query["name"] = {"$regex": re.escape(q), "$options": "i"}
     if safety_ok_only:
         query["safety.grade"] = "양호"
     from app.services.user_service import votes_by_facility
@@ -155,6 +156,11 @@ def _needs_confirmation(f: dict) -> list[str]:
 
 
 def to_csv(items: list[dict]) -> str:
+    def safe_cell(value):
+        if isinstance(value, str) and value.lstrip().startswith(("=", "+", "-", "@")):
+            return "'" + value
+        return value
+
     buf = io.StringIO()
     w = csv.writer(buf)
     w.writerow(
@@ -182,25 +188,30 @@ def to_csv(items: list[dict]) -> str:
         sf = f.get("safety") or {}
         t = f.get("transit") or {}
         w.writerow(
-            [
-                i,
-                f["score"],
-                f["name"],
-                f.get("category"),
-                f.get("facilityType"),
-                f.get("sportGuess") or "",
-                f.get("childSuitability"),
-                f.get("address"),
-                f.get("tel"),
-                sf.get("grade") or "",
-                sf.get("checkDate") or "",
-                t.get("minWalkSec") or "",
-                f.get("indoor") or "",
-                f.get("status"),
-                "; ".join(f["scoreReasons"]),
-                "; ".join(f["needsConfirmation"]),
-                ", ".join(f.get("sources", [])),
-            ]
+            list(
+                map(
+                    safe_cell,
+                    [
+                        i,
+                        f["score"],
+                        f["name"],
+                        f.get("category"),
+                        f.get("facilityType"),
+                        f.get("sportGuess") or "",
+                        f.get("childSuitability"),
+                        f.get("address"),
+                        f.get("tel"),
+                        sf.get("grade") or "",
+                        sf.get("checkDate") or "",
+                        t.get("minWalkSec") or "",
+                        f.get("indoor") or "",
+                        f.get("status"),
+                        "; ".join(f["scoreReasons"]),
+                        "; ".join(f["needsConfirmation"]),
+                        ", ".join(f.get("sources", [])),
+                    ],
+                )
+            )
         )
     return "﻿" + buf.getvalue()
 

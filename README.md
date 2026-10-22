@@ -43,7 +43,7 @@
 
 ```bash
 uv sync
-cp .env.example .env            # MONGO_URI, (선택) OPENAI_API_KEY
+cp .env.example .env            # MONGO_URI, ADMIN_TOKEN, (선택) OPENAI_API_KEY
 uv run python scripts/inspect_datasets.py                 # 품질 보고서 → data/reports/
 uv run python scripts/import_datasets.py --raw-dir data/raw   # 적재(약 1분), 활성 버전 전환
 uv run python run.py                                      # http://127.0.0.1:7004
@@ -53,6 +53,13 @@ uv run pytest -q                                          # 엔진·가드·문�
 환경변수(`.env.example` 참고): `MONGO_URI`, `DB_NAME`, `PORT`(7004), `DEMO_MODE`, `LLM_ENABLED`, `OPENAI_API_KEY`,
 `LLM_MODEL_MAIN`·`LLM_MODEL_BULK`(기본 gpt-5.6-luna, OpenAI 최저가 티어), `LLM_REASONING_EFFORT`(low), `LLM_DAILY_BUDGET_USD`, `AGENT_MAX_TURNS`, `AGENT_TIME_BUDGET_SECONDS`.
 API 키가 없으면 LLM 기능(추출·문서 다듬기·에이전트)만 꺼지고 진단·후보·시나리오·템플릿 계획서는 그대로 동작합니다.
+
+### 접근 보안
+
+- `/docs`, `/redoc`, `/openapi.json`은 모든 환경에서 비활성화됩니다.
+- 담당자 작업 화면과 관련 API는 `ADMIN_TOKEN`이 있어야 사용할 수 있습니다. 이용 안내와 간략한 적재 진행 상태는 공개됩니다. 브라우저 인증 창에는 사용자 이름 `admin`, 비밀번호에는 `.env`의 `ADMIN_TOKEN` 값을 입력합니다. 비워 두면 담당자 기능은 잠깁니다. 토큰은 긴 난수로 설정하고 `.env` 파일 권한을 `600`으로 유지하세요.
+- 운영 시 `BASE_URL`을 실제 `https://` 주소로, `ALLOWED_HOSTS`를 서비스 호스트 이름으로 설정하고 TLS를 제공하는 역방향 프록시 뒤에서 실행하세요. 운영 환경은 HTTP 주소, 모든 호스트 허용, 짧은 관리자 토큰을 거부합니다. `HOST`는 외부에 직접 노출하지 않는 주소로 유지하세요. 여러 서버나 작업자를 쓰면 공개 API의 요청 제한을 프록시에서도 적용해야 합니다.
+- 변경 요청은 `X-Requested-With: XMLHttpRequest` 헤더와 `Content-Length`가 필요합니다. 관리자 API를 스크립트로 호출할 때는 `X-Admin-Token: <ADMIN_TOKEN>` 헤더를 함께 보내세요.
 
 ## LLM 작업(키가 있을 때)
 

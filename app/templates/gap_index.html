@@ -33,7 +33,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const body = document.getElementById("gap-body");
   const sido = document.getElementById("sido-filter");

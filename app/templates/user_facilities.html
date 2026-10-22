@@ -14,7 +14,7 @@
 </div>
 {% endblock %}
 {% block extra_scripts %}
-<script>
+<script nonce="{{ request.state.csp_nonce }}">
 (function () {
   const body = document.getElementById("uf-body");
   const SPORTS = ["태권도", "수영", "헬스", "축구(풋살)", "복싱", "필라테스", "댄스(줌바 등)", "무용(발레 등)", "줄넘기", "농구", "야구", "검도", "유도", "합기도", "요가", "주짓수", "배드민턴", "탁구", "골프", "기타종목"];
@@ -26,12 +26,12 @@
       const d = await api.get("/api/user/facilities" + qs({ region: code, sport: sel.value, q: document.getElementById("f-q").value, evening: document.getElementById("f-evening").checked, active_only: document.getElementById("f-active").checked }));
       if (!d.items.length) { body.innerHTML = '<div class="empty-state">조건에 맞는 시설이 없습니다. <a href="/user/voice">희망 강좌·시설 수요 등록</a>을 이용해 의견을 남길 수 있습니다.</div>'; return; }
       body.innerHTML = `<p class="faint">${d.items.length}곳 · 최근 운영 기준 ${esc(d.cutoff)} 이후</p><div class="tile-grid">${d.items.map((f) => `<div class="tile"><div class="t"><a href="#" data-fac="${esc(f.facilityId)}">${esc(f.name)}</a></div><div class="m">${esc((f.activeSports.length ? f.activeSports : f.sports || []).join(", "))}</div><div class="m">${esc(f.address || "")}${f.tel ? " · " + esc(f.tel) : ""}</div><div class="row m">${f.activeCourses ? `<span class="chip">강좌 ${f.activeCourses}</span>` : ""}${f.eveningCourses ? `<span class="chip">저녁 ${f.eveningCourses}</span>` : ""}${f.weekendCourses ? `<span class="chip">주말 ${f.weekendCourses}</span>` : ""}${f.minPrice != null ? `<span class="chip off">월 ${fmtWon(f.minPrice)}부터</span>` : ""}${f.transit ? `<span class="chip off">정류장 ${Math.round(f.transit.minWalkSec / 60)}분</span>` : ""}</div></div>`).join("")}</div>`;
-      body.querySelectorAll("[data-fac]").forEach((a) => a.addEventListener("click", async (e) => { e.preventDefault(); show(code, a.dataset.fac); }));
+      body.querySelectorAll("[data-fac]").forEach((a) => a.addEventListener("click", async (e) => { e.preventDefault(); show(a.dataset.fac); }));
     } catch (e) { body.innerHTML = `<div class="notice error">${esc(e.message)}</div>`; }
   }
-  async function show(code, id) {
+  async function show(id) {
     try {
-      const f = await api.get(`/api/gap/${code}/facility/${id}`);
+      const f = await api.get(`/api/user/facility/${encodeURIComponent(id)}`);
       const html = `<div class="dialog-backdrop open" id="fac-dialog"><div class="dialog dialog-lg"><div class="dialog-header"><h2>${esc(f.name)}</h2><button class="btn-icon" data-dialog-close>&times;</button></div>
         <p class="small">${esc(f.address || "")} ${esc(f.detailAddress || "")}${f.tel ? " · " + esc(f.tel) : ""}${f.transit ? ` · 정류장 ${esc(f.transit.stopName)} 도보 ${Math.round(f.transit.minWalkSec / 60)}분` : ""}</p>
         <div class="table-wrap"><table class="table responsive"><thead><tr><th>강좌</th><th>시간</th><th class="num">월 수강료</th><th>최근</th></tr></thead><tbody>${f.courses.map((c) => `<tr><td class="name" data-label="강좌">${esc(c.name)}<span class="sub">${esc(c.sport)}</span></td><td data-label="시간">${esc(fmtSessions(c.sessions))}</td><td class="num" data-label="월 수강료">${fmtWon(c.priceWon)}</td><td data-label="최근">${esc(c.lastMonth)} · 신청 ${fmtNum(c.lastApplicants)}</td></tr>`).join("")}</tbody></table></div>
