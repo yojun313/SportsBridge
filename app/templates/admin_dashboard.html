@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}관리자 대시보드 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="page-head"><div><h1>관리자 대시보드</h1><p class="sub">담당자 기능과 관리자 가입 신청을 관리합니다.</p></div>
+    <div class="row">{% if admin_identity %}<span class="badge">{{ admin_identity.username }} · {{ '루트 관리자' if admin_identity.role == 'root' else '관리자' }}</span><button class="btn btn-ghost btn-sm" id="logout">로그아웃</button>{% else %}<a class="btn btn-ghost btn-sm" href="/admin/login">로그인</a>{% endif %}</div>
+  </div>
+  {% if not ADMIN_AUTH_ENABLED %}<div class="notice warn mb-16">현재 관리자 화면 인증이 비활성화되어 있습니다. 다시 사용하려면 .env에서 ADMIN_AUTH_ENABLED=true로 설정하고 서버를 재시작하세요.</div>{% endif %}
+  <div class="grid-3 mb-16">
+    <a class="card card-pad" href="/gap"><h3>지역 현황</h3><p>시군구별 시설·강좌 현황을 확인합니다.</p></a>
+    <a class="card card-pad" href="/candidates"><h3>가맹 검토</h3><p>가맹 여부를 확인할 시설을 살펴봅니다.</p></a>
+    <a class="card card-pad" href="/scenario"><h3>지원 방안</h3><p>시설 가맹과 강좌 개설 방안을 비교합니다.</p></a>
+    <a class="card card-pad" href="/agent"><h3>질문하기</h3><p>지역 현황과 지원 방안을 질문합니다.</p></a>
+    <a class="card card-pad" href="/review"><h3>자료 검토</h3><p>AI 분석 결과를 확인합니다.</p></a>
+    <a class="card card-pad" href="/data"><h3>데이터 관리</h3><p>원본 파일과 데이터 반영 상태를 관리합니다.</p></a>
+  </div>
+  {% if admin_identity and admin_identity.role == 'root' %}
+  <section class="card card-pad">
+    <div class="card-head"><h2>관리자 가입 신청</h2><button class="btn btn-ghost btn-sm" id="refresh-members">새로고침</button></div>
+    <p class="sub">이메일 확인을 마친 신청만 표시됩니다. 승인된 계정은 관리자 화면을 사용할 수 있습니다.</p>
+    <div id="members"><p class="muted">불러오는 중…</p></div>
+  </section>
+  {% endif %}
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script nonce="{{ request.state.csp_nonce }}">
+const logoutButton = document.getElementById('logout');
+if (logoutButton) logoutButton.addEventListener('click', async () => { await api.post('/api/admin-auth/logout'); location.href = '/admin/login'; });
+const members = document.getElementById('members');
+async function loadMembers() {
+  if (!members) return;
+  try {
+    const data = await api.get('/api/admin/members');
+    members.innerHTML = data.items.length ? `<div class="table-wrap"><table class="table responsive"><thead><tr><th>아이디</th><th>이메일</th><th>상태</th><th>신청일</th><th>처리</th></tr></thead><tbody>${data.items.map((user) => `<tr><td>${esc(user.username)}</td><td>${esc(user.email)}</td><td>${esc(({pending:'승인 대기',approved:'승인',rejected:'반려'})[user.status] || user.status)}</td><td>${esc((user.createdAt || '').slice(0, 10))}</td><td><button class="btn btn-sm btn-primary" data-member="${esc(user.username)}" data-action="approve" ${user.status === 'approved' ? 'disabled' : ''}>승인</button> <button class="btn btn-sm btn-ghost" data-member="${esc(user.username)}" data-action="reject" ${user.status === 'rejected' ? 'disabled' : ''}>반려·접근 해제</button></td></tr>`).join('')}</tbody></table></div>` : '<p class="muted">가입 신청이 없습니다.</p>';
+    members.querySelectorAll('[data-member]').forEach((button) => button.addEventListener('click', async () => {
+      try { await api.post(`/api/admin/members/${encodeURIComponent(button.dataset.member)}/${button.dataset.action}`); await loadMembers(); }
+      catch (error) { showSnackbar(error.message, 'error'); }
+    }));
+  } catch (error) { members.textContent = error.message; }
+}
+const refresh = document.getElementById('refresh-members');
+if (refresh) refresh.addEventListener('click', loadMembers);
+loadMembers();
+</script>
+{% endblock %}

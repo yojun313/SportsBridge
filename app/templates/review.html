@@ -3,13 +3,13 @@
 {% block content %}
 <div class="container">
   <div class="page-head">
-    <div><h1>검토 큐</h1><p class="sub">AI가 강좌 설명에서 읽어낸 대상 연령·출석 규칙과, 이름이 비슷한 두 시설이 같은 곳인지에 대한 판정을 사람이 확인하는 곳입니다. 여기서 승인한 것만 진단과 시나리오에 반영되고, 출처 표시가 "AI추출·미검토"에서 "검토완료"로 바뀝니다.</p></div>
+    <div><h1>자료 검토</h1><p class="sub">AI가 추출한 강좌 대상 연령·출석 규칙과 시설 동일 여부를 확인합니다. 승인한 내용만 지역 현황과 지원 방안 계산에 반영됩니다.</p></div>
     <div class="row">
       <select class="input" id="rv-kind" style="width:auto"><option value="">전체 유형</option><option value="extraction">강좌 설명 추출</option><option value="match">시설 동일성 판정</option><option value="class">시설 분류</option></select>
       <select class="input" id="rv-status" style="width:auto"><option value="pending">대기</option><option value="approved">승인</option><option value="rejected">반려</option></select>
     </div>
   </div>
-  {% if not LLM_ENABLED %}<div class="notice warn">LLM이 비활성이라 새 추출은 생성되지 않습니다. 기존 큐 항목은 검토할 수 있습니다.</div>{% endif %}
+  {% if not LLM_ENABLED %}<div class="notice warn">현재 새 AI 분석 결과는 생성되지 않습니다. 기존 검토 항목은 확인할 수 있습니다.</div>{% endif %}
   <p class="faint" id="rv-counts"></p>
   <div class="stack" id="rv-list"><div class="empty-state"><span class="spinner"></span></div></div>
 </div>

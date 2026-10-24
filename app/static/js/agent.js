@@ -22,7 +22,7 @@
     if (e.type === "turn") tlItem("turn", `턴 ${e.turn} / ${e.max_turns}`);
     else if (e.type === "tool_call") { const el = tlItem("call", TOOL_LABEL[e.tool] || e.tool, JSON.stringify(e.input), e.id); el.classList.add("pending"); }
     else if (e.type === "tool_result") { const el = tl.querySelector(`[data-id="${CSS.escape(e.id)}"]`); if (el) { el.classList.remove("pending"); el.classList.add(e.ok ? "result" : "error"); el.querySelector(".text").textContent = e.summary; } else tlItem(e.ok ? "result" : "error", e.tool, e.summary); }
-    else if (e.type === "guard") tlItem("guard", "가드 발동", e.text);
+    else if (e.type === "guard") tlItem("guard", "답변 확인", e.text);
     else if (e.type === "note") tlItem(e.level === "error" ? "error" : (e.level === "warn" ? "warn" : "note"), e.text);
     else if (e.type === "answer") tlItem("answer", e.forced ? "수집된 정보로 마무리" : "최종 답변 생성");
     else if (e.type === "usage") status.textContent = `토큰 ${fmtNum(e.usage.input_tokens + e.usage.output_tokens)} · ${e.costUsd} USD`;
@@ -33,7 +33,7 @@
     if (E.compare && E.compare.regions) parts.push(`<div class="evidence-card"><div class="k">지역 비교 ${provBadge("public")}</div>${E.compare.regions.map((g) => `<div>${esc(g.sidoName)} ${esc(g.sigunguName)}: 대상자 ${fmtNum(g.targetsTotal)}, 활동시설 ${fmtNum(g.activeFacilityCount)}, 종목 ${g.sportCount}</div>`).join("")}</div>`);
     (E.courses || []).slice(0, 5).forEach((c) => parts.push(`<div class="evidence-card"><div class="k">${esc(c.facility)} · ${esc(c.name)} ${provBadge("public")}${c.facts && c.facts.provenance ? provBadge(c.facts.provenance) : ""}</div><div>${esc(fmtSessions(c.sessions))} · ${fmtWon(c.priceWon)} · 최근 신청 ${fmtNum(c.lastApplicants)}</div></div>`));
     (E.candidates || []).slice(0, 5).forEach((c) => parts.push(`<div class="evidence-card"><div class="k">${esc(c.name)} ${provBadge("rule")}</div><div>${esc(c.category || "")} · 점수 ${c.score} · ${(c.reasons || []).map(esc).join(", ")}</div><div class="faint">${(c.needsConfirmation || []).map(esc).join("; ")}</div></div>`));
-    if (E.simulation) { const s = E.simulation; parts.push(`<div class="evidence-card"><div class="k">조합 시뮬레이션 ${provBadge("confirmed")}${provBadge("assumed")}</div><div>현재 ${s.baseline ? (s.baseline.assigned ?? s.baseline.connectedGroups) : "–"} → 최선 ${s.best ? (s.best.assigned ?? s.best.connectedGroups) : "없음"} (${s.best ? s.best.actions.join(" + ") : "–"}) · 비용 ${s.best ? fmtWon(s.best.costWon) : "–"} · 탐욕 ${s.greedy ? s.greedy.objective : "–"}</div><div class="faint">${s.synergy ? (s.synergy.hasSynergy ? "결합 효과 있음" : "결합 효과 없음") : ""}</div></div>`); }
+    if (E.simulation) { const s = E.simulation; parts.push(`<div class="evidence-card"><div class="k">지원 방안 비교 ${provBadge("confirmed")}${provBadge("assumed")}</div><div>현재 ${s.baseline ? (s.baseline.assigned ?? s.baseline.connectedGroups) : "–"} → 최선 ${s.best ? (s.best.assigned ?? s.best.connectedGroups) : "없음"} (${s.best ? s.best.actions.join(" + ") : "–"}) · 비용 ${s.best ? fmtWon(s.best.costWon) : "–"} · 개별 효과 순 ${s.greedy ? s.greedy.objective : "–"}</div><div class="faint">${s.synergy ? (s.synergy.hasSynergy ? "결합 효과 있음" : "결합 효과 없음") : ""}</div></div>`); }
     ev.innerHTML = parts.join("") || '<p class="faint">근거 없음</p>';
   }
   function finish(res) {

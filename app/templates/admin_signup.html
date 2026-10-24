@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}관리자 가입 신청 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container auth-page">
+  <section class="card card-pad auth-card">
+    <h1>관리자 가입 신청</h1>
+    <p class="sub">이메일 확인을 마치면 루트 관리자의 승인 대기 목록에 등록됩니다. 승인 후 관리자 화면을 사용할 수 있습니다.</p>
+    <form id="signup-form" class="stack mt-16">
+      <div class="field"><label for="username">아이디</label><input class="input" id="username" autocomplete="username" minlength="3" maxlength="32" required /></div>
+      <div class="field"><label for="email">이메일</label><input class="input" id="email" type="email" autocomplete="email" required /></div>
+      <div class="field"><label for="password">비밀번호</label><input class="input" id="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required /><p class="hint">12자 이상 입력해 주세요.</p></div>
+      <button class="btn btn-primary" type="submit">인증 코드 받기</button>
+    </form>
+    <form id="verify-form" class="stack mt-16" hidden>
+      <div class="field"><label for="code">이메일 인증 코드</label><input class="input" id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required /></div>
+      <button class="btn btn-primary" type="submit">이메일 확인</button>
+    </form>
+    <p id="signup-message" class="notice mt-16" hidden></p>
+    <p class="mt-16"><a href="/admin/login">로그인으로 돌아가기</a></p>
+    <p class="hint mt-16">관리자 가입 관련 문의사항은 <a href="mailto:yojun313@postech.ac.kr">yojun313@postech.ac.kr</a>로 연락해 주세요.</p>
+  </section>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script nonce="{{ request.state.csp_nonce }}">
+const signupMessage = document.getElementById('signup-message');
+function notice(text) { signupMessage.hidden = false; signupMessage.textContent = text; }
+document.getElementById('signup-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  try {
+    const result = await api.post('/api/admin-auth/signup/request', {
+      username: document.getElementById('username').value,
+      email: document.getElementById('email').value,
+      password: document.getElementById('password').value,
+    });
+    document.getElementById('verify-form').hidden = false;
+    notice(result.detail);
+  } catch (error) { notice(error.message); }
+});
+document.getElementById('verify-form').addEventListener('submit', async (event) => {
+  event.preventDefault();
+  try {
+    const result = await api.post('/api/admin-auth/signup/verify', {
+      email: document.getElementById('email').value,
+      code: document.getElementById('code').value,
+    });
+    document.getElementById('signup-form').hidden = true;
+    document.getElementById('verify-form').hidden = true;
+    notice(result.detail);
+  } catch (error) { notice(error.message); }
+});
+</script>
+{% endblock %}

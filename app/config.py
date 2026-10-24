@@ -27,11 +27,18 @@ def _float(name: str, default: float) -> float:
 
 
 APP_NAME = os.getenv("APP_NAME", "스포츠브릿지")
-APP_FULL_NAME = "이용권과 시설을 잇는 지자체 공급 플래너"
+APP_FULL_NAME = "스포츠 강좌이용권과 시설을 연결하는 지자체 공급 플래너"
 ENV = os.getenv("ENV", "development")
 BASE_URL = os.getenv("BASE_URL", "http://127.0.0.1:8010")
 COOKIE_SECURE = BASE_URL.startswith("https://")
-ADMIN_TOKEN = os.getenv("ADMIN_TOKEN", "").strip()
+ADMIN_AUTH_ENABLED = _bool("ADMIN_AUTH_ENABLED", "true")
+ADMIN_ROOT_USERNAME = os.getenv("ADMIN_ROOT_USERNAME", "admin").strip().lower()
+ADMIN_ROOT_PASSWORD = os.getenv("ADMIN_ROOT_PASSWORD", "")
+SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com").strip()
+SMTP_PORT = _int("SMTP_PORT", 587)
+SMTP_USERNAME = os.getenv("SMTP_USERNAME", os.getenv("MAIL_SENDER", "")).strip()
+SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", os.getenv("MAIL_PASSWORD", ""))
+SMTP_FROM = os.getenv("SMTP_FROM", SMTP_USERNAME).strip()
 ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "").split(",") if host.strip()]
 if not ALLOWED_HOSTS:
     configured_host = urlsplit(BASE_URL).hostname or "localhost"
@@ -45,8 +52,10 @@ if ENV != "development":
         raise ValueError("운영 환경의 BASE_URL은 https:// 주소여야 합니다.")
     if "*" in ALLOWED_HOSTS:
         raise ValueError("운영 환경에서 ALLOWED_HOSTS=* 는 허용되지 않습니다.")
-    if ADMIN_TOKEN and len(ADMIN_TOKEN) < 32:
-        raise ValueError("운영 환경의 ADMIN_TOKEN은 32자 이상이어야 합니다.")
+if ADMIN_AUTH_ENABLED and (not ADMIN_ROOT_USERNAME or len(ADMIN_ROOT_PASSWORD) < 12):
+    raise ValueError(
+        "관리자 인증을 사용하려면 ADMIN_ROOT_USERNAME과 12자 이상의 ADMIN_ROOT_PASSWORD가 필요합니다."
+    )
 
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://127.0.0.1:27017")
 DB_NAME = os.getenv("DB_NAME", "sportsbridge")

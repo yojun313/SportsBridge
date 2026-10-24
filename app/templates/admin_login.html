@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}관리자 로그인 - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container auth-page">
+  <section class="card card-pad auth-card">
+    <h1>관리자 로그인</h1>
+    <p class="sub">루트 계정 또는 승인된 관리자 계정으로 로그인해 주세요.</p>
+    <form id="login-form" class="stack mt-16">
+      <div class="field"><label for="username">아이디</label><input class="input" id="username" autocomplete="username" required /></div>
+      <div class="field"><label for="password">비밀번호</label><input class="input" id="password" type="password" autocomplete="current-password" required /></div>
+      <button class="btn btn-primary" type="submit">로그인</button>
+    </form>
+    <p id="login-message" class="notice mt-16" hidden></p>
+    <p class="mt-16"><a href="/admin/signup">관리자 가입 신청</a></p>
+  </section>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script nonce="{{ request.state.csp_nonce }}">
+const loginForm = document.getElementById('login-form');
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const message = document.getElementById('login-message');
+  try {
+    await api.post('/api/admin-auth/login', {
+      username: document.getElementById('username').value,
+      password: document.getElementById('password').value,
+    });
+    const requested = new URLSearchParams(location.search).get('next') || '/admin';
+    const next = new URL(requested, location.origin);
+    location.href = next.origin === location.origin && next.pathname.startsWith('/') ? next.pathname + next.search : '/admin';
+  } catch (error) {
+    message.hidden = false;
+    message.textContent = error.message;
+  }
+});
+</script>
+{% endblock %}

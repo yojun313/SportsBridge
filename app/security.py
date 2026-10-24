@@ -1,23 +1,26 @@
-"""관리 기능 인증과 요청 제한에 사용하는 공통 보안 규칙."""
+"""담당자 화면 접근 제어와 요청 제한."""
 
-import base64
-import binascii
-import hmac
+import hashlib
 import time
 from collections import defaultdict, deque
+from datetime import UTC, datetime
+from urllib.parse import quote
 
 from fastapi import HTTPException, Request
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse, Response
 
-from app.config import ADMIN_TOKEN
+from app.config import ADMIN_AUTH_ENABLED, ADMIN_ROOT_PASSWORD, ADMIN_ROOT_USERNAME
+from app.db import admin_sessions_col, admin_users_col
 
 ADMIN_PREFIXES = (
+    "/admin",
     "/gap",
     "/candidates",
     "/scenario",
     "/agent",
     "/review",
     "/data",
+    "/api/admin",
     "/api/gap",
     "/api/candidates",
     "/api/scenarios",
@@ -27,56 +30,69 @@ ADMIN_PREFIXES = (
     "/history",
     "/events",
 )
+PUBLIC_ADMIN_PATHS = {"/admin/login", "/admin/signup", "/api/data/import/status"}
+SESSION_COOKIE = "sportsbridge_admin_session"
 
 
 def is_admin_path(path: str) -> bool:
-    if path == "/api/data/import/status":
+    if path in PUBLIC_ADMIN_PATHS:
         return False
     return any(path == prefix or path.startswith(prefix + "/") for prefix in ADMIN_PREFIXES)
 
 
-def is_admin(request: Request) -> bool:
-    if not ADMIN_TOKEN:
-        return False
-    supplied = request.headers.get("X-Admin-Token", "")
-    if supplied and hmac.compare_digest(supplied.encode("utf-8"), ADMIN_TOKEN.encode("utf-8")):
-        return True
-    authorization = request.headers.get("Authorization", "")
-    if not authorization.startswith("Basic "):
-        return False
-    try:
-        raw = base64.b64decode(authorization[6:], validate=True).decode("utf-8")
-    except (ValueError, UnicodeDecodeError, binascii.Error):
-        return False
-    username, separator, password = raw.partition(":")
-    return (
-        bool(separator)
-        and username == "admin"
-        and hmac.compare_digest(password.encode("utf-8"), ADMIN_TOKEN.encode("utf-8"))
+async def load_admin_identity(request: Request) -> None:
+    request.state.admin_identity = None
+    token = request.cookies.get(SESSION_COOKIE, "")
+    if not token or len(token) > 128:
+        return
+    session = await admin_sessions_col.find_one(
+        {
+            "tokenHash": hashlib.sha256(token.encode()).hexdigest(),
+            "expiresAt": {"$gt": datetime.now(UTC)},
+        }
     )
+    if not session:
+        return
+    if session.get("role") == "root":
+        expected = hashlib.sha256(ADMIN_ROOT_PASSWORD.encode()).hexdigest()
+        if session.get("username") == ADMIN_ROOT_USERNAME and session.get("rootTag") == expected:
+            request.state.admin_identity = {"username": ADMIN_ROOT_USERNAME, "role": "root"}
+        return
+    user = await admin_users_col.find_one(
+        {"username": session.get("username"), "status": "approved"}
+    )
+    if user:
+        request.state.admin_identity = {"username": user["username"], "role": "admin"}
+
+
+def is_admin(request: Request) -> bool:
+    return bool(getattr(request.state, "admin_identity", None))
 
 
 def require_admin(request: Request) -> None:
-    if not ADMIN_TOKEN:
-        raise HTTPException(503, "관리자 기능을 사용하려면 ADMIN_TOKEN을 설정해야 합니다.")
-    if not is_admin(request):
-        raise HTTPException(
-            401,
-            "관리자 인증이 필요합니다.",
-            headers={"WWW-Authenticate": 'Basic realm="SportsBridge admin"'},
-        )
+    if ADMIN_AUTH_ENABLED and not is_admin(request):
+        raise HTTPException(401, "관리자 로그인이 필요합니다.")
 
 
-def admin_response(request: Request) -> JSONResponse | None:
-    try:
-        require_admin(request)
-    except HTTPException as exc:
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={"detail": exc.detail},
-            headers=exc.headers,
+def require_root(request: Request) -> None:
+    identity = getattr(request.state, "admin_identity", None)
+    if not identity or identity.get("role") != "root":
+        raise HTTPException(403, "루트 관리자만 사용할 수 있습니다.")
+
+
+def admin_response(request: Request) -> Response | None:
+    if not ADMIN_AUTH_ENABLED or is_admin(request):
+        return None
+    if (
+        request.method == "GET"
+        and not request.url.path.startswith("/api/")
+        and request.url.path not in {"/history", "/events"}
+    ):
+        destination = quote(
+            request.url.path + ("?" + request.url.query if request.url.query else ""), safe=""
         )
-    return None
+        return RedirectResponse(f"/admin/login?next={destination}", status_code=303)
+    return JSONResponse(status_code=401, content={"detail": "관리자 로그인이 필요합니다."})
 
 
 class RateLimiter:

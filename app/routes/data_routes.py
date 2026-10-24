@@ -15,7 +15,7 @@ from fastapi import APIRouter, File, HTTPException, Request, UploadFile
 from pydantic import BaseModel, Field, field_validator
 
 from app.api.import_jobs import job
-from app.config import DATA_RAW_DIR
+from app.config import ADMIN_AUTH_ENABLED, DATA_RAW_DIR
 from app.core.serialize import jsonable
 from app.db import datasets_col
 from app.security import is_admin, require_admin
@@ -187,7 +187,7 @@ async def start_import(request: Request):
 @router.get("/import/status")
 async def import_status(request: Request):
     snapshot = job.snapshot()
-    if not is_admin(request):
+    if ADMIN_AUTH_ENABLED and not is_admin(request):
         return jsonable(
             {key: snapshot.get(key) for key in ("status", "percent", "stepLabel", "version")}
         )

@@ -21,6 +21,9 @@ llm_calls_col = db["llm_calls"]
 agent_history_col = db["agent_history"]
 demand_signals_col = db["demand_signals"]
 votes_col = db["facility_votes"]
+admin_users_col = db["admin_users"]
+admin_signups_col = db["admin_signups"]
+admin_sessions_col = db["admin_sessions"]
 
 CATALOG_STATE_ID = "catalog"
 
@@ -75,6 +78,16 @@ INDEX_SPECS: dict[str, list[tuple[list[tuple[str, int]], dict]]] = {
     "agent_history": [([("createdAt", 1)], {})],
     "demand_signals": [([("regionCode", 1), ("sport", 1), ("createdAt", -1)], {})],
     "facility_votes": [([("facilityId", 1)], {}), ([("regionCode", 1)], {})],
+    "admin_users": [([("username", 1)], {"unique": True}), ([("email", 1)], {"unique": True})],
+    "admin_signups": [
+        ([("username", 1)], {"unique": True}),
+        ([("email", 1)], {"unique": True}),
+        ([("expiresAt", 1)], {"expireAfterSeconds": 0}),
+    ],
+    "admin_sessions": [
+        ([("tokenHash", 1)], {"unique": True}),
+        ([("expiresAt", 1)], {"expireAfterSeconds": 0}),
+    ],
 }
 
 

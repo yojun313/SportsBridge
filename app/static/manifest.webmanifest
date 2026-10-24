@@ -1,14 +1,14 @@
 {
   "name": "스포츠브릿지",
   "short_name": "스포츠브릿지",
-  "description": "스포츠강좌이용권 이용자에게는 내 조건에 맞는 강좌를, 담당자에게는 공급 공백 진단과 조치 조합을",
+  "description": "스포츠 강좌이용권 강좌 검색과 지역별 공급 현황 분석",
   "id": "/",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#05070f",
-  "theme_color": "#05070f",
+  "background_color": "#eef0f9",
+  "theme_color": "#eef0f9",
   "lang": "ko",
   "icons": [
     { "src": "/static/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },

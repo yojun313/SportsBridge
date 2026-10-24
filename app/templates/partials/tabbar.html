@@ -3,12 +3,12 @@
 {% if path == '/' %}
   {% set tabs = [] %}{% set more_items = [] %}{% set switch = none %}
 {% elif app_mode == 'user' %}
-  {% set tabs = [("/user", "찾기", "🔎"), ("/user/region", "내 동네", "🏘"), ("/user/facilities", "시설", "🏊"), ("/user/voice", "목소리", "📣")] %}
-  {% set more_items = [("/user/spaces", "무료 공간", "🏫"), ("/user/planner", "플래너", "🗓"), ("/user/ask", "질문", "💬"), ("/user/help", "도움말", "❓"), ("/user/guide", "설명서", "📖")] %}
+  {% set tabs = [("/user", "강좌 찾기", "🔎"), ("/user/region", "지역 현황", "🏘"), ("/user/facilities", "시설 검색", "🏊"), ("/user/voice", "희망 등록", "📣")] %}
+  {% set more_items = [("/user/spaces", "공공 운동 공간", "🏫"), ("/user/planner", "지원금 계산", "🗓"), ("/user/ask", "질문하기", "💬"), ("/user/help", "이용 안내", "❓"), ("/user/guide", "서비스 안내", "📖")] %}
   {% set switch = ("/gap", "담당자용으로") %}
 {% elif app_mode == 'admin' %}
-  {% set tabs = [("/gap", "진단", "📊"), ("/candidates", "후보", "📍"), ("/scenario", "시나리오", "🧩"), ("/agent", "에이전트", "🤖")] %}
-  {% set more_items = [("/review", "검토", "✅"), ("/data", "데이터", "🗂"), ("/guide", "설명서", "📖")] %}
+  {% set tabs = [("/gap", "지역 현황", "📊"), ("/candidates", "가맹 검토", "📍"), ("/scenario", "지원 방안", "🧩"), ("/agent", "질문하기", "🤖")] %}
+  {% set more_items = [("/admin", "관리자 대시보드", "⚙"), ("/review", "검토", "✅"), ("/data", "데이터", "🗂"), ("/guide", "설명서", "📖")] %}
   {% set switch = ("/user", "이용자용으로") %}
 {% else %}
   {% set tabs = [("/", "홈", "🏠"), ("/user", "이용자용", "🔎"), ("/gap", "담당자용", "📊"), ("/guide", "설명서", "📖")] %}

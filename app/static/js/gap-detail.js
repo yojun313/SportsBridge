@@ -21,7 +21,7 @@
       const d = await api.get(`/api/gap/${code}`);
       const r = d.region, s = d.stats || {};
       document.getElementById("region-title").textContent = `${r.sidoName} ${r.sigunguName}`;
-      document.getElementById("region-sub").textContent = `인구 ${fmtNum(r.population)} · 이용권 대상자 ${fmtNum(r.targetsTotal)} · 수급자 ${fmtNum(r.recipientsTotal)} · 기준연도 ${s.baseYear || "–"} · 강좌 활동 기준 ${r.activeCutoffMonth || "–"} 이후`;
+      document.getElementById("region-sub").textContent = `인구 ${fmtNum(r.population)} · 스포츠 강좌이용권 대상자 ${fmtNum(r.targetsTotal)} · 수급자 ${fmtNum(r.recipientsTotal)} · 기준연도 ${s.baseYear || "–"} · 강좌 활동 기준 ${r.activeCutoffMonth || "–"} 이후`;
       const flags = Object.entries(s.targets || {}).map(([k, v]) => `${esc((s.flagNames || {})[k] || k)} 대상 ${fmtNum(v)} / 수급 ${fmtNum((s.recipients || {})[k])}`).join(" · ");
       const sportsTotal = r.activeCourseCount || 0;
       const hourPairs = Object.entries(d.hourBins).map(([h, v]) => [`${h}시`, v]);

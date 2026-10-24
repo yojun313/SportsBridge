@@ -3,7 +3,7 @@
   const root = document.getElementById("cmp-root");
   const sub = document.getElementById("cmp-sub");
   const toPlan = document.getElementById("to-plan");
-  if (!sc || !sc.demandGroups || !sc.demandGroups.length) { root.innerHTML = '<div class="notice warn">시나리오가 없습니다. <a href="/scenario">편집 화면</a>에서 먼저 만드세요.</div>'; return; }
+  if (!sc || !sc.demandGroups || !sc.demandGroups.length) { root.innerHTML = '<div class="notice warn">시나리오가 없습니다. <a href="/scenario">편집 화면</a>에서 시나리오를 작성해 주세요.</div>'; return; }
   let result = null, selected = null;
   const objLabel = (r) => sc.mode === "capacity" ? `${fmtNum(r.assigned)}명 배정` : `${fmtNum(r.connectedGroups)}개 집단 연결`;
   const objVal = (r) => sc.mode === "capacity" ? r.assigned : r.connectedGroups;
@@ -29,9 +29,9 @@
         <div class="grid-3 mb-16">
           ${bundleCard(base, "현재 상태 (조치 없음)")}
           ${best ? bundleCard(best, "예산 내 최선 조합", "best") : '<div class="combo-card"><div class="title"><b>예산 내 최선 조합</b></div><p class="muted mt-8">예산·비용 조건을 만족하는 조합이 없습니다.</p></div>'}
-          <div class="combo-card"><div class="title"><b>탐욕 방식(단독 효과 순)</b><span class="big">${sc.mode === "capacity" ? fmtNum(g.objective) + "명" : fmtNum(g.objective) + "개 집단"}</span></div>
-            <div class="combo-actions">${g.actions.length ? g.actions.map((a) => `<span class="chip">${esc(a)}</span>`).join("") : '<span class="chip off">아무것도 고르지 못함</span>'}</div>
-            <p class="small muted mt-8">${syn ? (syn.hasSynergy ? `결합 효과 있음: 조합 효과 ${syn.comboGain} > 단독 효과 합 ${syn.sumOfSingleGains}. 단독 효과 순으로 고르면 이 조합을 놓칩니다.` : `이 시나리오에서는 결합 효과가 없습니다 (조합 ${syn.comboGain} = 단독 합 ${syn.sumOfSingleGains}).`) : "최선 조합이 없거나 조치가 1개뿐입니다."}</p></div>
+          <div class="combo-card"><div class="title"><b>개별 효과 순 선택 결과</b><span class="big">${sc.mode === "capacity" ? fmtNum(g.objective) + "명" : fmtNum(g.objective) + "개 집단"}</span></div>
+            <div class="combo-actions">${g.actions.length ? g.actions.map((a) => `<span class="chip">${esc(a)}</span>`).join("") : '<span class="chip off">선택된 조치 없음</span>'}</div>
+            <p class="small muted mt-8">${syn ? (syn.hasSynergy ? `조치를 함께 시행할 때 추가 효과가 있습니다. 조합 효과 ${syn.comboGain}, 개별 효과 합계 ${syn.sumOfSingleGains}.` : `함께 시행해도 추가 효과는 없습니다. 조합 효과와 개별 효과 합계가 모두 ${syn.comboGain}입니다.`) : "비교할 조합이 없거나 조치가 1개입니다."}</p></div>
         </div>
         <div class="grid-2 mb-16">
           <div class="card card-pad"><div class="card-head"><h3>조치별 단독 효과</h3></div><div class="table-wrap"><table class="table"><thead><tr><th>조치</th><th class="num">결과</th><th class="num">비용</th><th class="num">증가</th></tr></thead><tbody>${singles}</tbody></table></div></div>

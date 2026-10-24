@@ -79,11 +79,11 @@ async def region_overview(region_code: str):
     plain = []
     if r.get("activeFacilityCount") is not None:
         plain.append(
-            f"최근 1년 안에 이용권 강좌가 열린 시설이 {r['activeFacilityCount']}곳, 강좌는 {r['activeCourseCount']}개입니다."
+            f"최근 1년간 스포츠 강좌이용권 강좌 운영 기록이 있는 시설은 {r['activeFacilityCount']}곳, 강좌는 {r['activeCourseCount']}개입니다."
         )
     if r.get("topSport"):
         plain.append(
-            f"가장 많은 종목은 {r['topSport']}({round((r.get('topSportShare') or 0) * 100)}%)이고, 종목은 모두 {r['sportCount']}가지입니다."
+            f"운영 강좌가 가장 많은 종목은 {r['topSport']}({round((r.get('topSportShare') or 0) * 100)}%)이며, 전체 운영 종목은 {r['sportCount']}가지입니다."
         )
     if r.get("eveningShare") is not None:
         plain.append(
@@ -91,11 +91,11 @@ async def region_overview(region_code: str):
         )
     if r.get("rankFacilitiesPer1000"):
         plain.append(
-            f"이용권 대상자 수에 비해 시설이 적은 순으로 전국 {r['regionTotal']}개 시군구 중 {r['rankFacilitiesPer1000']}번째입니다."
+            f"스포츠 강좌이용권 대상자 1,000명당 가맹시설 수가 적은 순으로 전국 {r['regionTotal']}개 시군구 중 {r['rankFacilitiesPer1000']}위입니다."
         )
     if r.get("candidateLikelyCount"):
         plain.append(
-            f"아직 가맹하지 않은 것으로 보이는 체육시설이 {r['candidateLikelyCount']}곳 있어, 가맹 요청을 남길 수 있습니다."
+            f"가맹 여부를 확인할 체육시설이 {r['candidateLikelyCount']}곳 있습니다. 이용을 희망하는 시설이 있다면 의견을 등록할 수 있습니다."
         )
     return jsonable(
         {

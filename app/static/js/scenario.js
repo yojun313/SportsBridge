@@ -75,7 +75,7 @@
   // ---------- 공급 옵션
   function renderOptions() {
     const el = $("options");
-    if (!sc.supplyOptions.length) { el.innerHTML = '<p class="muted">"공급 옵션·후보 불러오기"로 실제 강좌를 채우거나 직접 추가하세요.</p>'; return; }
+    if (!sc.supplyOptions.length) { el.innerHTML = '<p class="muted">강좌와 가맹 검토 시설을 불러오거나 강좌를 직접 추가해 주세요.</p>'; return; }
     el.innerHTML = sc.supplyOptions.map((o, i) => `
       <div class="list-item" data-i="${i}">
         <div class="head"><b>${esc(o.label)}</b><div class="row">${o.exists ? '<span class="badge badge-ok">기존</span>' : '<span class="badge badge-warn">신설 필요</span>'}${o.voucherAffiliated === true ? '<span class="badge">가맹</span>' : (o.voucherAffiliated === false ? '<span class="badge badge-muted">비가맹</span>' : '<span class="badge badge-warn">가맹 미확인</span>')}<button class="btn-icon" data-del-option="${i}" aria-label="삭제">&times;</button></div></div>
@@ -168,7 +168,7 @@
       if (d.demandGroups && d.demandGroups.length) showSnackbar(`이용자 등록 수요 ${d.demandGroups.length}개 집단을 불러왔습니다`, "success");
       if (!sc.demandGroups.length) sc.demandGroups.push({ id: uid("d"), label: "수요 집단 1", sport: sc.sport, size: 8, availability: [{ weekday: 1, startMinute: 960, endMinute: 1080 }, { weekday: 3, startMinute: 960, endMinute: 1080 }], sessionsPerWeek: 2, bufferMinutes: 0, transport: "walk", provenance: "assumed" });
       persist(); renderAll();
-      showSnackbar(`공급 옵션 ${d.supplyOptions.length}개, 후보 시설 ${d.candidateActions.length}곳을 채웠습니다`, "success");
+      showSnackbar(`강좌 ${d.supplyOptions.length}개와 가맹 검토 시설 ${d.candidateActions.length}곳을 불러왔습니다.`, "success");
     } catch (e) { showSnackbar(e.message, "error"); }
   });
   $("add-group").addEventListener("click", () => { sc.demandGroups.push({ id: uid("d"), label: "수요 집단 " + (sc.demandGroups.length + 1), sport: sport.value || SPORTS[0], size: 8, availability: [], sessionsPerWeek: null, bufferMinutes: 0, transport: "walk", provenance: "confirmed" }); persist(); renderAll(); });

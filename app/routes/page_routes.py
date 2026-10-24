@@ -9,7 +9,13 @@ router = APIRouter(tags=["pages"])
 
 async def _ctx(request: Request, app_mode: str = "admin", **extra):
     meta = await catalog_service.metadata()
-    return {"request": request, "meta": jsonable(meta), "app_mode": app_mode, **extra}
+    return {
+        "request": request,
+        "meta": jsonable(meta),
+        "app_mode": app_mode,
+        "admin_identity": getattr(request.state, "admin_identity", None),
+        **extra,
+    }
 
 
 @router.get("/")
@@ -88,6 +94,27 @@ async def user_help(request: Request):
 async def gap_index(request: Request):
     return templates.TemplateResponse(
         request=request, name="gap_index.html", context=await _ctx(request)
+    )
+
+
+@router.get("/admin/login")
+async def admin_login(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="admin_login.html", context=await _ctx(request, app_mode="home")
+    )
+
+
+@router.get("/admin/signup")
+async def admin_signup(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="admin_signup.html", context=await _ctx(request, app_mode="home")
+    )
+
+
+@router.get("/admin")
+async def admin_dashboard(request: Request):
+    return templates.TemplateResponse(
+        request=request, name="admin_dashboard.html", context=await _ctx(request)
     )
 
 

@@ -1,6 +1,6 @@
 from fastapi.templating import Jinja2Templates
 
-from app.config import APP_FULL_NAME, APP_NAME, DEMO_MODE, LLM_ENABLED
+from app.config import ADMIN_AUTH_ENABLED, APP_FULL_NAME, APP_NAME, DEMO_MODE, LLM_ENABLED
 from app.core.paths import STATIC_DIR, TEMPLATES_DIR
 
 
@@ -19,4 +19,5 @@ templates.env.globals["APP_NAME"] = APP_NAME
 templates.env.globals["APP_FULL_NAME"] = APP_FULL_NAME
 templates.env.globals["DEMO_MODE"] = DEMO_MODE
 templates.env.globals["LLM_ENABLED"] = LLM_ENABLED
+templates.env.globals["ADMIN_AUTH_ENABLED"] = ADMIN_AUTH_ENABLED
 templates.env.globals["asset"] = asset

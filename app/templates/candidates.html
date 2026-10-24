@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container" id="cand-root" data-region="{{ region_code }}">
   <div class="page-head">
-    <div><h1>이용권 가맹 검토 시설 <button class="help-button" type="button" data-help-title="후보 점수 안내" data-help="목록은 공공 체육시설 자료에서 이용권 가맹시설로 확인되지 않은 시설을 추린 결과입니다. 점수는 검토 우선순위를 정하기 위한 참고값이며, 가맹 가능성을 의미하지 않습니다. 실제 가맹 여부와 강좌 운영은 시설에 확인해야 합니다." aria-label="후보 점수 안내">?</button></h1><p class="sub">공공 체육시설 가운데 이용권 가맹 여부를 확인할 시설을 우선순위와 함께 보여줍니다. 점수는 검토를 위한 참고 정보이며, 실제 가맹 여부는 시설에 확인해야 합니다.</p></div>
+    <div><h1>스포츠 강좌이용권 가맹 검토 시설 <button class="help-button" type="button" data-help-title="후보 점수 안내" data-help="목록은 공공 체육시설 자료에서 스포츠 강좌이용권 가맹시설로 확인되지 않은 시설을 추린 결과입니다. 점수는 검토 우선순위를 정하기 위한 참고값이며, 가맹 가능성을 의미하지 않습니다. 실제 가맹 여부와 강좌 운영은 시설에 확인해야 합니다." aria-label="후보 점수 안내">?</button></h1><p class="sub">공공 체육시설 가운데 스포츠 강좌이용권 가맹 여부를 확인할 시설을 우선순위와 함께 보여줍니다. 점수는 검토를 위한 참고 정보이며, 실제 가맹 여부는 시설에 확인해야 합니다.</p></div>
     <div class="row">
       <select class="input" id="cand-sido" aria-label="시도" style="width:auto;min-width:140px"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
       <select class="input" id="cand-sigungu" aria-label="시군구" style="width:auto;min-width:150px"><option value="">시군구</option></select>

@@ -9,15 +9,15 @@ from app.db import courses_col, facilities_voucher_col, gap_aggregates_col, regi
 AXES = [
     {
         "key": "quantity",
-        "label": "양",
-        "desc": "이용권 대상자 1,000명당 최근 12개월 활동 가맹시설 수",
+        "label": "가맹시설 수",
+        "desc": "스포츠 강좌이용권 대상자 1,000명당 최근 12개월간 강좌 운영 기록이 있는 가맹시설 수",
         "field": "facilitiesPer1000Targets",
         "rank": "rankFacilitiesPer1000",
         "lowerIsWorse": True,
     },
     {
         "key": "sport",
-        "label": "종목 선택권",
+        "label": "운영 종목 수",
         "desc": "최근 12개월 강좌가 있는 종목 수",
         "field": "sportCount",
         "rank": "rankSportCount",
@@ -25,8 +25,8 @@ AXES = [
     },
     {
         "key": "time",
-        "label": "시간 선택권",
-        "desc": "평일 18시 이후 시작 강좌 비율",
+        "label": "저녁 강좌 비율",
+        "desc": "평일 18시 이후 시작하는 강좌의 비율",
         "field": "eveningShare",
         "rank": "rankEveningShare",
         "lowerIsWorse": True,
@@ -206,21 +206,21 @@ def interpret(g: dict) -> list[str]:
     n = g.get("regionTotal") or 0
     if g.get("rankFacilitiesPer1000"):
         out.append(
-            f"대상자 1,000명당 활동 가맹시설 수는 전국 {n}개 시군구 중 {g['rankFacilitiesPer1000']}번째로 낮습니다 (값 {g['facilitiesPer1000Targets']})."
+            f"스포츠 강좌이용권 대상자 1,000명당 최근 운영 가맹시설은 {g['facilitiesPer1000Targets']}곳입니다. 시설 수가 적은 순으로 전국 {n}개 시군구 중 {g['rankFacilitiesPer1000']}위입니다."
         )
     if g.get("topSport") and g.get("topSportShare") is not None:
         out.append(
-            f"최근 12개월 강좌 {g['activeCourseCount']}개 중 '{g['topSport']}'이(가) {round(g['topSportShare'] * 100)}%를 차지합니다. 종목 수 {g['sportCount']}개."
+            f"최근 12개월간 운영 기록이 있는 강좌 {g['activeCourseCount']}개 중 가장 많은 종목은 {g['topSport']}({round(g['topSportShare'] * 100)}%)입니다. 운영 종목은 모두 {g['sportCount']}가지입니다."
         )
     if g.get("eveningShare") is not None:
         out.append(
-            f"시간이 확인된 강좌 {g['scheduleKnownCount']}개 중 18시 이후 시작은 {round(g['eveningShare'] * 100)}%, 주말 포함은 {round((g.get('weekendShare') or 0) * 100)}%입니다."
+            f"시간표가 확인된 강좌 {g['scheduleKnownCount']}개 중 18시 이후 시작하는 강좌는 {round(g['eveningShare'] * 100)}%, 주말에 운영하는 강좌는 {round((g.get('weekendShare') or 0) * 100)}%입니다."
         )
     else:
-        out.append("강좌 시간 정보가 결합되지 않아 시간 선택권 축은 계산하지 않았습니다.")
+        out.append("강좌 시간표를 확인할 수 없어 저녁 강좌 비율을 계산하지 않았습니다.")
     if g.get("candidateLikelyCount") is not None:
         out.append(
-            f"가맹 목록과 대조되지 않은 정상운영 체육시설 중 아동 강좌 가능성이 높은 업종은 {g['candidateLikelyCount']}곳입니다 (가맹 여부 확인 필요)."
+            f"운영 중인 체육시설 가운데 아동 대상 강좌를 운영할 가능성이 있어 가맹 여부를 확인할 시설은 {g['candidateLikelyCount']}곳입니다."
         )
     return out
 

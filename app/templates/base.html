@@ -1,12 +1,12 @@
 <!doctype html>
-<html lang="ko" data-app="{{ app_mode or 'admin' }}" data-theme="{{ 'light' if app_mode == 'user' else 'dark' }}">
+<html lang="ko" data-app="{{ app_mode or 'admin' }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
     <meta name="robots" content="noindex, nofollow" />
     <title>{% block title %}{{ APP_NAME }} - {{ APP_FULL_NAME }}{% endblock %}</title>
-    <meta name="description" content="{% block description %}스포츠강좌이용권 이용자에게는 내 조건에 맞는 강좌를, 담당자에게는 공급 공백 진단과 조치 조합을 제공하는 서비스{% endblock %}" />
-    <meta name="theme-color" content="{{ '#eef0f9' if app_mode == 'user' else '#05070f' }}" />
+    <meta name="description" content="{% block description %}스포츠 강좌이용권 강좌 검색과 지역별 시설·강좌 공급 현황 분석을 제공하는 서비스{% endblock %}" />
+    <meta name="theme-color" content="#eef0f9" />
     <link rel="manifest" href="/static/manifest.webmanifest" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />

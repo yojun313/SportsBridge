@@ -17,6 +17,7 @@ from app.core.templates import templates
 from app.db import create_indexes
 from app.db.mongo import close, ping
 from app.routes import (
+    admin_auth_routes,
     agent_routes,
     candidate_routes,
     data_routes,
@@ -28,7 +29,7 @@ from app.routes import (
     scenario_routes,
     user_routes,
 )
-from app.security import admin_response, is_admin, is_admin_path, limiter
+from app.security import admin_response, is_admin, is_admin_path, limiter, load_admin_identity
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -61,6 +62,7 @@ _MAX_UPLOAD_BYTES = 1_200 * 1024 * 1024 + 1024 * 1024
 @app.middleware("http")
 async def headers_middleware(request: Request, call_next):
     request.state.csp_nonce = secrets.token_urlsafe(24)
+    await load_admin_identity(request)
     path = request.url.path
     response = None
     if is_admin_path(path):
@@ -150,6 +152,7 @@ mimetypes.add_type("application/manifest+json", ".webmanifest")
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 app.include_router(page_routes.router)
+app.include_router(admin_auth_routes.router)
 app.include_router(metadata_routes.router)
 app.include_router(gap_routes.router)
 app.include_router(candidate_routes.router)

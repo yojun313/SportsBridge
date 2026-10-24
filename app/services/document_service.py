@@ -130,7 +130,7 @@ def template_plan(facts: dict) -> str:
         f"작성일 {f['date']} · 데이터 버전 {f['datasetVersion'] or '–'} · **자동 생성 초안, 담당자 검토 전**",
         "",
         "## 1. 목적",
-        f"{f['regionName']}에서 스포츠강좌이용권을 실제로 사용할 수 있는 {f['sport'] or ''} 강좌 공급을 늘리기 위해, 아래 수요 집단에 대해 함께 시행해야 효과가 나는 조치 조합을 정리합니다.".replace(
+        f"{f['regionName']}에서 스포츠 강좌이용권으로 이용할 수 있는 {f['sport'] or ''} 강좌를 늘리기 위해 검토할 지원 방안을 정리합니다.".replace(
             "  ", " "
         ),
         "",

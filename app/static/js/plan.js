@@ -3,7 +3,7 @@
   let selected = [];
   try { selected = JSON.parse(localStorage.getItem(SC_BUNDLE_KEY) || "[]"); } catch (e) {}
   const root = document.getElementById("plan-root");
-  if (!sc) { root.innerHTML = '<div class="notice warn">시나리오가 없습니다. <a href="/scenario">편집 화면</a>에서 만드세요.</div>'; return; }
+  if (!sc) { root.innerHTML = '<div class="notice warn">시나리오가 없습니다. <a href="/scenario">편집 화면</a>에서 시나리오를 작성해 주세요.</div>'; return; }
   let facts = null;
   function mdToHtml(md) {
     return esc(md).replace(/^### (.*)$/gm, "<h4>$1</h4>").replace(/^## (.*)$/gm, "<h3>$1</h3>").replace(/^# (.*)$/gm, "<h2>$1</h2>")
