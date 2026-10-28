@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}지역별 시설·강좌 현황 - {{ APP_NAME }}{% endblock %}
+{% block title %}지역별 운동 시설·강좌 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
   <div class="page-head"><div><h1>지역별 운동 시설·강좌 <button class="help-button" type="button" data-help-title="지역 현황 안내" data-help="시군구를 선택하면 스포츠 강좌이용권 시설과 최근 강좌, 종목별·시간대별 운영 현황을 볼 수 있습니다. 표시된 이용 이력은 현재 모집 여부를 뜻하지 않습니다." aria-label="지역 현황 안내">?</button></h1><p class="sub">선택한 지역의 스포츠 강좌이용권 시설과 최근 강좌 현황을 확인할 수 있습니다.</p></div>{% include "partials/user_region_picker.html" %}</div>

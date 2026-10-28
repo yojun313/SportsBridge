@@ -1,0 +1,143 @@
+{
+  "id": "verification-eight",
+  "title": "검증용 가정 · 수영 8명 · 예산 90만원",
+  "regionCode": "11110",
+  "sport": "수영",
+  "mode": "capacity",
+  "budgetWon": 900000,
+  "notes": "사용법 검증을 위한 가정값입니다. 실제 시설·이용자·사업비 자료가 아닙니다.",
+  "demandGroups": [
+    {
+      "id": "d1",
+      "label": "검증용 수요 8명(가정)",
+      "sport": "수영",
+      "size": 8,
+      "availability": [
+        {
+          "weekday": 0,
+          "startMinute": 960,
+          "endMinute": 1080
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1080
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1080
+        }
+      ],
+      "sessionsPerWeek": 3,
+      "ageMin": 8,
+      "ageMax": 12,
+      "bufferMinutes": 0,
+      "transport": "walk",
+      "provenance": "assumed"
+    }
+  ],
+  "supplyOptions": [
+    {
+      "id": "existing",
+      "label": "검증용 기존 강좌(가정)",
+      "facilityId": "sim-existing",
+      "facilityName": "검증용 기존 시설(가정)",
+      "sport": "수영",
+      "sessions": [
+        {
+          "weekday": 0,
+          "startMinute": 960,
+          "endMinute": 1020
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1020
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1020
+        }
+      ],
+      "attendanceRule": "all_required",
+      "ageMin": 5,
+      "ageMax": 18,
+      "capacity": 0,
+      "capacityProvenance": "assumed",
+      "voucherAffiliated": true,
+      "affiliationProvenance": "assumed",
+      "priceWon": 105000,
+      "exists": true,
+      "reachable": {
+        "d1": true
+      },
+      "provenance": "assumed"
+    },
+    {
+      "id": "new",
+      "label": "검증용 신설 강좌(가정)",
+      "facilityId": "sim-new",
+      "facilityName": "검증용 후보 시설(가정)",
+      "sport": "수영",
+      "sessions": [
+        {
+          "weekday": 0,
+          "startMinute": 960,
+          "endMinute": 1020
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1020
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1020
+        }
+      ],
+      "attendanceRule": "all_required",
+      "ageMin": 5,
+      "ageMax": 18,
+      "capacity": 0,
+      "capacityProvenance": "assumed",
+      "voucherAffiliated": false,
+      "affiliationProvenance": "assumed",
+      "priceWon": 105000,
+      "exists": false,
+      "reachable": {
+        "d1": true
+      },
+      "provenance": "assumed"
+    }
+  ],
+  "actions": [
+    {
+      "id": "affiliate",
+      "label": "검증용 후보 시설 가맹 협의",
+      "kind": "affiliate",
+      "facilityId": "sim-new",
+      "costWon": 200000,
+      "costProvenance": "assumed",
+      "requires": [],
+      "conflicts": [],
+      "provenance": "assumed"
+    },
+    {
+      "id": "open_course",
+      "label": "검증용 수영 강좌 8석 신설",
+      "kind": "open_course",
+      "supplyOptionId": "new",
+      "capacity": 8,
+      "costWon": 600000,
+      "costProvenance": "assumed",
+      "requires": [
+        "affiliate"
+      ],
+      "conflicts": [],
+      "provenance": "assumed"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "checks": [
+    "overview",
+    "expanded guide",
+    "field links",
+    "deep link",
+    "mobile layout",
+    "scenario preservation",
+    "JSON import and 8-person calculation"
+  ],
+  "consoleErrors": []
+}

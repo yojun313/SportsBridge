@@ -21,7 +21,7 @@ FILES = {
 BASE = "https://www.bigdata-culture.kr/bigdata/user/data_market/detail.do?id="
 SOURCES = {
     "regional_usage": {
-        "title": "지역별 스포츠강좌이용권 활용정보",
+        "title": "지역별 스포츠 강좌이용권 활용정보",
         "url": BASE + "5b30e290-2594-11eb-af9a-4b03f0a582d6",
         "provider": "국민체육진흥공단",
         "cycle": "비정기",
@@ -29,7 +29,7 @@ SOURCES = {
         "required": True,
     },
     "voucher_facilities": {
-        "title": "스포츠강좌이용권 시설",
+        "title": "스포츠 강좌이용권 시설",
         "url": BASE + "98eb52c8-da31-462a-9c01-5b9cb2f9d077",
         "provider": "국민체육진흥공단",
         "cycle": "연간",
@@ -37,7 +37,7 @@ SOURCES = {
         "required": True,
     },
     "voucher_courses": {
-        "title": "스포츠강좌이용권 이용시설 강좌",
+        "title": "스포츠 강좌이용권 이용시설 강좌",
         "url": BASE + "4e1a59b2-c54b-42a5-9a75-b86bb33ce279",
         "provider": "국민체육진흥공단",
         "cycle": "연간",
@@ -45,7 +45,7 @@ SOURCES = {
         "required": True,
     },
     "voucher_usage": {
-        "title": "스포츠강좌이용권 이용현황",
+        "title": "스포츠 강좌이용권 이용현황",
         "url": BASE + "04e1e27f-51fc-4ad2-a87b-112ea3b868e5",
         "provider": "국민체육진흥공단",
         "cycle": "비정기",
@@ -57,7 +57,7 @@ SOURCES = {
         "url": BASE + "3b5399ad-88c4-43aa-a1d7-7ef6a630370b",
         "provider": "국민체육진흥공단",
         "cycle": "비정기",
-        "role": "업종·운영상태·주소·좌표 (비가맹 후보 모집단)",
+        "role": "업종·운영상태·주소·좌표 (가맹 검토 시설 후보)",
         "required": True,
     },
     "public_facilities": {
@@ -85,7 +85,7 @@ SOURCES = {
         "required": False,
     },
     "transit_voucher": {
-        "title": "이용권시설 인접 대중교통",
+        "title": "스포츠 강좌이용권시설 인접 대중교통",
         "url": BASE + "914ac658-d64b-4fc9-add5-9773393bbe51",
         "provider": "국민체육진흥공단·산림빅데이터거래소",
         "cycle": "비정기",

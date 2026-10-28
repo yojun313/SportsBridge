@@ -10,7 +10,7 @@ AXES = [
     {
         "key": "quantity",
         "label": "가맹시설 수",
-        "desc": "스포츠 강좌이용권 대상자 1,000명당 최근 12개월간 강좌 운영 기록이 있는 가맹시설 수",
+        "desc": "스포츠 강좌이용권 대상자 1,000명당 집계기간에 강좌 운영 기록이 있는 가맹시설 수",
         "field": "facilitiesPer1000Targets",
         "rank": "rankFacilitiesPer1000",
         "lowerIsWorse": True,
@@ -18,7 +18,7 @@ AXES = [
     {
         "key": "sport",
         "label": "운영 종목 수",
-        "desc": "최근 12개월 강좌가 있는 종목 수",
+        "desc": "집계기간에 강좌 운영 기록이 있는 종목 수",
         "field": "sportCount",
         "rank": "rankSportCount",
         "lowerIsWorse": True,
@@ -26,7 +26,7 @@ AXES = [
     {
         "key": "time",
         "label": "저녁 강좌 비율",
-        "desc": "평일 18시 이후 시작하는 강좌의 비율",
+        "desc": "시간표가 확인된 강좌 중 18시 이후 시작하는 수업이 있는 강좌의 비율",
         "field": "eveningShare",
         "rank": "rankEveningShare",
         "lowerIsWorse": True,
@@ -210,7 +210,7 @@ def interpret(g: dict) -> list[str]:
         )
     if g.get("topSport") and g.get("topSportShare") is not None:
         out.append(
-            f"최근 12개월간 운영 기록이 있는 강좌 {g['activeCourseCount']}개 중 가장 많은 종목은 {g['topSport']}({round(g['topSportShare'] * 100)}%)입니다. 운영 종목은 모두 {g['sportCount']}가지입니다."
+            f"집계기간에 운영 기록이 있는 강좌 {g['activeCourseCount']}개 중 가장 많은 종목은 {g['topSport']}({round(g['topSportShare'] * 100)}%)입니다. 운영 종목은 모두 {g['sportCount']}가지입니다."
         )
     if g.get("eveningShare") is not None:
         out.append(

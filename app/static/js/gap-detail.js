@@ -2,6 +2,7 @@
   const root = document.getElementById("detail-root");
   const code = root.dataset.region;
   const body = document.getElementById("detail-body");
+  let usagePeriod = "기간 미확인";
 
   function statCard(a) {
     const na = !a.computable;
@@ -20,6 +21,7 @@
     try {
       const d = await api.get(`/api/gap/${code}`);
       const r = d.region, s = d.stats || {};
+      usagePeriod = r.activeCutoffMonth && r.dataMaxMonth ? `${r.activeCutoffMonth} ~ ${r.dataMaxMonth}` : "기간 미확인";
       document.getElementById("region-title").textContent = `${r.sidoName} ${r.sigunguName}`;
       document.getElementById("region-sub").textContent = `인구 ${fmtNum(r.population)} · 스포츠 강좌이용권 대상자 ${fmtNum(r.targetsTotal)} · 수급자 ${fmtNum(r.recipientsTotal)} · 기준연도 ${s.baseYear || "–"} · 강좌 활동 기준 ${r.activeCutoffMonth || "–"} 이후`;
       const flags = Object.entries(s.targets || {}).map(([k, v]) => `${esc((s.flagNames || {})[k] || k)} 대상 ${fmtNum(v)} / 수급 ${fmtNum((s.recipients || {})[k])}`).join(" · ");
@@ -33,11 +35,11 @@
             <div class="card-head"><h3>해석</h3>${provBadge("public")}</div>
             <ul class="stack small">${d.interpretation.map((t) => `<li>• ${esc(t)}</li>`).join("")}</ul>
             <p class="faint mt-8">${flags}</p>
-            <p class="small mt-8"><b>이용자 신호</b> · 등록 수요 ${fmtNum((d.signals || {}).demand ? d.signals.demand.total : 0)}건${d.signals && d.signals.demand && d.signals.demand.bySport.length ? " (" + d.signals.demand.bySport.slice(0, 4).map((s) => esc(s.sport) + " " + s.count).join(", ") + ")" : ""} · 가맹 요청 ${fmtNum((d.signals || {}).voteTotal || 0)}건${d.signals && d.signals.votes && d.signals.votes.length ? " — " + d.signals.votes.slice(0, 3).map((v) => esc(v.name) + " " + v.votes).join(", ") : ""}</p>
+            <p class="small mt-8"><b>이용자 신호</b> · 등록 수요 ${fmtNum((d.signals || {}).demand ? d.signals.demand.total : 0)}건${d.signals && d.signals.demand && d.signals.demand.bySport.length ? " (" + d.signals.demand.bySport.slice(0, 4).map((s) => esc(s.sport) + " " + s.count).join(", ") + ")" : ""} · 시설 이용 희망 ${fmtNum((d.signals || {}).voteTotal || 0)}건${d.signals && d.signals.votes && d.signals.votes.length ? " — " + d.signals.votes.slice(0, 3).map((v) => esc(v.name) + " " + v.votes).join(", ") : ""}</p>
             ${r.notComputable && r.notComputable.length ? `<p class="faint">계산 불가: ${esc(r.notComputable.join(", "))}</p>` : ""}
           </div>
           <div class="card card-pad">
-            <div class="card-head"><h3>종목 분포 <small class="faint">최근 12개월 강좌 ${fmtNum(sportsTotal)}개</small></h3></div>
+            <div class="card-head"><h3>종목 분포 <small class="faint">최근 운영 강좌 ${fmtNum(sportsTotal)}개</small></h3></div>
             ${d.sportCounts.length ? bars(d.sportCounts.slice(0, 10), sportsTotal) : '<p class="muted">활동 강좌가 없습니다.</p>'}
           </div>
         </div>
@@ -46,8 +48,9 @@
           <div class="card card-pad"><div class="card-head"><h3>요일 분포</h3></div>${r.scheduleKnownCount ? bars(dowPairs) : '<p class="muted">–</p>'}</div>
         </div>
         <div class="card card-pad mb-16">
-          <div class="card-head"><h3>가맹시설 <small class="faint">${fmtNum(r.voucherFacilityCount)}곳 · 최근 12개월 신청 인원 많은 순</small></h3><button class="btn btn-sm btn-ghost" id="toggle-fac">전체 보기</button></div>
-          <div class="table-wrap"><table class="table responsive" id="fac-table"><thead><tr><th>시설</th><th>종목</th><th class="num">최근 12개월 신청</th><th>마지막 강좌월</th><th>정류장 도보</th><th>전체시설 대조</th></tr></thead><tbody id="fac-body"></tbody></table></div>
+          <div class="card-head"><h3>가맹시설 <small class="faint">${fmtNum(r.voucherFacilityCount)}곳 · 수강 신청 누계 많은 순</small> <button class="help-button" type="button" data-help-title="수강 신청 누계 안내" data-help="공개 이용현황의 월별·강좌별 수강 신청 인원을 합산한 값입니다. 같은 사람이 여러 달 또는 여러 강좌를 신청하면 반복 포함될 수 있습니다. 시설 이용 희망 등록이나 가맹 신청 건수와는 다른 값입니다." aria-label="수강 신청 누계 안내">?</button></h3><button class="btn btn-sm btn-ghost" id="toggle-fac">전체 보기</button></div>
+          <p class="small muted">집계기간: ${esc(usagePeriod)} · 수강 신청 연인원이며, 같은 사람의 월별·강좌별 신청이 반복 포함될 수 있습니다.</p>
+          <div class="table-wrap"><table class="table responsive" id="fac-table"><thead><tr><th>시설</th><th>종목</th><th class="num">수강 신청 누계(연인원)</th><th>마지막 강좌월</th><th>정류장 도보</th><th>전체시설 대조</th></tr></thead><tbody id="fac-body"></tbody></table></div>
         </div>
         <div class="card card-pad">
           <div class="card-head"><h3>강좌 <small class="faint">활동 강좌, 종목 필터</small></h3><select class="input" id="course-sport" style="width:auto;min-width:160px"><option value="">전체 종목</option></select></div>
@@ -68,7 +71,7 @@
       const matchLabel = m.allFacilityId ? `<span class="badge badge-ok">대조됨 (${esc(m.matchType)})</span>` : (m.status === "candidates" ? '<span class="badge badge-warn">유사 시설 검토 필요</span>' : '<span class="badge badge-muted">미대조</span>');
       return `<tr><td class="name" data-label="시설"><a href="#" data-fac="${esc(f.facilityId)}">${esc(f.name)}</a><span class="sub">${esc(f.address || "")}</span></td>
         <td data-label="종목">${esc((f.sports || []).join(", "))}</td>
-        <td class="num" data-label="최근 12개월 신청">${fmtNum(u.last12mApplicants)} ${u.active ? '<span class="badge badge-ok">활동</span>' : '<span class="badge badge-muted">비활동</span>'}</td>
+        <td class="num" data-label="수강 신청 누계(연인원)">${fmtNum(u.last12mApplicants)} ${u.active ? '<span class="badge badge-ok">활동</span>' : '<span class="badge badge-muted">비활동</span>'}</td>
         <td data-label="마지막 강좌월">${esc(u.lastMonth || "–")}</td>
         <td data-label="정류장 도보">${t ? `${Math.round(t.minWalkSec / 60)}분 (${esc(t.stopType)} ${esc(t.stopName)})` : "–"}</td>
         <td data-label="전체시설 대조">${matchLabel}</td></tr>`;
@@ -82,7 +85,7 @@
       const u = f.usage || {};
       const html = `<div class="dialog-backdrop open" id="fac-dialog"><div class="dialog dialog-lg"><div class="dialog-header"><h2>${esc(f.name)}</h2><button class="btn-icon" data-dialog-close>&times;</button></div>
         <dl class="kv"><dt>주소</dt><dd>${esc(f.address || "")} ${esc(f.detailAddress || "")}</dd><dt>전화</dt><dd>${esc(f.tel || "–")}</dd><dt>종목</dt><dd>${esc((f.sports || []).join(", "))}</dd><dt>가맹 결정일</dt><dd>${esc(f.decisionDate || "–")}</dd>
-        <dt>이용 이력</dt><dd>${u.firstMonth ? `${esc(u.firstMonth)} ~ ${esc(u.lastMonth)} · 누적 신청 ${fmtNum(u.totalApplicants)} · 최근 12개월 ${fmtNum(u.last12mApplicants)}` : "없음"}</dd>
+        <dt>이용 이력</dt><dd>${u.firstMonth ? `${esc(u.firstMonth)} ~ ${esc(u.lastMonth)} · 전체 기록의 수강 신청 ${fmtNum(u.totalApplicants)}명(연인원) · 집계기간 ${esc(usagePeriod)}의 수강 신청 ${fmtNum(u.last12mApplicants)}명(연인원)` : "없음"}</dd>
         <dt>출처</dt><dd>${(f.sources || []).map(provBadge.bind(null, "public")).join(" ")} ${esc((f.sources || []).join(", "))}</dd></dl>
         <h3 class="mt-16">강좌 ${f.courses.length}개</h3>
         <div class="table-wrap"><table class="table"><thead><tr><th>강좌</th><th>종목</th><th>시간</th><th class="num">월 수강료</th><th>마지막 월</th><th class="num">신청</th></tr></thead><tbody>

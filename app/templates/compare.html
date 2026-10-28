@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %}조합 비교 - {{ APP_NAME }}{% endblock %}
+{% block title %}조치 조합 비교 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
   <div class="page-head">
     <div><h1>조치 조합 비교</h1><p class="sub" id="cmp-sub">시나리오를 불러오는 중…</p></div>
-    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario">편집으로</a><button class="btn btn-primary btn-sm" id="to-plan" disabled>선택 조합으로 협의 계획 →</button></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario">지원 방안 편집</a><button class="btn btn-primary btn-sm" id="to-plan" disabled>선택 조합으로 협의 계획서 →</button></div>
   </div>
   <div class="notice mb-16"><b>현재 상태</b>는 추가 조치 없이 배정할 수 있는 예상 인원입니다. <b>예산 내 최선 조합</b>은 입력한 예산에서 배정 가능 인원이 가장 많은 조합입니다. <b>개별 효과 순 선택 결과</b>는 각 조치의 단독 효과가 큰 순서로 선택한 결과입니다. 함께 시행해야 효과가 나는 조치가 있으면 두 결과가 다를 수 있습니다. 예상 인원은 실제 참여 인원이 아닙니다.</div>
   <div id="cmp-root"><div class="empty-state"><span class="spinner"></span></div></div>

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% block title %}시군구 진단 - {{ APP_NAME }}{% endblock %}
+{% block title %}지역 현황 상세 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container" id="detail-root" data-region="{{ region_code }}">
   <div class="page-head">
-    <div><h1 id="region-title">시군구 진단</h1><p class="sub" id="region-sub">불러오는 중…</p></div>
+    <div><h1 id="region-title">지역 현황 상세</h1><p class="sub" id="region-sub">불러오는 중…</p></div>
     <div class="row">
       <a class="btn btn-ghost btn-sm" href="/gap">전국 비교</a>
-      <a class="btn btn-primary btn-sm" id="link-candidates" href="/gap/{{ region_code }}/candidates">유치 후보 보기</a>
-      <a class="btn btn-secondary btn-sm" id="link-scenario" href="/scenario?region={{ region_code }}">시나리오 만들기</a>
+      <a class="btn btn-primary btn-sm" id="link-candidates" href="/gap/{{ region_code }}/candidates">가맹 검토 시설 보기</a>
+      <a class="btn btn-secondary btn-sm" id="link-scenario" href="/scenario?region={{ region_code }}">지원 방안 작성</a>
     </div>
   </div>
   <div id="detail-body"><div class="empty-state"><span class="spinner"></span></div></div>

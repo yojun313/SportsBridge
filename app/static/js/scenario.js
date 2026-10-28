@@ -3,6 +3,22 @@
   const SPORTS = ["수영", "태권도", "헬스", "축구(풋살)", "복싱", "필라테스", "댄스(줌바 등)", "무용(발레 등)", "줄넘기", "농구", "야구", "검도", "유도", "합기도", "요가", "주짓수", "배드민턴", "탁구", "기타종목"];
   let sc = loadScenario() || emptyScenario();
   const $ = (id) => document.getElementById(id);
+  function revealHelp(hash) {
+    const target = document.getElementById(hash.replace(/^#/, ""));
+    const detail = $("sc-help-details");
+    if (!target || !detail || (target !== detail && !detail.contains(target))) return;
+    detail.open = true;
+    requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+  }
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest("a[data-scenario-help]");
+    if (!link || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    history.replaceState(null, "", link.hash);
+    revealHelp(link.hash);
+  });
+  window.addEventListener("hashchange", () => revealHelp(location.hash));
+  if (location.hash) revealHelp(location.hash);
   const sido = $("sc-sido"), sg = $("sc-sigungu"), sport = $("sc-sport");
   SPORTS.forEach((s) => { const o = document.createElement("option"); o.value = s; o.textContent = s; sport.appendChild(o); });
   function fillSigungu() {

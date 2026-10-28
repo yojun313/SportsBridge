@@ -3,10 +3,10 @@
   {% set nav = [("/user", "강좌 찾기"), ("/user/region", "지역 현황"), ("/user/facilities", "시설 검색"), ("/user/spaces", "공공 운동 공간"), ("/user/voice", "희망 강좌·시설 등록"), ("/user/planner", "지원금 계산"), ("/user/ask", "질문하기"), ("/user/help", "이용 안내"), ("/user/guide", "서비스 안내")] %}
   {% set brand_href = "/" %}{% set brand_sub = "이용자용 · 조건별 강좌·시설 검색" %}{% set switch_href = "/gap" %}{% set switch_label = "담당자용으로" %}
 {% elif app_mode == 'home' %}
-  {% set nav = [("/user", "이용자용"), ("/gap", "담당자용"), ("/guide", "설명서"), ("/admin", "관리자 대시보드")] %}
+  {% set nav = [("/user", "이용자용"), ("/gap", "담당자용"), ("/guide", "서비스 안내"), ("/admin", "관리자 대시보드")] %}
   {% set brand_href = "/" %}{% set brand_sub = APP_FULL_NAME %}{% set switch_href = none %}
 {% else %}
-  {% set nav = [("/admin", "대시보드"), ("/gap", "지역 현황"), ("/candidates", "가맹 검토"), ("/scenario", "지원 방안"), ("/agent", "질문하기"), ("/review", "자료 검토"), ("/data", "데이터 관리"), ("/guide", "이용 안내")] %}
+  {% set nav = [("/admin", "관리자 대시보드"), ("/gap", "지역 현황"), ("/candidates", "가맹 검토"), ("/scenario", "지원 방안"), ("/agent", "질문하기"), ("/data", "데이터 관리"), ("/guide", "서비스 안내")] %}
   {% set brand_href = "/" %}{% set brand_sub = "담당자용 · 지역별 공급 현황 분석" %}{% set switch_href = "/user" %}{% set switch_label = "이용자용으로" %}
 {% endif %}
 <header class="site-header">

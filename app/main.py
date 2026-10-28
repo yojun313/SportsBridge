@@ -25,7 +25,6 @@ from app.routes import (
     llm_routes,
     metadata_routes,
     page_routes,
-    review_routes,
     scenario_routes,
     user_routes,
 )
@@ -158,7 +157,6 @@ app.include_router(gap_routes.router)
 app.include_router(candidate_routes.router)
 app.include_router(scenario_routes.router)
 app.include_router(llm_routes.router)
-app.include_router(review_routes.router)
 app.include_router(agent_routes.router)
 app.include_router(user_routes.router)
 app.include_router(data_routes.router)

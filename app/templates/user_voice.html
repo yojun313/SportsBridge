@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}희망 강좌·시설 수요 등록 - {{ APP_NAME }}{% endblock %}
+{% block title %}희망 강좌·시설 등록 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
   <div class="page-head"><div><h1>희망 강좌·시설 등록 <button class="help-button" type="button" data-help-title="희망 사항 등록 안내" data-help="원하는 종목과 시간대, 이용을 희망하는 시설을 익명으로 등록할 수 있습니다. 등록 건수는 담당자가 지역별 강좌와 시설을 검토할 때 참고합니다." aria-label="희망 사항 등록 안내">?</button></h1><p class="sub">원하는 강좌나 스포츠 강좌이용권으로 이용하고 싶은 시설을 등록해 주세요. 의견은 익명으로 집계됩니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
@@ -38,7 +38,7 @@
       const slots = Object.entries(d.bySlot).map(([k, v]) => { const [dd, h] = k.split(":").map(Number); return [`${DOWS[dd]} ${String(h).padStart(2, "0")}시`, v]; }).sort((a, b) => b[1] - a[1]).slice(0, 8);
       const max = Math.max(1, ...slots.map((s) => s[1]));
       body.innerHTML = `
-        <div class="grid-3 mb-16"><div class="card stat"><div class="label">등록된 수요</div><div class="value">${fmtNum(d.demand.total)}<small>건</small></div></div><div class="card stat"><div class="label">가맹 요청</div><div class="value">${fmtNum(d.voteTotal)}<small>건</small></div></div><div class="card stat"><div class="label">가장 많은 종목</div><div class="value" style="font-size:18px">${d.demand.bySport.length ? esc(d.demand.bySport[0].sport) + " " + d.demand.bySport[0].count + "건" : "–"}</div></div></div>
+        <div class="grid-3 mb-16"><div class="card stat"><div class="label">등록된 수요</div><div class="value">${fmtNum(d.demand.total)}<small>건</small></div></div><div class="card stat"><div class="label">시설 이용 희망</div><div class="value">${fmtNum(d.voteTotal)}<small>건</small></div></div><div class="card stat"><div class="label">가장 많은 종목</div><div class="value" style="font-size:18px">${d.demand.bySport.length ? esc(d.demand.bySport[0].sport) + " " + d.demand.bySport[0].count + "건" : "–"}</div></div></div>
         <div class="grid-2 mb-16">
           <div class="card card-pad"><div class="card-head"><h3>종목별 희망 등록</h3></div>${d.demand.bySport.length ? `<div class="bar-list">${d.demand.bySport.map((s) => `<div class="bar-row"><span class="k">${esc(s.sport)}</span><div class="bar"><span style="width:${(s.count / d.demand.bySport[0].count * 100).toFixed(0)}%"></span></div><span class="v">${s.count}</span></div>`).join("")}</div>` : '<p class="muted">아직 등록된 희망 강좌가 없습니다.</p>'}</div>
           <div class="card card-pad"><div class="card-head"><h3>원하는 시간대</h3></div>${slots.length ? `<div class="bar-list">${slots.map(([k, v]) => `<div class="bar-row"><span class="k">${esc(k)}</span><div class="bar"><span style="width:${(v / max * 100).toFixed(0)}%"></span></div><span class="v">${v}</span></div>`).join("")}</div>` : '<p class="muted">–</p>'}</div>

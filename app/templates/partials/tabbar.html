@@ -8,10 +8,10 @@
   {% set switch = ("/gap", "담당자용으로") %}
 {% elif app_mode == 'admin' %}
   {% set tabs = [("/gap", "지역 현황", "📊"), ("/candidates", "가맹 검토", "📍"), ("/scenario", "지원 방안", "🧩"), ("/agent", "질문하기", "🤖")] %}
-  {% set more_items = [("/admin", "관리자 대시보드", "⚙"), ("/review", "검토", "✅"), ("/data", "데이터", "🗂"), ("/guide", "설명서", "📖")] %}
+  {% set more_items = [("/admin", "관리자 대시보드", "⚙"), ("/data", "데이터 관리", "🗂"), ("/guide", "서비스 안내", "📖")] %}
   {% set switch = ("/user", "이용자용으로") %}
 {% else %}
-  {% set tabs = [("/", "홈", "🏠"), ("/user", "이용자용", "🔎"), ("/gap", "담당자용", "📊"), ("/guide", "설명서", "📖")] %}
+  {% set tabs = [("/", "홈", "🏠"), ("/user", "이용자용", "🔎"), ("/gap", "담당자용", "📊"), ("/guide", "서비스 안내", "📖")] %}
   {% set more_items = [] %}
   {% set switch = none %}
 {% endif %}

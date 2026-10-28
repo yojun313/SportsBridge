@@ -171,13 +171,6 @@ async def agent_page(request: Request):
     )
 
 
-@router.get("/review")
-async def review_page(request: Request):
-    return templates.TemplateResponse(
-        request=request, name="review.html", context=await _ctx(request)
-    )
-
-
 @router.get("/guide")
 async def guide_page(request: Request):
     return templates.TemplateResponse(

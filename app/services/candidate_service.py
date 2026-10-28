@@ -18,7 +18,7 @@ SCORE_RULES = [
     {"key": "transit", "desc": "정류장 도보 5분 이내 +2, 10분 이내 +1 (공공시설만 데이터 있음)"},
     {"key": "indoor", "desc": "실내 +1"},
     {"key": "recent", "desc": "정보 갱신일이 2025년 이후 +1"},
-    {"key": "votes", "desc": "이용자 '가맹되면 다니겠다' 표시 건수만큼 +1 (최대 +3)"},
+    {"key": "votes", "desc": "시설 이용 희망 등록 1건당 +1 (최대 +3)"},
 ]
 
 BAD_GRADES = {"주의", "수리필요", "사용중지"}
@@ -109,7 +109,7 @@ async def list_candidates(
         v = votes.get(f["_id"], 0)
         if v:
             sc += min(v, 3)
-            why.append(f"이용자 가맹 요청 {v}건")
+            why.append(f"시설 이용 희망 등록 {v}건")
         f["votes"] = v
         f["facilityId"] = f.pop("_id")
         f["score"] = sc

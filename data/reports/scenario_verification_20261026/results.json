@@ -1,0 +1,942 @@
+{
+  "origin": "https://sportsbridge.o-r.kr",
+  "createdAt": "2026-10-26T03:08:32.579Z",
+  "assumptionsOnly": true,
+  "checks": [
+    {
+      "name": "예산 90만원: 가맹 협의+강좌 신설",
+      "passed": true,
+      "baseline": 0,
+      "best": 8,
+      "cost": 800000,
+      "greedy": 0,
+      "result": {
+        "mode": "capacity",
+        "objective": "assigned",
+        "baseline": {
+          "actions": [],
+          "assigned": 0,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 0,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 0,
+              "unmet": 8,
+              "connectedOptions": [
+                "existing"
+              ]
+            }
+          },
+          "blocked": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "reasons": [
+                "supply:not_opened",
+                "affiliation:not_affiliated"
+              ],
+              "labels": [
+                "강좌 미개설(신설 조치 필요)",
+                "비가맹 시설(가맹 조치 필요)"
+              ]
+            }
+          ]
+        },
+        "best": {
+          "actions": [
+            "affiliate",
+            "open_course"
+          ],
+          "assigned": 8,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 800000,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "count": 8
+            }
+          ],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 8,
+              "unmet": 0,
+              "connectedOptions": [
+                "existing",
+                "new"
+              ]
+            }
+          },
+          "blocked": [],
+          "overBudget": false,
+          "budgetUndetermined": false,
+          "assumptionDependent": [
+            "action:affiliate",
+            "action:open_course",
+            "capacity:existing",
+            "capacity:new"
+          ]
+        },
+        "greedy": {
+          "actions": [],
+          "objective": 0,
+          "costWon": 0,
+          "steps": []
+        },
+        "singles": {
+          "affiliate": {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 200000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ]
+          },
+          "open_course": null
+        },
+        "bundles": [
+          {
+            "actions": [
+              "affiliate",
+              "open_course"
+            ],
+            "assigned": 8,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 800000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "count": 8
+              }
+            ],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 8,
+                "unmet": 0,
+                "connectedOptions": [
+                  "existing",
+                  "new"
+                ]
+              }
+            },
+            "blocked": [],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "action:affiliate",
+              "action:open_course",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 0,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened",
+                  "affiliation:not_affiliated"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)",
+                  "비가맹 시설(가맹 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 200000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "action:affiliate",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          }
+        ],
+        "evaluated": 3,
+        "infeasible": 1,
+        "overBudget": 0,
+        "synergy": {
+          "comboGain": 8,
+          "sumOfSingleGains": 0,
+          "hasSynergy": true
+        },
+        "traceLabels": {
+          "supply:not_opened": "강좌 미개설(신설 조치 필요)",
+          "sport:mismatch": "종목 불일치",
+          "age:out_of_range": "대상 연령 불일치",
+          "time:unknown_schedule": "시간표 미확인",
+          "time:required_days_conflict": "필수 출석 요일이 가용시간과 충돌",
+          "time:attendance_rule_unknown": "출석 규칙 미확인(보수적으로 전 요일 필수 적용)",
+          "time:not_enough_selectable_days": "가용시간에 맞는 요일이 주당 횟수보다 적음",
+          "reach:not_reachable": "이동 불가(확인됨)",
+          "reach:needs_transport_support": "이동 지원 필요",
+          "affiliation:not_affiliated": "비가맹 시설(가맹 조치 필요)",
+          "affiliation:unknown": "가맹 여부 미확인",
+          "capacity:unknown": "정원 미확인(확정 배정 제외)"
+        },
+        "labels": {
+          "actions": {
+            "affiliate": "검증용 후보 시설 가맹 협의",
+            "open_course": "검증용 수영 강좌 8석 신설"
+          },
+          "options": {
+            "existing": "검증용 기존 강좌(가정)",
+            "new": "검증용 신설 강좌(가정)"
+          },
+          "groups": {
+            "d1": "검증용 수요 8명(가정)"
+          }
+        },
+        "validation": {
+          "ok": true,
+          "problems": [],
+          "unresolved": [],
+          "provenanceSummary": {
+            "assumed": 7
+          }
+        }
+      }
+    },
+    {
+      "name": "선택 조합의 협의 계획서",
+      "passed": true,
+      "source": "template",
+      "guard": []
+    },
+    {
+      "name": "예산 부족: 70만원",
+      "passed": true,
+      "baseline": 0,
+      "best": 0,
+      "result": {
+        "mode": "capacity",
+        "objective": "assigned",
+        "baseline": {
+          "actions": [],
+          "assigned": 0,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 0,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 0,
+              "unmet": 8,
+              "connectedOptions": [
+                "existing"
+              ]
+            }
+          },
+          "blocked": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "reasons": [
+                "supply:not_opened",
+                "affiliation:not_affiliated"
+              ],
+              "labels": [
+                "강좌 미개설(신설 조치 필요)",
+                "비가맹 시설(가맹 조치 필요)"
+              ]
+            }
+          ]
+        },
+        "best": {
+          "actions": [],
+          "assigned": 0,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 0,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 0,
+              "unmet": 8,
+              "connectedOptions": [
+                "existing"
+              ]
+            }
+          },
+          "blocked": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "reasons": [
+                "supply:not_opened",
+                "affiliation:not_affiliated"
+              ],
+              "labels": [
+                "강좌 미개설(신설 조치 필요)",
+                "비가맹 시설(가맹 조치 필요)"
+              ]
+            }
+          ],
+          "overBudget": false,
+          "budgetUndetermined": false,
+          "assumptionDependent": [
+            "capacity:existing",
+            "capacity:new"
+          ]
+        },
+        "greedy": {
+          "actions": [],
+          "objective": 0,
+          "costWon": 0,
+          "steps": []
+        },
+        "singles": {
+          "affiliate": {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 200000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ]
+          },
+          "open_course": null
+        },
+        "bundles": [
+          {
+            "actions": [
+              "affiliate",
+              "open_course"
+            ],
+            "assigned": 8,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 800000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "count": 8
+              }
+            ],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 8,
+                "unmet": 0,
+                "connectedOptions": [
+                  "existing",
+                  "new"
+                ]
+              }
+            },
+            "blocked": [],
+            "overBudget": true,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "action:affiliate",
+              "action:open_course",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 0,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened",
+                  "affiliation:not_affiliated"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)",
+                  "비가맹 시설(가맹 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 200000,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "action:affiliate",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          }
+        ],
+        "evaluated": 3,
+        "infeasible": 1,
+        "overBudget": 1,
+        "synergy": null,
+        "traceLabels": {
+          "supply:not_opened": "강좌 미개설(신설 조치 필요)",
+          "sport:mismatch": "종목 불일치",
+          "age:out_of_range": "대상 연령 불일치",
+          "time:unknown_schedule": "시간표 미확인",
+          "time:required_days_conflict": "필수 출석 요일이 가용시간과 충돌",
+          "time:attendance_rule_unknown": "출석 규칙 미확인(보수적으로 전 요일 필수 적용)",
+          "time:not_enough_selectable_days": "가용시간에 맞는 요일이 주당 횟수보다 적음",
+          "reach:not_reachable": "이동 불가(확인됨)",
+          "reach:needs_transport_support": "이동 지원 필요",
+          "affiliation:not_affiliated": "비가맹 시설(가맹 조치 필요)",
+          "affiliation:unknown": "가맹 여부 미확인",
+          "capacity:unknown": "정원 미확인(확정 배정 제외)"
+        },
+        "labels": {
+          "actions": {
+            "affiliate": "검증용 후보 시설 가맹 협의",
+            "open_course": "검증용 수영 강좌 8석 신설"
+          },
+          "options": {
+            "existing": "검증용 기존 강좌(가정)",
+            "new": "검증용 신설 강좌(가정)"
+          },
+          "groups": {
+            "d1": "검증용 수요 8명(가정)"
+          }
+        },
+        "validation": {
+          "ok": true,
+          "problems": [],
+          "unresolved": [],
+          "provenanceSummary": {
+            "assumed": 7
+          }
+        }
+      }
+    },
+    {
+      "name": "시간대 불일치",
+      "passed": true,
+      "best": 0,
+      "selectedPairAssigned": 0,
+      "blocked": [
+        {
+          "groupId": "d1",
+          "optionId": "existing",
+          "reasons": [
+            "time:required_days_conflict"
+          ],
+          "labels": [
+            "필수 출석 요일이 가용시간과 충돌"
+          ]
+        },
+        {
+          "groupId": "d1",
+          "optionId": "new",
+          "reasons": [
+            "time:required_days_conflict"
+          ],
+          "labels": [
+            "필수 출석 요일이 가용시간과 충돌"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "신설 정원 미입력",
+      "passed": true,
+      "validation": {
+        "ok": false,
+        "problems": [
+          "조치 open_course: 신설 정원이 없어 확정 배정에서 제외됩니다(구조 탐색 모드에서는 연결 여부만 봅니다)"
+        ],
+        "unresolved": [
+          {
+            "kind": "capacity",
+            "id": "new",
+            "text": "'검증용 신설 강좌(가정)' 정원 미확인"
+          }
+        ],
+        "provenanceSummary": {
+          "assumed": 6
+        }
+      }
+    },
+    {
+      "name": "조치 비용 미확인",
+      "passed": true,
+      "best": 0,
+      "result": {
+        "mode": "capacity",
+        "objective": "assigned",
+        "baseline": {
+          "actions": [],
+          "assigned": 0,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 0,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 0,
+              "unmet": 8,
+              "connectedOptions": [
+                "existing"
+              ]
+            }
+          },
+          "blocked": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "reasons": [
+                "supply:not_opened",
+                "affiliation:not_affiliated"
+              ],
+              "labels": [
+                "강좌 미개설(신설 조치 필요)",
+                "비가맹 시설(가맹 조치 필요)"
+              ]
+            }
+          ]
+        },
+        "best": {
+          "actions": [],
+          "assigned": 0,
+          "connectedGroups": 1,
+          "totalDemand": 8,
+          "costWon": 0,
+          "unknownCostActions": [],
+          "unknownCapacityOptions": [],
+          "assignments": [],
+          "perGroup": {
+            "d1": {
+              "size": 8,
+              "assigned": 0,
+              "unmet": 8,
+              "connectedOptions": [
+                "existing"
+              ]
+            }
+          },
+          "blocked": [
+            {
+              "groupId": "d1",
+              "optionId": "new",
+              "reasons": [
+                "supply:not_opened",
+                "affiliation:not_affiliated"
+              ],
+              "labels": [
+                "강좌 미개설(신설 조치 필요)",
+                "비가맹 시설(가맹 조치 필요)"
+              ]
+            }
+          ],
+          "overBudget": false,
+          "budgetUndetermined": false,
+          "assumptionDependent": [
+            "capacity:existing",
+            "capacity:new"
+          ]
+        },
+        "greedy": {
+          "actions": [],
+          "objective": 0,
+          "costWon": 0,
+          "steps": []
+        },
+        "singles": {
+          "affiliate": {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 0,
+            "unknownCostActions": [
+              "affiliate"
+            ],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ]
+          },
+          "open_course": null
+        },
+        "bundles": [
+          {
+            "actions": [
+              "affiliate",
+              "open_course"
+            ],
+            "assigned": 8,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 600000,
+            "unknownCostActions": [
+              "affiliate"
+            ],
+            "unknownCapacityOptions": [],
+            "assignments": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "count": 8
+              }
+            ],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 8,
+                "unmet": 0,
+                "connectedOptions": [
+                  "existing",
+                  "new"
+                ]
+              }
+            },
+            "blocked": [],
+            "overBudget": false,
+            "budgetUndetermined": true,
+            "assumptionDependent": [
+              "action:affiliate",
+              "action:open_course",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 0,
+            "unknownCostActions": [],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened",
+                  "affiliation:not_affiliated"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)",
+                  "비가맹 시설(가맹 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": false,
+            "assumptionDependent": [
+              "capacity:existing",
+              "capacity:new"
+            ]
+          },
+          {
+            "actions": [
+              "affiliate"
+            ],
+            "assigned": 0,
+            "connectedGroups": 1,
+            "totalDemand": 8,
+            "costWon": 0,
+            "unknownCostActions": [
+              "affiliate"
+            ],
+            "unknownCapacityOptions": [],
+            "assignments": [],
+            "perGroup": {
+              "d1": {
+                "size": 8,
+                "assigned": 0,
+                "unmet": 8,
+                "connectedOptions": [
+                  "existing"
+                ]
+              }
+            },
+            "blocked": [
+              {
+                "groupId": "d1",
+                "optionId": "new",
+                "reasons": [
+                  "supply:not_opened"
+                ],
+                "labels": [
+                  "강좌 미개설(신설 조치 필요)"
+                ]
+              }
+            ],
+            "overBudget": false,
+            "budgetUndetermined": true,
+            "assumptionDependent": [
+              "action:affiliate",
+              "capacity:existing",
+              "capacity:new"
+            ]
+          }
+        ],
+        "evaluated": 3,
+        "infeasible": 1,
+        "overBudget": 0,
+        "synergy": null,
+        "traceLabels": {
+          "supply:not_opened": "강좌 미개설(신설 조치 필요)",
+          "sport:mismatch": "종목 불일치",
+          "age:out_of_range": "대상 연령 불일치",
+          "time:unknown_schedule": "시간표 미확인",
+          "time:required_days_conflict": "필수 출석 요일이 가용시간과 충돌",
+          "time:attendance_rule_unknown": "출석 규칙 미확인(보수적으로 전 요일 필수 적용)",
+          "time:not_enough_selectable_days": "가용시간에 맞는 요일이 주당 횟수보다 적음",
+          "reach:not_reachable": "이동 불가(확인됨)",
+          "reach:needs_transport_support": "이동 지원 필요",
+          "affiliation:not_affiliated": "비가맹 시설(가맹 조치 필요)",
+          "affiliation:unknown": "가맹 여부 미확인",
+          "capacity:unknown": "정원 미확인(확정 배정 제외)"
+        },
+        "labels": {
+          "actions": {
+            "affiliate": "검증용 후보 시설 가맹 협의",
+            "open_course": "검증용 수영 강좌 8석 신설"
+          },
+          "options": {
+            "existing": "검증용 기존 강좌(가정)",
+            "new": "검증용 신설 강좌(가정)"
+          },
+          "groups": {
+            "d1": "검증용 수요 8명(가정)"
+          }
+        },
+        "validation": {
+          "ok": true,
+          "problems": [],
+          "unresolved": [
+            {
+              "kind": "cost",
+              "id": "affiliate",
+              "text": "'검증용 후보 시설 가맹 협의' 비용 미확인"
+            }
+          ],
+          "provenanceSummary": {
+            "assumed": 6
+          }
+        }
+      }
+    }
+  ],
+  "consoleErrors": []
+}

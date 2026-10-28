@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}시설 찾기 - {{ APP_NAME }}{% endblock %}
+{% block title %}스포츠 강좌이용권 사용 가능 시설 - {{ APP_NAME }}{% endblock %}
 {% block content %}
 <div class="container">
   <div class="page-head"><div><h1>스포츠 강좌이용권 사용 가능 시설 <button class="help-button" type="button" data-help-title="시설 검색 안내" data-help="지역을 선택하고 종목·시간대 또는 시설명으로 검색할 수 있습니다. 시설을 선택하면 확인된 강좌와 이용 기록을 볼 수 있습니다. 최근 이용 기록이 현재 모집 중임을 의미하지는 않습니다." aria-label="시설 검색 안내">?</button></h1><p class="sub">종목·시간대·시설명으로 스포츠 강좌이용권 가맹시설과 강좌 정보를 확인합니다.</p></div>{% include "partials/user_region_picker.html" %}</div>
@@ -7,7 +7,7 @@
     <select class="input" id="f-sport" style="width:auto;min-width:140px"><option value="">모든 종목</option></select>
     <input class="input" id="f-q" placeholder="시설 이름" style="min-width:160px" />
     <label class="checkbox-row" style="margin:0"><input type="checkbox" id="f-evening" /> <span>저녁 강좌 있는 곳만</span></label>
-    <label class="checkbox-row" style="margin:0"><input type="checkbox" id="f-active" checked /> <span>최근 1년 운영 중만</span></label>
+    <label class="checkbox-row" style="margin:0"><input type="checkbox" id="f-active" checked /> <span>최근 운영 기록 있는 곳만</span></label>
     <button class="btn btn-primary" id="f-go">찾기</button>
   </div></div>
   <div id="uf-body"><div class="notice">시군구를 선택해 주세요.</div></div>
