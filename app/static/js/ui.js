@@ -50,10 +50,18 @@ function fmtSessions(sessions) {
 }
 
 const PROV_LABEL = { public: "공공자료", llm_extracted: "AI추출·미검토", llm_reviewed: "AI추출·검토완료", confirmed: "담당자확인", assumed: "가정", rule: "규칙" };
+const PROV_HELP = {
+  public: "공개 자료에서 가져온 정보입니다. 자료의 기준일과 현재 상황이 다를 수 있습니다.",
+  llm_extracted: "AI가 추출했으며 담당자가 아직 검토하지 않은 정보입니다.",
+  llm_reviewed: "AI 추출 결과를 담당자가 검토한 정보입니다. 현재 운영 상황은 별도 확인이 필요합니다.",
+  confirmed: "입력자가 담당자 확인값으로 표시한 정보입니다. 확인 근거를 함께 검토해야 합니다.",
+  assumed: "모의 계산을 위해 가정한 값입니다. 실제 정원·비용·운영 상태가 확정된 값이 아닙니다.",
+  rule: "정해진 분류·계산 규칙을 적용한 결과입니다. 시설 실사나 사업 승인 결과가 아닙니다.",
+};
 
 function provBadge(p) {
   const label = PROV_LABEL[p] || p || "미상";
-  return `<span class="prov prov-${esc(p || "unknown")}">${esc(label)}</span>`;
+  return `<span class="prov prov-${esc(p || "unknown")}" tabindex="0" data-tooltip="${esc(PROV_HELP[p] || "정보의 출처나 확인 상태를 판단할 수 없습니다.")}">${esc(label)}</span>`;
 }
 
 function openDialog(id) { const el = document.getElementById(id); if (el) el.classList.add("open"); }
@@ -127,8 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const fill = document.getElementById("global-import-fill"), text = document.getElementById("global-import-text");
   let wasRunning = false, timer = null;
   function render(j) {
-    if (j.status === "running") { bar.hidden = false; fill.style.width = (j.percent || 0) + "%"; text.textContent = `데이터 적재 중 ${j.percent || 0}% · ${j.stepLabel || ""}${j.message ? " — " + j.message : ""}`; wasRunning = true; }
-    else if (wasRunning) { bar.hidden = false; fill.style.width = "100%"; text.textContent = j.status === "done" ? `적재 완료 · 새 버전 ${j.version || ""} 적용. 새로고침하면 반영됩니다.` : `적재 실패: ${j.message || ""}`; wasRunning = false; setTimeout(() => { bar.hidden = true; }, 12000); }
+    if (j.status === "running") { bar.hidden = false; fill.style.width = (j.percent || 0) + "%"; text.textContent = `데이터 반영 중 ${j.percent || 0}% · ${j.stepLabel || ""}${j.message ? " — " + j.message : ""}`; wasRunning = true; }
+    else if (wasRunning) { bar.hidden = false; fill.style.width = "100%"; text.textContent = j.status === "done" ? `데이터 반영 완료 · 새 버전 ${j.version || ""} 적용. 새로고침하면 반영됩니다.` : `데이터 반영 실패: ${j.message || ""}`; wasRunning = false; setTimeout(() => { bar.hidden = true; }, 12000); }
     else bar.hidden = true;
     schedule(j.status === "running" ? 2000 : 15000);
   }

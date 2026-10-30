@@ -79,7 +79,7 @@ async def region_overview(region_code: str):
     plain = []
     if r.get("activeFacilityCount") is not None:
         plain.append(
-            f"최근 1년간 스포츠 강좌이용권 강좌 운영 기록이 있는 시설은 {r['activeFacilityCount']}곳, 강좌는 {r['activeCourseCount']}개입니다."
+            f"집계기간에 스포츠 강좌이용권 강좌 기록이 있는 시설은 {r['activeFacilityCount']}곳, 강좌는 {r['activeCourseCount']}개입니다."
         )
     if r.get("topSport"):
         plain.append(

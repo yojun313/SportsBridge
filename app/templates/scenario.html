@@ -3,68 +3,75 @@
 {% block content %}
 <div class="container">
   <div class="page-head">
-    <div><h1>지원 방안 시뮬레이션 <button class="help-button" type="button" data-help-title="지원 방안 작성 안내" data-help="지원할 집단과 강좌, 개선 조치·예산을 입력해 조합을 비교합니다. 정원과 조치 비용은 직접 확인하거나 가정값으로 입력해야 합니다. 페이지 상단의 ‘사용방법’에서 항목별 설명과 검증한 예시를 확인할 수 있습니다." aria-label="지원 방안 작성 안내">?</button></h1><p class="sub">지역의 수요와 강좌, 개선 조치를 입력해 예산에 맞는 지원 방안을 비교합니다. 입력 내용은 현재 브라우저에 저장됩니다.</p></div>
-    <div class="row">
-      <a class="btn btn-outline btn-sm" href="#sc-help-details" data-scenario-help>사용방법</a>
-      <button class="btn btn-ghost btn-sm" id="sc-reset">새로 만들기</button>
-      <button class="btn btn-ghost btn-sm" id="sc-export">JSON 내보내기</button>
-      <label class="btn btn-ghost btn-sm" for="sc-import">JSON 불러오기</label><input type="file" id="sc-import" accept="application/json" hidden />
-    </div>
+    <div><h1>지원 방안 시뮬레이션 <button class="help-button" type="button" data-help-title="지원 방안 작성 안내" data-help="지원할 집단과 강좌, 개선 조치·예산을 입력해 조합을 비교합니다. 정원과 조치 비용은 직접 확인하거나 가정값으로 입력해야 합니다. 페이지 상단의 ‘사용방법’에서 항목별 설명과 검증한 예시를 확인할 수 있습니다." aria-label="지원 방안 작성 안내">?</button></h1><p class="sub">지역과 강좌, 지원할 인원과 예산을 입력해 지원 방안을 비교합니다. 사용방법의 예시 입력값을 불러오면 조합 계산만 눌러 결과를 확인할 수 있습니다.</p></div>
+    <div class="row"><a class="btn btn-outline btn-sm" href="#sc-help-details" data-scenario-help data-tooltip="상세 입력 방법과 예시 입력값을 사용방법에서 확인합니다.">자세한 사용방법</a></div>
   </div>
+
 
   {% include "partials/scenario_help.html" %}
 
-  <div class="card card-pad mb-16 scenario-step" id="sc-step-region">
-    <div class="card-head"><h3>1. 지역과 종목</h3>{% if LLM_ENABLED %}<a class="btn btn-sm btn-outline" href="/agent">질문으로 지원 방안 찾기</a>{% endif %}</div>
-    <div class="input-row">
-      <select class="input" id="sc-sido" aria-label="시도"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
-      <select class="input" id="sc-sigungu" aria-label="시군구"><option value="">시군구</option></select>
-      <select class="input" id="sc-sport" aria-label="종목"></select>
-      <button class="btn btn-primary" id="sc-load">강좌·시설 불러오기</button>
+  <section id="sc-advanced" aria-label="상세 시뮬레이션 입력">
+    <p class="small muted" id="sc-existing-note">실제 적용 시에는 시설에 추가 정원과 비용을 확인한 뒤 입력해 주세요.</p>
+    <div class="row">
+      <a class="btn btn-outline btn-sm" href="#sc-help-details" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">사용방법</a>
+      <button class="btn btn-ghost btn-sm" id="sc-reset" data-tooltip="현재 브라우저의 작성 내용을 새 지원 방안으로 초기화합니다. 필요한 내용은 먼저 JSON 파일로 내려받으세요.">새로 만들기</button>
+      <button class="btn btn-ghost btn-sm" id="sc-export" data-tooltip="작성한 집단·강좌·조치·예산을 JSON 파일로 내려받습니다. 다른 브라우저에서 다시 불러올 수 있습니다.">JSON 내보내기</button>
+      <label class="btn btn-ghost btn-sm" for="sc-import" data-tooltip="JSON 파일로 저장한 지원 방안을 불러와 현재 작성 내용을 교체합니다.">JSON 불러오기</label><input type="file" id="sc-import" data-tooltip="기존 JSON 파일의 지원 방안을 불러옵니다. 현재 작성 내용이 교체되므로 필요한 내용은 먼저 내려받으세요." accept="application/json" hidden />
     </div>
-    <p class="faint mt-8" id="sc-load-note">지역과 종목을 선택해 불러오면 최근 운영 기록이 있는 가맹 강좌 최대 20개와 가맹 검토 시설 최대 5곳이 추가됩니다. 정원과 비용은 직접 확인하거나 가정값으로 입력해 주세요. <a href="#sc-help-region" data-scenario-help>불러오는 자료와 작성 순서</a></p>
+
+  <div class="card card-pad mb-16 scenario-step" id="sc-step-region">
+    <div class="card-head"><h3>1. 지역과 종목</h3>{% if LLM_ENABLED %}<a class="btn btn-sm btn-outline" href="/agent" data-tooltip="지역 현황이나 지원 방안에 관해 질문하고 조회 자료와 계산 결과를 확인합니다.">질문으로 지원 방안 찾기</a>{% endif %}</div>
+    <div class="input-row">
+      <select class="input" id="sc-sido" data-tooltip="검토할 시도를 선택합니다. 시군구를 선택하고 불러오기 버튼을 눌러 자료를 추가하세요." aria-label="시도"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
+      <select class="input" id="sc-sigungu" data-tooltip="자료를 불러올 시군구를 선택합니다. 기존에 입력한 집단·강좌가 자동 삭제되지는 않습니다." aria-label="시군구"><option value="">시군구</option></select>
+      <select class="input" id="sc-sport" data-tooltip="불러올 가맹 강좌와 가맹 검토 시설의 검토 종목을 선택합니다." aria-label="종목"></select>
+      <button class="btn btn-primary" id="sc-load" data-tooltip="선택 지역·종목의 기존 강좌 최대 20개, 가맹 검토 시설 최대 5곳과 등록 희망 조건을 추가합니다. 정원·비용은 직접 확인해야 합니다.">강좌·시설 불러오기</button>
+    </div>
+    <p class="faint mt-8" id="sc-load-note">지역과 종목을 선택해 불러오면 집계기간에 기록이 있는 가맹 강좌 최대 20개와 가맹 검토 시설 최대 5곳이 추가됩니다. 정원과 비용은 직접 확인하거나 가정값으로 입력해 주세요. <a href="#sc-help-region" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">불러오는 자료와 작성 순서</a></p>
   </div>
 
   <div class="card card-pad mb-16 scenario-step" id="sc-step-demand">
-    <div class="card-head"><h3>2. 수요 집단 <span class="faint">(익명 집단, 최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-group">+ 집단</button></div>
+    <div class="card-head"><h3>2. 수요 집단 <span class="faint">(익명 집단, 최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-group" data-tooltip="동일한 종목·시간·이동 조건으로 검토할 익명 집단을 추가합니다. 최대 10개이며 개인 이름은 입력하지 마세요.">+ 집단</button></div>
     <p class="faint mb-8">같은 조건으로 강좌를 이용하려는 사람들을 집단으로 입력합니다. 예를 들어 “8명, 월·수·금 15~18시 이용 가능”처럼 인원과 시간을 적어 주세요. 이름 등 개인정보는 입력하지 마세요. 등록된 희망 강좌도 불러올 수 있습니다.</p>
-    <p class="small"><a href="#sc-help-demand" data-scenario-help>인원·시간·연령·이동 조건 입력방법</a></p>
+    <p class="small"><a href="#sc-help-demand" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">인원·시간·연령·이동 조건 입력방법</a></p>
     <div class="list-editor" id="groups"></div>
   </div>
 
   <div class="card card-pad mb-16 scenario-step" id="sc-step-supply">
-    <div class="card-head"><h3>3. 이용 가능한 강좌 <span class="faint">(기존·신설 예정 강좌, 최대 30)</span></h3><button class="btn btn-sm btn-secondary" id="add-option">+ 강좌</button></div>
+    <div class="card-head"><h3>3. 이용 가능한 강좌 <span class="faint">(기존·신설 예정 강좌, 최대 30)</span></h3><button class="btn btn-sm btn-secondary" id="add-option" data-tooltip="기존 또는 신설 예정 강좌를 추가합니다. 최대 30개이며 시간표·가맹 여부·추가 수용 인원을 확인해야 합니다.">+ 강좌</button></div>
     <p class="faint mb-8">현재 운영 중인 강좌와 새로 개설할 강좌를 입력합니다. 시간표가 없으면 이용 가능 시간을 비교할 수 없습니다. 정원을 입력하지 않은 강좌는 배정 가능 인원 계산에서 제외됩니다.</p>
-    <p class="small"><a href="#sc-help-supply" data-scenario-help>추가 수용 정원·신설 정원·출석 규칙 입력방법</a></p>
+    <p class="small"><a href="#sc-help-supply" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">추가 수용 정원·신설 정원·출석 규칙 입력방법</a></p>
     <div class="list-editor" id="options"></div>
   </div>
 
   <div class="card card-pad mb-16 scenario-step" id="sc-step-actions">
-    <div class="card-head"><h3>4. 개선 조치 <span class="faint">(최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-action">+ 조치</button></div>
-    <p class="faint mb-8">가맹 협의·강좌 신설·정원 추가·이동 지원을 입력합니다. 비가맹 시설의 신설 강좌에는 가맹 협의가 필요합니다. 확인한 비용이나 시험할 가정값을 입력하고 출처를 구분해 주세요. <a href="#sc-help-actions" data-scenario-help>조치 종류·비용·선행 조건 입력방법</a></p>
+    <div class="card-head"><h3>4. 개선 조치 <span class="faint">(최대 10)</span></h3><button class="btn btn-sm btn-secondary" id="add-action" data-tooltip="가맹 협의·강좌 신설·정원 추가·이동 지원 중 한 조치를 추가합니다. 최대 10개 조치의 조합을 비교합니다.">+ 조치</button></div>
+    <p class="faint mb-8">가맹 협의·강좌 신설·정원 추가·이동 지원을 입력합니다. 비가맹 시설의 신설 강좌에는 가맹 협의가 필요합니다. 확인한 비용이나 시험할 가정값을 입력하고 출처를 구분해 주세요. <a href="#sc-help-actions" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">조치 종류·비용·선행 조건 입력방법</a></p>
     <div class="list-editor" id="actions"></div>
   </div>
 
   <div class="card card-pad scenario-step" id="sc-step-budget">
-    <h3>5. 예산과 모드</h3>
-    <p class="faint mb-8">예산을 입력하면 예산 범위에서 배정 가능 인원이 가장 많은 조합을 찾습니다. ‘정원·비용 시뮬레이션’은 예상 인원을, ‘구조 탐색’은 정원 정보 없이 이용 가능한 집단 수를 계산합니다.</p>
-    <p class="small"><a href="#sc-help-budget" data-scenario-help>예산·모드 선택방법</a> · <a href="#sc-help-example" data-scenario-help>검증한 8명 배정 예시</a> · <a href="#sc-help-errors" data-scenario-help>오류가 나거나 0명일 때</a></p>
+    <h3>5. 예산과 계산 방식</h3>
+    <p class="faint mb-8">예산을 입력하면 예산 범위에서 배정 가능 인원이 가장 많은 조합을 찾습니다. ‘정원·비용 시뮬레이션’은 예상 인원을, ‘정원 미적용 비교’는 정원 정보 없이 이용 가능한 집단 수를 계산합니다.</p>
+    <p class="small"><a href="#sc-help-budget" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">예산·모드 선택방법</a> · <a href="#sc-help-example" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">검증한 8명 배정 예시</a> · <a href="#sc-help-errors" data-scenario-help data-tooltip="이 항목의 자세한 입력 방법과 해석 기준을 펼쳐 확인합니다.">오류가 나거나 0명일 때</a></p>
     <div class="input-row">
-      <div class="field" style="flex:1;min-width:180px"><label for="sc-budget">예산(원, 비우면 무제한)</label><input class="input" id="sc-budget" type="number" min="0" step="10000" /></div>
-      <div class="field" style="flex:1;min-width:220px"><label for="sc-mode">모드</label><select class="input" id="sc-mode"><option value="capacity">정원·비용 시뮬레이션 (사람 수 배정)</option><option value="structure">구조 탐색 (정원 없이 연결 가능 집단 수)</option></select></div>
-      <div class="field" style="flex:2;min-width:220px"><label for="sc-title">제목</label><input class="input" id="sc-title" placeholder="예: 종로구 초등 저학년 수영" /></div>
+      <div class="field" style="flex:1;min-width:180px"><label for="sc-budget">예산(원, 비우면 무제한)</label><input class="input" id="sc-budget" data-tooltip="개선 조치 비용의 합계 한도입니다. 수강료 예산과 다릅니다. 빈칸은 한도 없음, 0은 0원인 조합만 최선 후보로 검토합니다." type="number" min="0" step="10000" /></div>
+      <div class="field" style="flex:1;min-width:220px"><label for="sc-mode">계산 방식</label><select class="input" id="sc-mode" data-tooltip="정원·비용 모드는 배정 가능 인원을, 정원 미적용 비교는 정원 제한 없이 연결 가능한 집단 수를 비교합니다."><option value="capacity">정원·비용 시뮬레이션 (사람 수 배정)</option><option value="structure">정원 미적용 비교 (정원 없이 연결 가능 집단 수)</option></select></div>
+      <div class="field" style="flex:2;min-width:220px"><label for="sc-title">제목</label><input class="input" id="sc-title" data-tooltip="작성한 지원 방안을 구분할 제목입니다. 개인 이름이나 연락처는 입력하지 마세요." placeholder="예: 종로구 초등 저학년 수영" /></div>
     </div>
     <div id="sc-validation"></div>
   </div>
   <div class="sticky-actions">
-    <span class="faint" id="sc-saved"></span>
-    <button class="btn btn-ghost" id="sc-validate">검증</button>
-    <button class="btn btn-primary" id="sc-compare">조합 계산 →</button>
+    <span class="faint" id="sc-saved" data-tooltip="입력은 현재 브라우저의 저장 공간에 보관됩니다. 검증·계산·문서 요청 시에는 입력값이 서버로 전송됩니다."></span>
+    <button class="btn btn-ghost" id="sc-validate" data-tooltip="누락된 조치 연결·정원·비용 등 입력 오류와 확인할 항목을 검사합니다. 실제 시설 운영 상태를 검증하는 기능은 아닙니다.">검증</button>
+    <button class="btn btn-primary" id="sc-compare" data-tooltip="입력 오류를 검사한 뒤 가능한 조치 조합을 비교합니다. 계산 결과는 입력한 정원·비용·조건과 가정에 따라 달라집니다.">조합 계산 →</button>
   </div>
+  </section>
 </div>
 {% endblock %}
 {% block extra_scripts %}
 <script nonce="{{ request.state.csp_nonce }}">window.META = {{ meta | tojson }};</script>
 <script src="{{ asset('js/scenario-store.js') }}"></script>
+<script src="{{ asset('js/scenario-presets.js') }}"></script>
 <script src="{{ asset('js/scenario.js') }}"></script>
 {% endblock %}

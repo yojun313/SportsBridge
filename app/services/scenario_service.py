@@ -125,18 +125,18 @@ def validate(sc: Scenario) -> dict:
     for a in sc.actions:
         if a.kind in ("open_course", "add_capacity") and a.supplyOptionId not in opt_ids:
             problems.append(
-                f"조치 {a.id}: supplyOptionId '{a.supplyOptionId}'가 공급 옵션에 없습니다"
+                f"조치 {a.id}: 연결할 강좌 ID '{a.supplyOptionId}'가 강좌 목록에 없습니다"
             )
         if a.kind == "transport" and a.demandGroupId not in grp_ids:
             problems.append(
-                f"조치 {a.id}: demandGroupId '{a.demandGroupId}'가 수요 집단에 없습니다"
+                f"조치 {a.id}: 연결할 집단 ID '{a.demandGroupId}'가 수요 집단 목록에 없습니다"
             )
         for r in a.requires + a.conflicts:
             if r not in act_ids:
                 problems.append(f"조치 {a.id}: 참조 조치 '{r}'가 없습니다")
         if a.kind == "open_course" and a.capacity is None and sc.mode == "capacity":
             problems.append(
-                f"조치 {a.id}: 신설 정원이 없어 확정 배정에서 제외됩니다(구조 탐색 모드에서는 연결 여부만 봅니다)"
+                f"조치 {a.id}: 신설 정원이 없어 확정 배정에서 제외됩니다(정원 미적용 비교 모드에서는 연결 여부만 봅니다)"
             )
     unresolved = []
     for o in sc.supplyOptions:

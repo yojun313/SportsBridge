@@ -8,6 +8,20 @@ from app.services import catalog_service, scenario_service
 router = APIRouter(prefix="/api/scenarios", tags=["scenario"])
 
 
+@router.get("/presets")
+async def presets(
+    region: str = Query("11110", min_length=5, max_length=5),
+    sport: str = Query("수영", min_length=1, max_length=40),
+):
+    from app.services.scenario_presets import build_presets
+
+    version = await catalog_service.require_version()
+    meta = await catalog_service.metadata()
+    return jsonable(
+        await build_presets(version, meta.get("activeCutoffMonth") or "", region, sport)
+    )
+
+
 @router.get("/supply")
 async def supply(
     region: str = Query(..., min_length=5, max_length=5),

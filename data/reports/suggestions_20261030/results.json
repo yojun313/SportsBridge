@@ -1,0 +1,12 @@
+{
+  "publicWrite": true,
+  "anonymous": true,
+  "adminProtected": true,
+  "adminAuthorName": true,
+  "boardSeparation": true,
+  "xssEscaped": true,
+  "mobileNoOverflow": true,
+  "rootDelete": true,
+  "persistedAfterReload": true,
+  "errors": []
+}

@@ -5,16 +5,17 @@
     <span class="badge">국민체육진흥공단 공공데이터 활용</span>
     <h1>운동 기회와 지역 공급을 연결하는<br />스포츠브릿지</h1>
     <p class="subtitle">
-      이용자는 지역과 시간에 맞는 강좌와 운동 공간을 찾을 수 있습니다. 담당자는 등록된 희망 강좌와 시설 이용 의견을 참고해 가맹시설과 새 강좌를 검토할 수 있습니다.
+      <span>이용자는 지역과 시간에 맞는 강좌와 운동 공간을 찾을 수 있습니다.</span>
+      <span>담당자는 등록된 희망 강좌와 시설 이용 의견을 참고해 가맹시설과 새 강좌를 검토할 수 있습니다.</span>
     </p>
     <div class="mode-grid">
-      <a class="mode-card" href="/user">
+      <a class="mode-card" href="/user" data-tooltip="지역·종목·시간·예산으로 스포츠 강좌이용권 강좌를 찾습니다.">
         <div class="mode-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21v-2a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v2"/></svg></div>
         <h2>이용자용</h2>
         <p>스포츠 강좌이용권 대상자와 지역 주민이 강좌와 공공 운동 공간을 찾을 수 있습니다. 지역·종목·시간·예산을 입력하면 조건에 맞는 결과와 조정할 수 있는 조건을 안내합니다.</p>
         <span class="btn btn-primary">조건에 맞는 강좌 찾기</span>
       </a>
-      <a class="mode-card" href="/gap">
+      <a class="mode-card" href="/gap" data-tooltip="시군구별 가맹시설·종목·시간대·수급률을 비교합니다.">
         <div class="mode-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 4 3 5-6"/></svg></div>
         <h2>담당자용</h2>
         <p>지자체·공단·복지기관 담당자가 지역별 시설·강좌 현황을 살펴보고, 가맹 검토 시설과 강좌 개설 방안을 비교할 수 있습니다. 이용자가 등록한 희망 강좌와 시설 의견도 함께 확인할 수 있습니다.</p>
@@ -22,15 +23,15 @@
       </a>
     </div>
     <div class="cta-row mt-16">
-      <a class="btn btn-ghost" href="/agent">질문으로 알아보기</a>
-      <a class="btn btn-outline" href="/guide">서비스 안내</a>
+      <a class="btn btn-ghost" href="/agent" data-tooltip="공개 지역 현황과 계산 결과를 참고해 지원 방안을 질문합니다.">질문으로 알아보기</a>
+      <a class="btn btn-outline" href="/guide" data-tooltip="서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.">서비스 안내</a>
     </div>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2 class="section-title">이용 의견이 공급 검토에 반영되는 과정</h2>
+    <h2 class="section-title">이용 의견이 공급 검토에 반영되는 과정 <button class="help-button" type="button" data-help-title="이용 의견과 지원 방안의 관계" data-help="이용자는 희망 종목·시간대와 시설 의견을 익명으로 등록할 수 있습니다. 담당자는 이를 공개 시설·강좌 현황과 함께 확인하고 가맹·개설·정원·이동 지원 조합을 검토합니다. 희망 등록은 실제 수강 신청이나 정책 시행을 보장하는 절차가 아닙니다." aria-label="이용 의견과 지원 방안 안내">?</button></h2>
     <p class="section-subtitle">이용자가 등록한 희망 강좌와 시설 의견을 담당자가 지역별 현황과 함께 확인합니다.</p>
     <div class="steps-grid">
       <div class="step-card"><div class="step-number">1</div><h3>조건에 맞는 강좌 찾기</h3><p>지역·종목·시간·예산을 입력해 강좌를 찾습니다.</p></div>
@@ -46,16 +47,16 @@
     <div class="card card-pad mb-16 guide-promo">
       <div class="row between">
         <div><h2 style="margin:0 0 6px">서비스 안내</h2><p style="margin:0">화면별 사용 방법과 데이터 기준, 주요 용어를 확인할 수 있습니다.</p></div>
-        <a class="btn btn-primary" href="/guide">서비스 안내 열기</a>
+        <a class="btn btn-primary" href="/guide" data-tooltip="서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.">서비스 안내 열기</a>
       </div>
     </div>
     <div class="card card-pad">
-      <div class="card-head"><h2>데이터 현황</h2><a class="btn btn-sm btn-ghost" href="/data">출처</a></div>
+      <div class="card-head"><h2>데이터 현황</h2><a class="btn btn-sm btn-ghost" href="/data" data-tooltip="원본 CSV와 출처·반영 상태를 관리합니다. 파일 교체 후 전체 다시 적재가 필요합니다.">출처</a></div>
       <div class="grid-4" id="landing-stats">
-        <div class="stat"><div class="label">데이터 버전</div><div class="value" style="font-size: 16px;">{{ meta.datasetVersion or '미적재' }}</div><div class="desc">최신 강좌월 {{ meta.dataMaxMonth or '–' }}</div></div>
-        <div class="stat"><div class="label">가맹시설</div><div class="value">{{ '{:,}'.format(meta.steps.voucher_facilities.count) if meta.steps.voucher_facilities else '–' }}</div><div class="desc">시설 목록과 이용 기록에 나온 시설</div></div>
-        <div class="stat"><div class="label">강좌</div><div class="value">{{ '{:,}'.format(meta.steps.courses.count) if meta.steps.courses else '–' }}</div><div class="desc">이용현황 강좌번호 기준</div></div>
-        <div class="stat"><div class="label">전체 체육시설</div><div class="value">{{ '{:,}'.format(meta.steps.all_facilities.allFacilities) if meta.steps.all_facilities else '–' }}</div><div class="desc">가맹 검토에 참고하는 시설</div></div>
+        <div class="stat"><div class="label" tabindex="0" data-tooltip="서비스 조회에 현재 사용하는 데이터 묶음의 식별값입니다. 원본 파일 교체 시점이나 실시간 데이터 갱신 시점을 뜻하지 않습니다.">데이터 버전</div><div class="value" style="font-size: 16px;">{{ meta.datasetVersion or '미적재' }}</div><div class="desc">최신 강좌 기록월 {{ meta.dataMaxMonth or '–' }}</div></div>
+        <div class="stat"><div class="label" tabindex="0" data-tooltip="공개 가맹시설 목록과 이용현황에서 통합한 시설 수입니다. 모든 시설의 현재 모집·영업 상태를 확인한 수치는 아닙니다.">가맹시설</div><div class="value">{{ '{:,}'.format(meta.steps.voucher_facilities.count) if meta.steps.voucher_facilities else '–' }}</div><div class="desc">시설 목록과 이용 기록에 나온 시설</div></div>
+        <div class="stat"><div class="label" tabindex="0" data-tooltip="공개 이용현황의 강좌번호를 기준으로 통합한 강좌 수입니다. 현재 모집 중 강좌나 잔여석 수와 다릅니다.">강좌</div><div class="value">{{ '{:,}'.format(meta.steps.courses.count) if meta.steps.courses else '–' }}</div><div class="desc">이용현황 강좌번호 기준</div></div>
+        <div class="stat"><div class="label" tabindex="0" data-tooltip="전체 체육시설 원본 자료에 포함된 시설 수입니다. 스포츠 강좌이용권 가맹시설 수가 아니며 가맹 검토에 참고합니다.">전체 체육시설</div><div class="value">{{ '{:,}'.format(meta.steps.all_facilities.allFacilities) if meta.steps.all_facilities else '–' }}</div><div class="desc">가맹 검토에 참고하는 시설</div></div>
       </div>
     </div>
   </div>

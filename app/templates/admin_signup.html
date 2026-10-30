@@ -3,21 +3,21 @@
 {% block content %}
 <div class="container auth-page">
   <section class="card card-pad auth-card">
-    <h1>관리자 가입 신청</h1>
-    <p class="sub">이메일 확인을 마치면 루트 관리자의 승인 대기 목록에 등록됩니다. 승인 후 관리자 화면을 사용할 수 있습니다.</p>
+    <h1>관리자 가입 신청 <button class="help-button" type="button" data-help-title="가입 신청 절차" data-help="아이디·이메일·비밀번호를 입력해 인증 코드를 요청합니다. 이메일로 받은 6자리 코드를 10분 안에 입력하면 가입 신청이 승인 대기 상태로 등록됩니다. 이메일 확인이 가입 승인은 아니며, 최고 관리자(루트)가 승인한 뒤 관리자 화면을 사용할 수 있습니다." aria-label="가입 신청 절차 안내">?</button></h1>
+    <p class="sub">이메일 확인을 마치면 최고 관리자(루트)의 승인 대기 목록에 등록됩니다. 승인 후 관리자 화면을 사용할 수 있습니다.</p>
     <form id="signup-form" class="stack mt-16">
-      <div class="field"><label for="username">아이디</label><input class="input" id="username" autocomplete="username" minlength="3" maxlength="32" required /></div>
-      <div class="field"><label for="email">이메일</label><input class="input" id="email" type="email" autocomplete="email" required /></div>
-      <div class="field"><label for="password">비밀번호</label><input class="input" id="password" type="password" autocomplete="new-password" minlength="12" maxlength="128" required /><p class="hint">12자 이상 입력해 주세요.</p></div>
-      <button class="btn btn-primary" type="submit">인증 코드 받기</button>
+      <div class="field"><label for="username" data-tooltip="3~32자이며 영문 소문자로 시작하고 영문 소문자·숫자·밑줄을 사용할 수 있습니다. 로그인에 사용할 아이디입니다.">아이디</label><input class="input" id="username" data-tooltip="3~32자이며 영문 소문자로 시작하고 영문 소문자·숫자·밑줄을 사용할 수 있습니다. 로그인에 사용할 아이디입니다." autocomplete="username" minlength="3" maxlength="32" required /></div>
+      <div class="field"><label for="email" data-tooltip="인증 코드를 받을 이메일 주소입니다. 다른 관리자 계정에 사용 중인 주소는 사용할 수 없습니다.">이메일</label><input class="input" id="email" data-tooltip="인증 코드를 받을 이메일 주소입니다. 다른 관리자 계정에 사용 중인 주소는 사용할 수 없습니다." type="email" autocomplete="email" required /></div>
+      <div class="field"><label for="password" data-tooltip="가입할 계정의 비밀번호를 12~128자로 입력합니다.">비밀번호</label><input class="input" id="password" data-tooltip="가입할 계정의 비밀번호를 12~128자로 입력합니다." type="password" autocomplete="new-password" minlength="12" maxlength="128" required /><p class="hint">12자 이상 입력해 주세요.</p></div>
+      <button class="btn btn-primary" type="submit" data-tooltip="입력한 이메일로 가입 확인용 6자리 코드를 보냅니다. 같은 신청 정보로 다시 요청하면 새 코드가 발급됩니다.">인증 코드 받기</button>
     </form>
     <form id="verify-form" class="stack mt-16" hidden>
-      <div class="field"><label for="code">이메일 인증 코드</label><input class="input" id="code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required /></div>
-      <button class="btn btn-primary" type="submit">이메일 확인</button>
+      <div class="field"><label for="code" data-tooltip="이메일로 받은 숫자 6자리 코드를 발송 후 10분 안에 입력합니다. 인증 시도는 최대 5회입니다.">이메일 인증 코드</label><input class="input" id="code" data-tooltip="이메일로 받은 숫자 6자리 코드를 발송 후 10분 안에 입력합니다. 인증 시도는 최대 5회입니다." inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" required /></div>
+      <button class="btn btn-primary" type="submit" data-tooltip="인증 코드를 확인하고 가입 신청을 승인 대기 목록에 등록합니다. 즉시 관리자 권한이 부여되지는 않습니다.">이메일 확인</button>
     </form>
     <p id="signup-message" class="notice mt-16" hidden></p>
-    <p class="mt-16"><a href="/admin/login">로그인으로 돌아가기</a></p>
-    <p class="hint mt-16">관리자 가입 관련 문의사항은 <a href="mailto:yojun313@postech.ac.kr">yojun313@postech.ac.kr</a>로 연락해 주세요.</p>
+    <p class="mt-16"><a href="/admin/login" data-tooltip="최고 관리자 승인 후 사용할 관리자 로그인 화면으로 이동합니다.">로그인으로 돌아가기</a></p>
+    <p class="hint mt-16">관리자 가입 관련 문의사항은 <a href="mailto:yojun313@postech.ac.kr" data-tooltip="메일 프로그램을 열어 관리자 가입 관련 문의를 작성합니다.">yojun313@postech.ac.kr</a>로 연락해 주세요.</p>
   </section>
 </div>
 {% endblock %}

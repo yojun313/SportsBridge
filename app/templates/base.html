@@ -21,11 +21,15 @@
   </head>
   <body>
     {% include "partials/header.html" %}
-    <div class="global-import" id="global-import-bar" hidden><div class="global-import-inner"><span class="spinner" style="width:14px;height:14px"></span><span id="global-import-text">데이터 적재 중…</span><div class="progress"><div class="progress-bar" id="global-import-fill"></div></div><a href="/data" class="small">자세히</a></div></div>
+    <div class="global-import" id="global-import-bar" hidden><div class="global-import-inner"><span class="spinner" style="width:14px;height:14px"></span><span id="global-import-text">데이터 반영 중…</span><div class="progress"><div class="progress-bar" id="global-import-fill"></div></div><a href="/data" class="small">자세히</a></div></div>
     {% if DEMO_MODE %}<div class="demo-banner" role="status">합성·시연 데이터 모드입니다. 실제 지역 통계로 해석하지 마세요.</div>{% endif %}
     <main id="main">
       {% block content %}{% endblock %}
     </main>
+    <div class="container page-help-bar">
+      <button class="btn btn-ghost btn-sm" id="page-help-button" type="button" data-tooltip="현재 화면에 표시된 기능·입력 항목·상태의 설명을 한곳에서 확인합니다. 모바일에서도 선택해 볼 수 있습니다.">? 이 화면의 기능·용어 안내</button>
+      <span class="faint small">항목 위에 마우스를 잠시 올리면 설명이 표시됩니다.</span>
+    </div>
     {% block footer %}{% include "partials/footer.html" %}{% endblock %}
     {% include "partials/tabbar.html" %}
     <div id="snackbar-root" aria-live="polite"></div>
@@ -34,6 +38,7 @@
     </div>
     <script src="{{ asset('js/api.js') }}"></script>
     <script src="{{ asset('js/ui.js') }}"></script>
+    <script src="{{ asset('js/tooltips.js') }}"></script>
     <script src="{{ asset('js/viewport.js') }}"></script>
     {% block extra_scripts %}{% endblock %}
   </body>

@@ -29,14 +29,14 @@ REASON_KO = {
     "time:not_enough_selectable_days": "가용 요일이 주당 횟수보다 적음",
     "age:out_of_range": "대상 연령 불일치",
     "price:over_budget": "월 수강료가 예산 초과",
-    "inactive": "최근 12개월 이용 기록 없음",
+    "inactive": "집계기간 내 강좌 기록 없음",
 }
 FLAG_KO = {
     "attendance_unknown": "출석 규칙 미확인",
     "age_unknown": "대상 연령 미확인",
     "price_unknown": "수강료 미확인",
     "schedule_ambiguous": "시간표 후보가 여럿(모호)",
-    "recent_low": "최근 신청 인원 적음(운영 확인 권장)",
+    "recent_low": "마지막 집계월 신청 인원 적음(운영 확인 권장)",
 }
 
 

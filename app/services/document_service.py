@@ -27,18 +27,18 @@ def build_facts(
             unresolved.append(f"조치 '{a.label}' 신설 정원 미확인")
     for o in sc.supplyOptions:
         if o.capacity is None and o.exists:
-            unresolved.append(f"옵션 '{o.label}' 정원 미확인")
+            unresolved.append(f"강좌 '{o.label}' 정원 미확인")
         if o.voucherAffiliated is None:
-            unresolved.append(f"옵션 '{o.label}' 가맹 여부 미확인")
+            unresolved.append(f"강좌 '{o.label}' 가맹 여부 미확인")
         if o.attendanceRule == "unknown" and o.sessions:
-            unresolved.append(f"옵션 '{o.label}' 출석 규칙 미확인")
+            unresolved.append(f"강좌 '{o.label}' 출석 규칙 미확인")
     assumed = [
         f"조치 '{a.label}' 비용({a.costWon:,}원)은 가정값"
         for a in sel
         if a.costWon is not None and a.costProvenance == "assumed"
     ]
     assumed += [
-        f"옵션 '{o.label}' 정원({o.capacity}석)은 가정값"
+        f"강좌 '{o.label}' 정원({o.capacity}석)은 가정값"
         for o in sc.supplyOptions
         if o.capacity is not None and o.capacityProvenance == "assumed"
     ]
@@ -162,7 +162,7 @@ def template_plan(facts: dict) -> str:
         )
     else:
         lines.append(
-            f"- 구조 탐색 모드: 연결 가능한 수요 집단 {f['connectedGroups']}개 (정원을 보지 않았으므로 사람 수로 해석하지 않음)"
+            f"- 정원 미적용 비교 모드: 연결 가능한 수요 집단 {f['connectedGroups']}개 (정원을 보지 않았으므로 사람 수로 해석하지 않음)"
         )
     for x in f["assignments"]:
         lines.append(f"- {x['group']} → {x['option']}: {x['count']}명")

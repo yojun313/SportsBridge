@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ '관리자 제안 게시판' if board == 'admin' else '이용자 제안 게시판' }} - {{ APP_NAME }}{% endblock %}
+{% block content %}
+<div class="container suggestions-page" data-board="{{ board }}">
+  <div class="page-head"><div>
+    <h1>{{ '관리자 제안 게시판' if board == 'admin' else '이용자 제안 게시판' }}</h1>
+    <p class="sub">서비스 개선 의견과 기능 제안을 개발자에게 전달해 주세요.</p>
+  </div></div>
+  <div class="notice mb-16">
+    {% if board == 'admin' %}로그인한 관리자만 글을 작성하고 열람할 수 있습니다. 작성자 이름과 계정 아이디가 함께 표시됩니다.
+    {% else %}누구나 익명으로 작성하고 열람할 수 있는 공개 게시판입니다. 이름·연락처 등 개인정보는 입력하지 마세요.{% endif %}
+    강좌·시설 이용 희망은 <a href="/user/voice" data-tooltip="원하는 종목·시간대와 시설 이용 희망을 등록합니다. 이 게시판의 의견은 지역별 희망 등록 통계나 가맹 검토 점수에 반영되지 않습니다.">희망 강좌·시설 등록</a>을 이용해 주세요.
+  </div>
+  <section class="card card-pad mb-16" aria-labelledby="suggestion-write-title">
+    <h2 id="suggestion-write-title">제안 작성</h2>
+    <form id="suggestion-form">
+      {% if board == 'admin' %}
+      <div class="field"><label for="suggestion-name" data-tooltip="게시글에 표시할 작성자 이름입니다. 로그인한 계정 아이디도 함께 표시되며 아이디는 변경할 수 없습니다.">작성자 이름</label><input class="input" id="suggestion-name" name="authorName" required maxlength="40" value="{{ admin_identity.username }}" autocomplete="name"><p class="hint">표시할 이름으로 수정해 주세요. 계정: {{ admin_identity.username }}</p></div>
+      {% endif %}
+      <div class="field"><label for="suggestion-title" data-tooltip="제안의 핵심을 2~100자로 작성해 주세요. 예: 강좌 검색에 주말 필터 추가">제목</label><input class="input" id="suggestion-title" name="title" required minlength="2" maxlength="100" placeholder="개선이 필요한 기능이나 제안을 적어 주세요."></div>
+      <div class="field"><label for="suggestion-content" data-tooltip="어느 화면에서 무엇이 불편했는지, 어떤 방식으로 개선되면 좋을지 5~5,000자로 작성해 주세요. 비밀번호·연락처 등 개인정보는 입력하지 마세요.">내용</label><textarea class="input" id="suggestion-content" name="content" required minlength="5" maxlength="5000" rows="7" placeholder="관련 화면, 불편한 점, 제안하는 개선 방법을 작성해 주세요."></textarea></div>
+      <div class="suggestion-actions"><span class="hint">등록 후 직접 수정·삭제할 수 없습니다. 게시물 관리는 최고 관리자가 담당합니다.</span><button class="btn btn-primary" id="suggestion-submit" type="submit" data-tooltip="입력한 제안을 게시판에 등록합니다. 자동 이메일 발송이나 강좌 신청이 아니며, 등록은 1시간에 5건까지 가능합니다.">제안 등록</button></div>
+      <p id="suggestion-message" class="hint" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+  <section class="card card-pad" aria-labelledby="suggestion-list-title">
+    <div class="card-head"><h2 id="suggestion-list-title">등록된 제안 <span id="suggestion-total" class="faint small"></span></h2><button class="btn btn-ghost btn-sm" id="suggestion-refresh" type="button" data-tooltip="최신 등록 순서로 제안 목록을 다시 불러옵니다.">새로고침</button></div>
+    <div id="suggestion-list" aria-live="polite"><p class="muted">제안을 불러오는 중입니다.</p></div>
+    <div class="suggestion-pagination"><button class="btn btn-outline btn-sm" id="suggestion-prev" type="button" disabled data-tooltip="더 최근에 등록된 제안이 있는 이전 페이지로 이동합니다.">이전</button><span id="suggestion-page" class="small" aria-live="polite"></span><button class="btn btn-outline btn-sm" id="suggestion-next" type="button" disabled data-tooltip="더 이전에 등록된 제안이 있는 다음 페이지로 이동합니다.">다음</button></div>
+  </section>
+</div>
+{% endblock %}
+{% block extra_scripts %}<script src="{{ asset('js/suggestions.js') }}"></script>{% endblock %}

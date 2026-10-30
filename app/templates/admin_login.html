@@ -3,15 +3,15 @@
 {% block content %}
 <div class="container auth-page">
   <section class="card card-pad auth-card">
-    <h1>관리자 로그인</h1>
-    <p class="sub">루트 계정 또는 승인된 관리자 계정으로 로그인해 주세요.</p>
+    <h1>관리자 로그인 <button class="help-button" type="button" data-help-title="관리자 로그인 안내" data-help="최고 관리자(루트)는 서버에 설정한 아이디와 비밀번호로 로그인합니다. 일반 관리자는 이메일 확인 후 최고 관리자의 가입 승인이 있어야 로그인할 수 있습니다. 이메일 확인만 마친 승인 대기 계정은 사용할 수 없습니다." aria-label="관리자 로그인 안내">?</button></h1>
+    <p class="sub">최고 관리자(루트) 계정 또는 가입 승인된 관리자 계정으로 로그인해 주세요.</p>
     <form id="login-form" class="stack mt-16">
-      <div class="field"><label for="username">아이디</label><input class="input" id="username" autocomplete="username" required /></div>
-      <div class="field"><label for="password">비밀번호</label><input class="input" id="password" type="password" autocomplete="current-password" required /></div>
-      <button class="btn btn-primary" type="submit">로그인</button>
+      <div class="field"><label for="username" data-tooltip="최고 관리자(루트)의 설정 아이디 또는 가입 승인된 관리자 아이디를 입력합니다. 이메일 주소로 로그인하는 방식이 아닙니다.">아이디</label><input class="input" id="username" data-tooltip="최고 관리자(루트)의 설정 아이디 또는 가입 승인된 관리자 아이디를 입력합니다. 이메일 주소로 로그인하는 방식이 아닙니다." autocomplete="username" required /></div>
+      <div class="field"><label for="password" data-tooltip="해당 관리자 계정의 비밀번호를 입력합니다.">비밀번호</label><input class="input" id="password" data-tooltip="해당 관리자 계정의 비밀번호를 입력합니다." type="password" autocomplete="current-password" required /></div>
+      <button class="btn btn-primary" type="submit" data-tooltip="입력한 아이디와 비밀번호로 인증하고 원래 요청한 관리자 화면으로 이동합니다.">로그인</button>
     </form>
     <p id="login-message" class="notice mt-16" hidden></p>
-    <p class="mt-16"><a href="/admin/signup">관리자 가입 신청</a></p>
+    <p class="mt-16"><a href="/admin/signup" data-tooltip="이메일 확인과 최고 관리자 승인을 거치는 관리자 가입 신청 화면으로 이동합니다.">관리자 가입 신청</a></p>
   </section>
 </div>
 {% endblock %}

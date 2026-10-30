@@ -1,0 +1,12 @@
+{
+  "calculator": true,
+  "validation": true,
+  "zeroVsMissing": true,
+  "actualCourses": 2,
+  "appliedPrice": 147400,
+  "courseAndFacilitySearch": true,
+  "regexEscaped": true,
+  "storedCourseApply": true,
+  "mobileNoOverflow": true,
+  "errors": []
+}

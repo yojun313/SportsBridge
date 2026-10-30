@@ -206,7 +206,7 @@ def interpret(g: dict) -> list[str]:
     n = g.get("regionTotal") or 0
     if g.get("rankFacilitiesPer1000"):
         out.append(
-            f"스포츠 강좌이용권 대상자 1,000명당 최근 운영 가맹시설은 {g['facilitiesPer1000Targets']}곳입니다. 시설 수가 적은 순으로 전국 {n}개 시군구 중 {g['rankFacilitiesPer1000']}위입니다."
+            f"스포츠 강좌이용권 대상자 1,000명당 집계기간에 강좌 기록이 있는 가맹시설은 {g['facilitiesPer1000Targets']}곳입니다. 시설 수가 적은 순으로 전국 {n}개 시군구 중 {g['rankFacilitiesPer1000']}위입니다."
         )
     if g.get("topSport") and g.get("topSportShare") is not None:
         out.append(

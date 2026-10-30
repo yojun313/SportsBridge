@@ -1,6 +1,6 @@
 <div class="row" id="u-picker">
-  <select class="input" id="p-sido" aria-label="시도" style="width:auto;min-width:130px"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
-  <select class="input" id="p-sigungu" aria-label="시군구" style="width:auto;min-width:140px"><option value="">시군구</option></select>
+  <select class="input" id="p-sido" data-tooltip="조회할 시도를 선택한 뒤 시군구를 지정해 주세요." aria-label="시도" style="width:auto;min-width:130px"><option value="">시도</option>{% for s in meta.sidos %}<option value="{{ s.sidoCode }}">{{ s.sidoName }}</option>{% endfor %}</select>
+  <select class="input" id="p-sigungu" data-tooltip="시군구를 선택하면 해당 지역 자료를 불러오며 선택한 지역은 이 브라우저에 저장됩니다." aria-label="시군구" style="width:auto;min-width:140px"><option value="">시군구</option></select>
 </div>
 <script nonce="{{ request.state.csp_nonce }}">
 (function () {

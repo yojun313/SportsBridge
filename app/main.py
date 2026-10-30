@@ -25,7 +25,9 @@ from app.routes import (
     llm_routes,
     metadata_routes,
     page_routes,
+    planner_routes,
     scenario_routes,
+    suggestion_routes,
     user_routes,
 )
 from app.security import admin_response, is_admin, is_admin_path, limiter, load_admin_identity
@@ -160,6 +162,8 @@ app.include_router(llm_routes.router)
 app.include_router(agent_routes.router)
 app.include_router(user_routes.router)
 app.include_router(data_routes.router)
+app.include_router(suggestion_routes.router)
+app.include_router(planner_routes.router)
 
 
 @app.exception_handler(RequestValidationError)

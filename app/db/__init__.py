@@ -24,6 +24,7 @@ votes_col = db["facility_votes"]
 admin_users_col = db["admin_users"]
 admin_signups_col = db["admin_signups"]
 admin_sessions_col = db["admin_sessions"]
+suggestions_col = db["suggestions"]
 
 CATALOG_STATE_ID = "catalog"
 
@@ -39,6 +40,7 @@ VERSIONED_COLLECTIONS = [
 ]
 
 INDEX_SPECS: dict[str, list[tuple[list[tuple[str, int]], dict]]] = {
+    "suggestions": [([("board", 1), ("createdAt", -1), ("_id", -1)], {})],
     "datasets": [([("datasetVersion", 1)], {"unique": True})],
     "facilities_all": [
         ([("datasetVersion", 1), ("sourceFacilityId", 1)], {}),

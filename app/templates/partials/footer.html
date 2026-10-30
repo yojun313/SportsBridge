@@ -4,13 +4,13 @@
       <div class="footer-title">{{ APP_NAME }}{% if app_mode == 'user' %} · 이용자용{% elif app_mode == 'admin' %} · 담당자용{% endif %}</div>
       {% if app_mode == 'user' %}
       <p>공공데이터를 활용해 조건에 맞는 강좌와 공공 운동 공간을 안내합니다. 검색 조건 자체는 저장하지 않습니다. 희망 강좌를 등록하면 희망 종목·시간대 등 이용 조건이 익명으로 저장됩니다.</p>
-      <div class="footer-links"><a href="/user/help">이용 안내</a><a href="/user/guide">서비스 안내</a><a href="https://svoucher.kspo.or.kr/main.do" target="_blank" rel="noopener">스포츠 강좌이용권 공식 사이트(신청·결제)</a><a href="/gap">담당자용으로 이동</a></div>
+      <div class="footer-links"><a href="/user/help" data-tooltip="이용자 화면의 검색·저장·희망 등록 방법을 확인합니다.">이용 안내</a><a href="/user/guide" data-tooltip="서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.">서비스 안내</a><a href="https://svoucher.kspo.or.kr/main.do" data-tooltip="국민체육진흥공단 공식 사이트를 새 탭으로 엽니다. 실제 스포츠 강좌이용권 신청·결제와 최신 사업 안내는 공식 사이트에서 확인합니다." target="_blank" rel="noopener">스포츠 강좌이용권 공식 사이트(신청·결제)</a><a href="/gap" data-tooltip="시군구별 가맹시설·종목·시간대·수급률을 비교합니다.">담당자용으로 이동</a></div>
       {% else %}
       <p>국민체육진흥공단 공공데이터를 활용해 지역별 가맹시설과 강좌 현황을 분석합니다. 수치의 기준일과 출처를 확인하고, 순위는 지역 간 비교 자료로 활용해 주세요.</p>
-      <div class="footer-links"><a href="/data">데이터 관리</a><a href="/guide">서비스 안내</a><a href="https://svoucher.kspo.or.kr/main.do" target="_blank" rel="noopener">스포츠 강좌이용권 공식 사이트</a><a href="/user">이용자용으로 이동</a></div>
+      <div class="footer-links"><a href="/data" data-tooltip="원본 CSV와 출처·반영 상태를 관리합니다. 파일 교체 후 전체 다시 적재가 필요합니다.">데이터 관리</a><a href="/guide" data-tooltip="서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.">서비스 안내</a><a href="https://svoucher.kspo.or.kr/main.do" data-tooltip="국민체육진흥공단 공식 사이트를 새 탭으로 엽니다. 실제 스포츠 강좌이용권 신청·결제와 최신 사업 안내는 공식 사이트에서 확인합니다." target="_blank" rel="noopener">스포츠 강좌이용권 공식 사이트</a><a href="/user" data-tooltip="지역·종목·시간·예산으로 스포츠 강좌이용권 강좌를 찾습니다.">이용자용으로 이동</a></div>
       {% endif %}
       <div class="copyright">2026 국민체육진흥공단 공공데이터 활용 경진대회 출품</div>
-      <div class="copyright">제작자 <a href="https://www.yojun.dev" target="_blank" rel="noopener noreferrer">Yojun Moon</a></div>
+      <div class="copyright">제작자 <a href="https://www.yojun.dev" data-tooltip="제작자 Yojun Moon의 개인 웹사이트를 새 탭으로 엽니다." target="_blank" rel="noopener noreferrer">Yojun Moon</a></div>
     </div>
   </div>
 </footer>

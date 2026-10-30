@@ -5,10 +5,10 @@
   <div class="page-head">
     {% if agent_mode == 'user' %}
     <div><h1>질문하기</h1><p class="sub">예를 들어 “강남구에 저녁 수영 강좌가 있나요?”라고 질문하면 공공데이터를 조회해 답합니다. 확인되지 않은 정보는 따로 표시합니다.</p></div>
-    <div class="row"><a class="btn btn-ghost btn-sm" href="/user">조건으로 찾기</a></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/user" data-tooltip="지역·종목·시간·예산 조건으로 스포츠 강좌이용권 강좌를 검색합니다.">조건으로 찾기</a></div>
     {% else %}
     <div><h1>담당자 질문 도우미 <button class="help-button" type="button" data-help-title="질문 도우미 안내" data-help="지역 현황이나 지원 방안에 관해 자연어로 질문하면 관련 자료를 조회하고 계산 결과를 안내합니다. 답변의 근거와 사용한 자료를 함께 확인해 주세요." aria-label="질문 도우미 안내">?</button></h1><p class="sub">지역 현황이나 지원 방안에 관해 질문하면 관련 자료를 조회해 설명합니다. 수치와 근거를 함께 확인할 수 있습니다.</p></div>
-    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario">시나리오 편집</a><button class="btn btn-ghost btn-sm" id="hist-btn">질의 기록</button></div>
+    <div class="row"><a class="btn btn-ghost btn-sm" href="/scenario" data-tooltip="저장된 지원 방안의 집단·강좌·개선 조치·예산을 확인하거나 수정합니다.">지원 방안 편집</a><button class="btn btn-ghost btn-sm" id="hist-btn" data-tooltip="담당자용 질문과 답변의 서버 저장 기록을 확인합니다. 다른 담당자의 기록이 포함될 수 있으므로 개인정보를 질문에 입력하지 마세요.">질의 기록</button></div>
     {% endif %}
   </div>
   {% if not LLM_ENABLED %}<div class="notice warn">현재 질문 기능을 사용할 수 없습니다. 강좌 찾기와 지역 현황 등 다른 기능은 이용할 수 있습니다.</div>{% endif %}
@@ -16,30 +16,30 @@
     <section class="card card-pad">
       <div class="sample-qs" id="samples">
         {% if agent_mode == 'user' %}
-        <button>종로구에서 초등학생이 저녁에 이용할 수 있는 수영 강좌가 있나요?</button>
-        <button>마포구에서 월 10만 5천 원 이하인 태권도 강좌를 알려주세요.</button>
-        <button>부산 동래구에 강좌가 많은 종목은 무엇인가요?</button>
-        <button>강남구에 스포츠 강좌이용권 비가맹 수영장이 있나요?</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">종로구에서 초등학생이 저녁에 이용할 수 있는 수영 강좌가 있나요?</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">마포구에서 월 10만 5천 원 이하인 태권도 강좌를 알려주세요.</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">부산 동래구에 강좌가 많은 종목은 무엇인가요?</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">강남구에서 스포츠 강좌이용권 가맹 여부를 확인할 수영장이 있나요?</button>
         {% else %}
-        <button>종로구에서 초등학생이 저녁에 이용할 수 있는 수영 강좌가 적은 이유는 무엇인가요?</button>
-        <button>부산 동래구의 진단 결과와 가맹 검토 시설 5곳을 알려주세요.</button>
-        <button>종로구와 중구의 강좌 현황을 비교해 주세요.</button>
-        <button>종로구에서 8명이 월·수·금 15~18시에 수영을 이용하려고 합니다. 시설 가맹 비용 20만 원, 강좌 개설 비용 60만 원, 정원 8명, 예산 90만 원일 때 지원 방안을 비교해 주세요.</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">종로구에서 초등학생이 저녁에 이용할 수 있는 수영 강좌가 현황과 확인할 사항을 알려주세요.</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">부산 동래구의 지역 현황와 가맹 검토 시설 5곳을 알려주세요.</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">종로구와 중구의 강좌 현황을 비교해 주세요.</button>
+        <button data-tooltip="이 예시를 질문 입력란에 채웁니다. 내용을 수정한 뒤 질문 버튼을 눌러 전송하세요.">종로구에서 8명이 월·수·금 15~18시에 수영을 이용하려고 합니다. 시설 가맹 비용 20만 원, 강좌 개설 비용 60만 원, 정원 8명, 예산 90만 원일 때 지원 방안을 비교해 주세요.</button>
         {% endif %}
       </div>
       <div class="chat" id="chat"><div class="msg assistant">{% if agent_mode == "user" %}시군구와 희망 종목, 이용 가능한 시간을 입력해 주세요. 조건에 맞는 스포츠 강좌이용권 강좌를 안내합니다.{% else %}시군구, 종목, 시간대, 수요 인원과 예산을 입력해 주세요. 지역 현황과 지원 방안을 안내합니다.{% endif %}</div></div>
       <form class="chat-form" id="chat-form">
-        <textarea class="input" id="q" rows="2" placeholder="{{ '예: 노원구에 주말 축구 강좌가 있나요?' if agent_mode == 'user' else '예: 강남구의 가맹 검토 시설 중 안전점검 결과가 양호한 곳을 알려주세요.' }}" maxlength="2000"></textarea>
-        <button class="btn btn-primary" id="send" type="submit">질문</button>
+        <textarea class="input" id="q" data-tooltip="지역·종목·요일·시간과 확인한 예산·정원·비용을 구체적으로 적어 주세요. Enter는 전송, Shift+Enter는 줄바꿈입니다." rows="2" placeholder="{{ '예: 노원구에 주말 축구 강좌가 있나요?' if agent_mode == 'user' else '예: 강남구의 가맹 검토 시설 중 안전점검 결과가 양호한 곳을 알려주세요.' }}" maxlength="2000"></textarea>
+        <button class="btn btn-primary" id="send" data-tooltip="입력한 질문을 서버로 보내 관련 공공자료 조회와 계산을 요청합니다. 답변의 출처와 미확인 항목을 함께 확인하세요." type="submit">질문</button>
       </form>
     </section>
     <aside class="stack">
-      <div class="card card-pad"><div class="card-head"><h3>조회 과정</h3><span class="faint" id="run-status">대기</span></div><div class="timeline" id="timeline"><div class="empty-state small">질문에 사용한 자료와 계산 과정이 표시됩니다.</div></div></div>
-      <div class="card card-pad"><div class="card-head"><h3>답변 근거</h3></div><div class="stack" id="evidence"><p class="faint">답변에 사용한 자료가 표시됩니다.</p></div></div>
+      <div class="card card-pad"><div class="card-head"><h3>조회 과정</h3><span class="faint" id="run-status" data-tooltip="질문 처리 상태를 표시합니다. 토큰과 USD 금액은 AI 처리 사용량·추정 비용이며 사업비나 수강료가 아닙니다.">대기</span></div><div class="timeline" id="timeline" data-tooltip="질문 처리를 위해 조회한 자료와 계산 단계입니다. 조회 성공이 실제 운영 조건이나 사업 승인을 보장하지는 않습니다."><div class="empty-state small">질문에 사용한 자료와 계산 과정이 표시됩니다.</div></div></div>
+      <div class="card card-pad"><div class="card-head"><h3>답변 근거</h3></div><div class="stack" id="evidence" data-tooltip="답변에 사용한 지역 지표·강좌·후보 시설·계산 결과입니다. 출처·확인 상태와 자료 기준일을 확인하세요."><p class="faint">답변에 사용한 자료가 표시됩니다.</p></div></div>
     </aside>
   </div>
 </div>
-<div class="dialog-backdrop" id="hist-dialog"><div class="dialog dialog-lg"><div class="dialog-header"><h2>질의 기록</h2><button class="btn-icon" data-dialog-close>&times;</button></div><div id="hist-body"></div></div></div>
+<div class="dialog-backdrop" id="hist-dialog"><div class="dialog dialog-lg"><div class="dialog-header"><h2>질의 기록</h2><button class="btn-icon" data-dialog-close data-tooltip="질의 기록 창을 닫습니다." aria-label="질의 기록 닫기">&times;</button></div><div id="hist-body"></div></div></div>
 {% endblock %}
 {% block extra_scripts %}
 <script src="{{ asset('js/markdown.js') }}"></script>

@@ -1,0 +1,203 @@
+{
+  "report": [
+    {
+      "route": "/",
+      "title": "스포츠브릿지 - 스포츠 강좌이용권과 시설을 연결하는 지자체 공급 플래너",
+      "total": 5,
+      "withHelp": 5,
+      "missing": [],
+      "tooltipCount": 18,
+      "overflow": false
+    },
+    {
+      "route": "/user",
+      "title": "조건에 맞는 강좌 찾기 - 스포츠브릿지",
+      "total": 40,
+      "withHelp": 40,
+      "missing": [],
+      "tooltipCount": 79,
+      "overflow": false
+    },
+    {
+      "route": "/user/region",
+      "title": "지역별 운동 시설·강좌 - 스포츠브릿지",
+      "total": 3,
+      "withHelp": 3,
+      "missing": [],
+      "tooltipCount": 32,
+      "overflow": false
+    },
+    {
+      "route": "/user/facilities",
+      "title": "스포츠 강좌이용권 사용 가능 시설 - 스포츠브릿지",
+      "total": 8,
+      "withHelp": 8,
+      "missing": [],
+      "tooltipCount": 39,
+      "overflow": false
+    },
+    {
+      "route": "/user/spaces",
+      "title": "공공 운동 공간 - 스포츠브릿지",
+      "total": 7,
+      "withHelp": 7,
+      "missing": [],
+      "tooltipCount": 36,
+      "overflow": false
+    },
+    {
+      "route": "/user/voice",
+      "title": "희망 강좌·시설 등록 - 스포츠브릿지",
+      "total": 17,
+      "withHelp": 17,
+      "missing": [],
+      "tooltipCount": 52,
+      "overflow": false
+    },
+    {
+      "route": "/user/planner",
+      "title": "스포츠 강좌이용권 지원금 계산 - 스포츠브릿지",
+      "total": 7,
+      "withHelp": 7,
+      "missing": [],
+      "tooltipCount": 43,
+      "overflow": false
+    },
+    {
+      "route": "/user/ask",
+      "title": "질문하기 - 스포츠브릿지",
+      "total": 7,
+      "withHelp": 7,
+      "missing": [],
+      "tooltipCount": 40,
+      "overflow": false
+    },
+    {
+      "route": "/user/help",
+      "title": "이용 안내 - 스포츠브릿지",
+      "total": 2,
+      "withHelp": 2,
+      "missing": [],
+      "tooltipCount": 39,
+      "overflow": false
+    },
+    {
+      "route": "/user/guide",
+      "title": "서비스 안내 - 스포츠브릿지",
+      "total": 11,
+      "withHelp": 11,
+      "missing": [],
+      "tooltipCount": 126,
+      "overflow": false
+    },
+    {
+      "route": "/admin",
+      "title": "관리자 대시보드 - 스포츠브릿지",
+      "total": 5,
+      "withHelp": 5,
+      "missing": [],
+      "tooltipCount": 42,
+      "overflow": false
+    },
+    {
+      "route": "/gap",
+      "title": "시군구별 스포츠 강좌이용권 강좌 현황 - 스포츠브릿지",
+      "total": 4,
+      "withHelp": 4,
+      "missing": [],
+      "tooltipCount": 2339,
+      "overflow": false
+    },
+    {
+      "route": "/gap/28140",
+      "title": "지역 현황 상세 - 스포츠브릿지",
+      "total": 7,
+      "withHelp": 7,
+      "missing": [],
+      "tooltipCount": 241,
+      "overflow": false
+    },
+    {
+      "route": "/gap/11110/candidates",
+      "title": "스포츠 강좌이용권 가맹 검토 시설 - 스포츠브릿지",
+      "total": 13,
+      "withHelp": 13,
+      "missing": [],
+      "tooltipCount": 447,
+      "overflow": false
+    },
+    {
+      "route": "/scenario",
+      "title": "지원 방안 시뮬레이션 - 스포츠브릿지",
+      "total": 18,
+      "withHelp": 18,
+      "missing": [],
+      "tooltipCount": 68,
+      "overflow": false
+    },
+    {
+      "route": "/agent",
+      "title": "담당자 질문 도우미 - 스포츠브릿지",
+      "total": 9,
+      "withHelp": 9,
+      "missing": [],
+      "tooltipCount": 38,
+      "overflow": false
+    },
+    {
+      "route": "/data",
+      "title": "데이터 관리 - 스포츠브릿지",
+      "total": 16,
+      "withHelp": 16,
+      "missing": [],
+      "tooltipCount": 227,
+      "overflow": false
+    },
+    {
+      "route": "/guide",
+      "title": "서비스 안내 - 스포츠브릿지",
+      "total": 11,
+      "withHelp": 11,
+      "missing": [],
+      "tooltipCount": 112,
+      "overflow": false
+    },
+    {
+      "route": "/admin/signup",
+      "title": "관리자 가입 신청 - 스포츠브릿지",
+      "total": 5,
+      "withHelp": 5,
+      "missing": [],
+      "tooltipCount": 28,
+      "overflow": false
+    },
+    {
+      "route": "/scenario",
+      "title": "지원 방안 시뮬레이션 - 스포츠브릿지",
+      "total": 108,
+      "withHelp": 108,
+      "missing": [],
+      "tooltipCount": 203,
+      "overflow": false
+    },
+    {
+      "route": "/scenario/compare",
+      "title": "조치 조합 비교 - 스포츠브릿지",
+      "total": 8,
+      "withHelp": 8,
+      "missing": [],
+      "tooltipCount": 80,
+      "overflow": false
+    },
+    {
+      "route": "/scenario/plan",
+      "title": "협의 계획서 - 스포츠브릿지",
+      "total": 6,
+      "withHelp": 6,
+      "missing": [],
+      "tooltipCount": 36,
+      "overflow": false
+    }
+  ],
+  "errors": []
+}

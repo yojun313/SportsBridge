@@ -1,28 +1,29 @@
+{% set menu_help = {'/user/suggestions': '서비스 개선 의견과 기능 제안을 익명으로 작성하고 열람합니다. 다른 이용자에게도 공개됩니다.', '/admin/suggestions': '로그인한 관리자끼리 개발자에게 제안할 의견을 작성하고 열람합니다. 작성자 이름과 계정 아이디가 표시됩니다.', '/': '서비스 첫 화면에서 이용자용·담당자용 기능과 데이터 현황을 확인합니다.', '/user': '지역·종목·시간·예산으로 스포츠 강좌이용권 강좌를 찾습니다.', '/user/region': '선택 지역의 공개 강좌·종목·시간대 현황을 확인합니다.', '/user/facilities': '스포츠 강좌이용권 사용 시설과 공개 강좌를 검색합니다.', '/user/spaces': '학교 개방시설 등 공개 운동 공간의 운영 정보를 확인합니다.', '/user/voice': '희망 강좌 조건이나 시설 이용 의견을 익명으로 등록합니다. 실제 수강 신청은 아닙니다.', '/user/planner': '월 수강료와 지원 한도를 입력해 예상 지원금·본인부담금을 계산합니다.', '/user/ask': 'AI에 강좌·시설 검색 조건을 질문합니다. 운영 상황과 지원 자격을 확정하는 답변은 아닙니다.', '/user/help': '이용자 화면의 검색·저장·희망 등록 방법을 확인합니다.', '/user/guide': '서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.', '/guide': '서비스 전체 기능의 사용 방법·계산 기준·주요 용어를 확인합니다.', '/admin': '담당자 기능을 선택하고 최고 관리자 계정에서 가입 승인을 처리합니다.', '/gap': '시군구별 가맹시설·종목·시간대·수급률을 비교합니다.', '/candidates': '공개 가맹 목록과 연결되지 않은 시설을 검토합니다. 실제 미가맹이 확정된 시설 목록은 아닙니다.', '/scenario': '수요와 강좌·추가 수용 정원·비용을 입력해 지원 방안 조합을 비교합니다.', '/agent': '공개 지역 현황과 계산 결과를 참고해 지원 방안을 질문합니다.', '/data': '원본 CSV와 출처·반영 상태를 관리합니다. 파일 교체 후 전체 다시 적재가 필요합니다.'} %}
 {#- 하단 탭바 (768px 미만에서만 보임). 메뉴는 모드별로 header.html과 같은 목록에서 앞 4개 + 더보기 -#}
 {% set path = request.url.path %}
 {% if path == '/' %}
   {% set tabs = [] %}{% set more_items = [] %}{% set switch = none %}
 {% elif app_mode == 'user' %}
   {% set tabs = [("/user", "강좌 찾기", "🔎"), ("/user/region", "지역 현황", "🏘"), ("/user/facilities", "시설 검색", "🏊"), ("/user/voice", "희망 등록", "📣")] %}
-  {% set more_items = [("/user/spaces", "공공 운동 공간", "🏫"), ("/user/planner", "지원금 계산", "🗓"), ("/user/ask", "질문하기", "💬"), ("/user/help", "이용 안내", "❓"), ("/user/guide", "서비스 안내", "📖")] %}
+  {% set more_items = [("/user/spaces", "공공 운동 공간", "🏫"), ("/user/planner", "지원금 계산", "🗓"), ("/user/ask", "질문하기", "💬"), ("/user/suggestions", "제안 게시판", "📝"), ("/user/help", "이용 안내", "❓"), ("/user/guide", "서비스 안내", "📖")] %}
   {% set switch = ("/gap", "담당자용으로") %}
 {% elif app_mode == 'admin' %}
   {% set tabs = [("/gap", "지역 현황", "📊"), ("/candidates", "가맹 검토", "📍"), ("/scenario", "지원 방안", "🧩"), ("/agent", "질문하기", "🤖")] %}
-  {% set more_items = [("/admin", "관리자 대시보드", "⚙"), ("/data", "데이터 관리", "🗂"), ("/guide", "서비스 안내", "📖")] %}
+  {% set more_items = [("/admin", "관리자 대시보드", "⚙"), ("/data", "데이터 관리", "🗂"), ("/admin/suggestions", "제안 게시판", "📝"), ("/guide", "서비스 안내", "📖")] %}
   {% set switch = ("/user", "이용자용으로") %}
 {% else %}
   {% set tabs = [("/", "홈", "🏠"), ("/user", "이용자용", "🔎"), ("/gap", "담당자용", "📊"), ("/guide", "서비스 안내", "📖")] %}
   {% set more_items = [] %}
   {% set switch = none %}
 {% endif %}
-{% macro is_active(href) -%}{{ 'active' if path == href or (href not in ('/', '/user') and path.startswith(href + '/')) else '' }}{%- endmacro %}
+{% macro is_active(href) -%}{{ 'active' if path == href or (href not in ('/', '/user', '/admin') and path.startswith(href + '/')) else '' }}{%- endmacro %}
 {% if tabs %}
 <nav class="tabbar" aria-label="하단 메뉴">
   {% for href, label, icon in tabs %}
-  <a href="{{ href }}" class="tab-item {{ is_active(href) }}" {% if is_active(href) %}aria-current="page"{% endif %}><span class="tab-icon" aria-hidden="true">{{ icon }}</span><span class="tab-label">{{ label }}</span></a>
+  <a href="{{ href }}" data-tooltip="{{ menu_help.get(href, label ~ ' 화면으로 이동합니다.') }}" class="tab-item {{ is_active(href) }}" {% if is_active(href) %}aria-current="page"{% endif %}><span class="tab-icon" aria-hidden="true">{{ icon }}</span><span class="tab-label">{{ label }}</span></a>
   {% endfor %}
   {% if more_items %}
-  <button type="button" class="tab-item {{ 'active' if more_items | selectattr(0, 'in', [path]) | list else '' }}" id="tab-more" aria-expanded="false" aria-controls="more-sheet"><span class="tab-icon" aria-hidden="true">⋯</span><span class="tab-label">더보기</span></button>
+  <button type="button" class="tab-item {{ 'active' if more_items | selectattr(0, 'in', [path]) | list else '' }}" id="tab-more" data-tooltip="하단에 표시되지 않은 추가 기능과 이용자용·담당자용 전환 메뉴를 엽니다." aria-expanded="false" aria-controls="more-sheet"><span class="tab-icon" aria-hidden="true">⋯</span><span class="tab-label">더보기</span></button>
   {% endif %}
 </nav>
 {% endif %}
@@ -32,10 +33,10 @@
     <div class="sheet-grip"></div>
     <div class="sheet-title">더보기</div>
     {% for href, label, icon in more_items %}
-    <a href="{{ href }}" class="sheet-action {{ is_active(href) }}"><span class="tab-icon" aria-hidden="true">{{ icon }}</span>{{ label }}</a>
+    <a href="{{ href }}" data-tooltip="{{ menu_help.get(href, label ~ ' 화면으로 이동합니다.') }}" class="sheet-action {{ is_active(href) }}"><span class="tab-icon" aria-hidden="true">{{ icon }}</span>{{ label }}</a>
     {% endfor %}
-    {% if switch %}<a href="{{ switch[0] }}" class="sheet-action switch"><span class="tab-icon" aria-hidden="true">↔</span>{{ switch[1] }}</a>{% endif %}
-    <button type="button" class="sheet-action" data-sheet-close><span class="tab-icon" aria-hidden="true">✕</span>닫기</button>
+    {% if switch %}<a href="{{ switch[0] }}" data-tooltip="{{ menu_help.get(switch[0]) }}" class="sheet-action switch"><span class="tab-icon" aria-hidden="true">↔</span>{{ switch[1] }}</a>{% endif %}
+    <button type="button" class="sheet-action" data-sheet-close data-tooltip="더보기 메뉴를 닫고 현재 화면으로 돌아갑니다."><span class="tab-icon" aria-hidden="true">✕</span>닫기</button>
   </div>
 </div>
 {% endif %}

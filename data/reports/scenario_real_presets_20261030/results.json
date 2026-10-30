@@ -1,0 +1,37 @@
+{
+  "results": [
+    {
+      "id": "capacity",
+      "before": 4,
+      "after": 12,
+      "cost": 300000,
+      "emptyInputs": 0,
+      "unresolved": 0
+    },
+    {
+      "id": "transport",
+      "before": 0,
+      "after": 6,
+      "cost": 150000,
+      "emptyInputs": 0,
+      "unresolved": 0
+    },
+    {
+      "id": "combined",
+      "before": 0,
+      "after": 8,
+      "cost": 450000,
+      "emptyInputs": 0,
+      "unresolved": 0
+    },
+    {
+      "id": "groups",
+      "before": 8,
+      "after": 14,
+      "cost": 300000,
+      "emptyInputs": 0,
+      "unresolved": 0
+    }
+  ],
+  "errors": []
+}

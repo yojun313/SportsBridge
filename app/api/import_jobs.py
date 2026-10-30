@@ -19,16 +19,16 @@ from app.api.events import broadcaster
 logger = logging.getLogger(__name__)
 
 STEPS = [
-    ("hash", "원본 파일 확인·해시", 3),
+    ("hash", "원본 파일 확인·식별값 계산", 3),
     ("regions", "지역(표준 코드) 적재", 5),
     ("voucher_facilities", "가맹시설 병합", 12),
     ("courses", "강좌·이용현황 결합", 30),
     ("all_facilities", "전체 체육시설·안전점검·대중교통", 60),
     ("voucher_transit", "가맹시설 대중교통", 68),
-    ("matching", "가맹↔전체 시설 매칭", 78),
+    ("matching", "가맹·전체 시설 목록 연결", 78),
     ("aggregates", "시군구 집계", 84),
-    ("write", "MongoDB 기록", 97),
-    ("activate", "활성 버전 전환", 100),
+    ("write", "조회 데이터 저장", 97),
+    ("activate", "사용 데이터 버전 적용", 100),
 ]
 STEP_PCT = {k: p for k, _, p in STEPS}
 STEP_LABEL = {k: l for k, l, _ in STEPS}
